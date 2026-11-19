@@ -10,40 +10,7 @@
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
 
-<style id="ms-black-bg-theme">
-  html, body {
-    background-color: #0B0E14;
-    color: #CBD5E1;
-    -webkit-font-smoothing: antialiased;
-  }
 
-  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
-  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
-    background-color: #10141C;
-    color: #CBD5E1;
-    border-color: #252C3A;
-  }
-
-  .card, .panel, .box, .ms-card, .state, [class*="card"] {
-    background: #12161F;
-    color: #CBD5E1;
-    border-color: #252C3A;
-    box-shadow: none;
-  }
-
-  input, select, textarea {
-    background-color: #090C11;
-    color: #CBD5E1;
-    border-color: #2D3648;
-  }
-
-  button, .btn {
-    background: #1B2230;
-    color: #E2E8F0;
-    border-color: #2D3648;
-    box-shadow: none;
-  }
-</style>
 </head>
 <body>
 <div id="app"></div>
@@ -61,7 +28,7 @@
         <div class="row" style="justify-content: space-between;">
           <div>
             <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Active Database</div>
-            <div style="font-weight: 800; font-size: 16px; margin-top: 2px;">${hasDb ? MS.escapeHtml(data.meta.filename) : 'Empty'}</div>
+            <div style="font-weight: 800; font-size: 16px; margin-top: 2px; color: #FFFFFF;">${hasDb ? MS.escapeHtml(data.meta.filename) : 'Empty'}</div>
             <div style="font-size: 12px; color: var(--text-secondary);">${machines.length} records</div>
           </div>
           <a href="import.html" class="btn btn--primary" style="height: 36px; text-decoration: none; font-size: 12px;">REPLACE</a>

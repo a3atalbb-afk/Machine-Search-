@@ -5,17 +5,17 @@
 
 :root {
   /* Brand Colors */
-  --navy:        #1B212C;
+  --navy:        #1A1A1A;
   --navy-light:  #24344F;
   --gold:        #F4A623;
   --gold-dark:   #D98A12;
-  --bg:          #FFF5F5;
-  --surface:     #FFFFFF;
+  --bg: #0D131F;
+  --surface: #161D2B;
   --success:     #20A66A;
   --error:       #D94B4B;
-  --text:        #1B212C;
-  --text-muted:  #6B7385;
-  --border:      #E2E5EB;
+  --text: #F4F5F7;
+  --text-muted: #64748B;
+  --border: #2A364F;
 
   /* Spacing Scale */
   --sp-1: 4px;
@@ -46,11 +46,11 @@
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #FFFFFF;
-    --surface: #1B2537;
-    --text: #FFF5F5;
-    --text-muted: #718096;
-    --border: #E2E8F0;
+    --bg: #0D131F;
+    --surface: #161D2B;
+    --text: #F4F5F7;
+    --text-muted: #64748B;
+    --border: #2A364F;
     --navy: #FFFFFF;
     --navy-light: #24344F;
   }

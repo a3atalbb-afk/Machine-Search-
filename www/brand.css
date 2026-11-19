@@ -49,3 +49,11 @@ a, a:link, a:visited, a:hover, a:active {
 .db-list-item {
   text-decoration: none !important;
 }
+
+/* Details Page Fix */
+#app, #app *, .info-row, .info-row span, .info-row div, .code-val, .detail-val {
+  color: #FFFFFF !important;
+}
+.text-muted, .info-label {
+  color: #A0ABC0 !important;
+}
