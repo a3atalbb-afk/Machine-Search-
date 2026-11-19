@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>MACHINE SEARCH — Component Preview</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<style>
+  .section { padding: 24px 16px; max-width: 720px; margin: 0 auto; }
+  .section-title {
+    font-size: 12px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 16px;
+  }
+</style>
+<link rel="stylesheet" href="styles.css">
+
+<style id="ms-black-bg-theme">
+  html, body {
+    background-color: #0B0E14;
+    color: #CBD5E1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
+  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
+    background-color: #10141C;
+    color: #CBD5E1;
+    border-color: #252C3A;
+  }
+
+  .card, .panel, .box, .ms-card, .state, [class*="card"] {
+    background: #12161F;
+    color: #CBD5E1;
+    border-color: #252C3A;
+    box-shadow: none;
+  }
+
+  input, select, textarea {
+    background-color: #090C11;
+    color: #CBD5E1;
+    border-color: #2D3648;
+  }
+
+  button, .btn {
+    background: #1B2230;
+    color: #E2E8F0;
+    border-color: #2D3648;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <img class="app-header__logo" src="assets/logo-nav.svg" alt="Logo">
+  <div class="app-header__title">
+    <div class="app-header__name">MACHINE SEARCH</div>
+    <div class="app-header__tagline">Find Machines. Get Codes.</div>
+  </div>
+  <div class="app-header__actions">
+    <div class="offline-badge">Offline</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Buttons</div>
+  <div class="row gap-2" style="flex-wrap:wrap">
+    <button class="btn btn--primary">Primary</button>
+    <button class="btn btn--secondary">Secondary</button>
+    <button class="btn btn--ghost">Ghost</button>
+    <button class="btn btn--danger">Danger</button>
+    <button class="btn btn--primary btn--lg">Large</button>
+    <button class="btn btn--primary btn--sm">Small</button>
+    <button class="btn btn--copy">COPY</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Search Bar</div>
+  <div class="input-wrap">
+    <span class="input-wrap__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+    </span>
+    <input type="text" placeholder="Type machine name... e.g. prize rush">
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Stat Card</div>
+  <div class="card--stats">
+    <div class="stat-value">148</div>
+    <div class="stat-label">Total Machine Records</div>
+    <div class="row gap-5" style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)">
+      <div class="col">
+        <div style="font-size:13px;font-weight:700">A3 (5).xlsx</div>
+        <div style="font-size:11px;color:#98A2B5">Active File</div>
+      </div>
+      <div class="col">
+        <div style="font-size:13px;font-weight:700">A3</div>
+        <div style="font-size:11px;color:#98A2B5">Location</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Quick Cards</div>
+  <div class="grid-3">
+    <div class="quick-card">
+      <div class="quick-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </div>
+      <div class="quick-card__title">Search</div>
+      <div class="quick-card__sub">Find any machine</div>
+    </div>
+    <div class="quick-card quick-card--gold">
+      <div class="quick-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0-12l-4 4m4-4l4 4M4 20h16"/></svg>
+      </div>
+      <div class="quick-card__title">Import</div>
+      <div class="quick-card__sub">Load Excel</div>
+    </div>
+    <div class="quick-card">
+      <div class="quick-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.7 6.3.9-4.6 4.4 1.1 6.2L12 17.3 6.5 20.2 7.6 14 3 9.6l6.3-.9L12 3z"/></svg>
+      </div>
+      <div class="quick-card__title">Favorites</div>
+      <div class="quick-card__sub">Saved codes</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Result Card</div>
+  <div class="result-card">
+    <div class="result-card__head">
+      <div class="result-card__icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="14" height="18" rx="2"/><rect x="5" y="6" width="10" height="6" rx="1" fill="#14213D"/></svg>
+      </div>
+      <div class="result-card__body">
+        <div class="result-card__name">PRIZE PRIZE RUSH</div>
+        <div class="result-card__meta">
+          <span class="pill">📍 A3</span>
+          <span class="pill">#85</span>
+        </div>
+      </div>
+      <button class="fav-btn is-active" aria-label="Favorite">
+        <svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.7 6.3.9-4.6 4.4 1.1 6.2L12 17.3 6.5 20.2 7.6 14 3 9.6l6.3-.9L12 3z"/></svg>
+      </button>
+    </div>
+    <div class="result-card__code">
+      <div class="flex-1" style="min-width:0">
+        <span class="result-card__code-label">Original Machine Code</span>
+        <div class="result-card__code-value">R_PRIZE_PRIZE RUSH_002</div>
+      </div>
+      <button class="btn btn--copy">COPY</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Empty State</div>
+  <div class="state">
+    <div class="state__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </div>
+    <div class="state__title">Start typing to search</div>
+    <div class="state__subtitle">Try "prize rush", "dance", or "gold fish"</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Chips</div>
+  <div class="chip-row">
+    <button class="chip is-active">All</button>
+    <button class="chip">A3</button>
+    <button class="chip">Prize</button>
+    <button class="chip">Dance</button>
+    <button class="chip">Gold Fish</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Action Bar (Copy All)</div>
+  <div class="action-bar">
+    <div class="action-bar__count"><b>5</b> results</div>
+    <button class="btn btn--copy">COPY ALL</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Info Rows</div>
+  <div class="card card--pad">
+    <div class="info-list">
+      <div class="info-row"><span class="info-row__key">File</span><span class="info-row__value">A3 (5).xlsx</span></div>
+      <div class="info-row"><span class="info-row__key">Sheet</span><span class="info-row__value">Machine</span></div>
+      <div class="info-row"><span class="info-row__key">Records</span><span class="info-row__value">148</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a class="bottom-nav__item is-active" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>
+    Home
+  </a>
+  <a class="bottom-nav__item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    Search
+  </a>
+  <a class="bottom-nav__item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/></svg>
+    Database
+  </a>
+  <a class="bottom-nav__item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l2.7 5.7 6.3.9-4.6 4.4 1.1 6.2L12 17.3 6.5 20.2 7.6 14 3 9.6l6.3-.9L12 3z"/></svg>
+    Favorites
+  </a>
+  <a class="bottom-nav__item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1 0 2.8 2 2 0 0 1-2.8 0l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 0 1-2.8 0 2 2 0 0 1 0-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 0-2.8 2 2 0 0 1 2.8 0l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 0 2 2 0 0 1 0 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    Settings
+  </a>
+</nav>
+
+<script src="app.js?v=1016"></script>
+</body>
+</html>

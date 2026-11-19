@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>MACHINE SEARCH — Logo & Brand</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<style>
+  body { padding: 0 0 40px; }
+  .hero-section {
+    background: linear-gradient(160deg, var(--brand-primary) 0%, var(--brand-primary-light) 100%);
+    color: #fff; padding: 60px 24px 48px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(245,174,50,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,174,50,.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .hero-section > * { position: relative; z-index: 1; }
+  .hero-logo { width: 96px; height: 96px; margin: 0 auto 24px; border-radius: 20px; }
+  .hero-title { font-size: 28px; font-weight: 900; letter-spacing: .06em; margin-bottom: 6px; }
+  .hero-tag { color: var(--brand-gold); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  
+  .section { padding: 32px 16px; max-width: 720px; margin: 0 auto; }
+  .section-title {
+    font-size: 12px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 16px;
+  }
+  
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  .logo-cell {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md);
+    padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .logo-cell:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .logo-cell img { width: 64px; height: 64px; }
+  .logo-cell--dark { background: var(--brand-primary); border-color: var(--brand-primary); }
+  .logo-cell--light { background: #fff; border-color: var(--border); }
+  .logo-cell__label {
+    font-size: 11px; font-weight: 700; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .logo-cell--dark .logo-cell__label { color: #B8C4D9; }
+  .logo-cell--light .logo-cell__label { color: var(--text-secondary); }
+  
+  /* Color swatches */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+  }
+  .color-swatch {
+    border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--border);
+  }
+  .color-swatch__color { height: 56px; }
+  .color-swatch__info { padding: 8px; background: var(--surface); }
+  .color-swatch__name { font-size: 11px; font-weight: 700; }
+  .color-swatch__hex  { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+  
+  /* Type scale */
+  .type-row {
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 16px;
+  }
+  .type-row__label { width: 100px; font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); flex-shrink: 0; }
+  
+  /* Spacing demo */
+  .sp-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .sp-box { height: 16px; background: var(--brand-gold); border-radius: 4px; }
+  .sp-label { font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); }
+</style>
+<link rel="stylesheet" href="styles.css">
+
+<style id="ms-black-bg-theme">
+  html, body {
+    background-color: #0B0E14;
+    color: #CBD5E1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
+  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
+    background-color: #10141C;
+    color: #CBD5E1;
+    border-color: #252C3A;
+  }
+
+  .card, .panel, .box, .ms-card, .state, [class*="card"] {
+    background: #12161F;
+    color: #CBD5E1;
+    border-color: #252C3A;
+    box-shadow: none;
+  }
+
+  input, select, textarea {
+    background-color: #090C11;
+    color: #CBD5E1;
+    border-color: #2D3648;
+  }
+
+  button, .btn {
+    background: #1B2230;
+    color: #E2E8F0;
+    border-color: #2D3648;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero-section">
+  <img class="hero-logo" src="assets/logo-splash.svg" alt="MACHINE SEARCH Logo">
+  <div class="hero-title">MACHINE SEARCH</div>
+  <div class="hero-tag">FIND MACHINES. GET CODES.</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Logo Variants</div>
+  <div class="logo-grid">
+    <div class="logo-cell logo-cell--dark">
+      <img src="assets/logo-main.svg" alt="Main">
+      <div class="logo-cell__label">Main</div>
+    </div>
+    <div class="logo-cell logo-cell--dark">
+      <img src="assets/logo-nav.svg" alt="Nav">
+      <div class="logo-cell__label">Nav (small)</div>
+    </div>
+    <div class="logo-cell logo-cell--dark">
+      <img src="assets/logo-splash.svg" alt="Splash">
+      <div class="logo-cell__label">Splash</div>
+    </div>
+    <div class="logo-cell logo-cell--light">
+      <img src="assets/logo-mono.svg" alt="Mono">
+      <div class="logo-cell__label">Monochrome</div>
+    </div>
+    <div class="logo-cell logo-cell--light">
+      <img src="assets/logo-light.svg" alt="Light">
+      <div class="logo-cell__label">Light BG</div>
+    </div>
+    <div class="logo-cell logo-cell--dark">
+      <img src="assets/logo-dark.svg" alt="Dark">
+      <div class="logo-cell__label">Dark BG</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Color Palette</div>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#14213D"></div><div class="color-swatch__info"><div class="color-swatch__name">Primary Navy</div><div class="color-swatch__hex">#14213D</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#1B2D4A"></div><div class="color-swatch__info"><div class="color-swatch__name">Navy Light</div><div class="color-swatch__hex">#1B2D4A</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#F5AE32"></div><div class="color-swatch__info"><div class="color-swatch__name">Arcade Gold</div><div class="color-swatch__hex">#F5AE32</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#3978F6"></div><div class="color-swatch__info"><div class="color-swatch__name">Electric Blue</div><div class="color-swatch__hex">#3978F6</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#20A66A"></div><div class="color-swatch__info"><div class="color-swatch__name">Success</div><div class="color-swatch__hex">#20A66A</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#E9A23B"></div><div class="color-swatch__info"><div class="color-swatch__name">Warning</div><div class="color-swatch__hex">#E9A23B</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#E05252"></div><div class="color-swatch__info"><div class="color-swatch__name">Error</div><div class="color-swatch__hex">#E05252</div></div></div>
+    <div class="color-swatch"><div class="color-swatch__color" style="background:#0D1422"></div><div class="color-swatch__info"><div class="color-swatch__name">Dark BG</div><div class="color-swatch__hex">#0D1422</div></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Typography Scale</div>
+  <div class="card card--pad">
+    <div class="type-row"><span class="type-row__label">Display L</span><span class="t-display-lg">FIND YOUR MACHINE</span></div>
+    <div class="type-row"><span class="type-row__label">Display M</span><span class="t-display-md">Machine Search</span></div>
+    <div class="type-row"><span class="type-row__label">Heading L</span><span class="t-heading-lg">Prize Prize Rush</span></div>
+    <div class="type-row"><span class="type-row__label">Heading M</span><span class="t-heading-md">Database Overview</span></div>
+    <div class="type-row"><span class="type-row__label">Heading S</span><span class="t-heading-sm">Live Search Results</span></div>
+    <div class="type-row"><span class="type-row__label">Body L</span><span class="t-body-lg">Search arcade machines and discover their original codes instantly.</span></div>
+    <div class="type-row"><span class="type-row__label">Body M</span><span class="t-body-md">A professional offline arcade machine database and code finder.</span></div>
+    <div class="type-row"><span class="type-row__label">Body S</span><span class="t-body-sm">All data is processed locally on your device.</span></div>
+    <div class="type-row"><span class="type-row__label">Label</span><span class="t-label">ORIGINAL MACHINE CODE</span></div>
+    <div class="type-row"><span class="type-row__label">Caption</span><span class="t-caption">Find Machines. Get Codes.</span></div>
+    <div class="type-row"><span class="type-row__label">Code</span><span class="t-code">R_PRIZE_PRIZE RUSH_002</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Spacing Scale</div>
+  <div class="card card--pad">
+    <div class="sp-row"><span class="sp-label">4px</span><div class="sp-box" style="width:4px"></div></div>
+    <div class="sp-row"><span class="sp-label">8px</span><div class="sp-box" style="width:8px"></div></div>
+    <div class="sp-row"><span class="sp-label">12px</span><div class="sp-box" style="width:12px"></div></div>
+    <div class="sp-row"><span class="sp-label">16px</span><div class="sp-box" style="width:16px"></div></div>
+    <div class="sp-row"><span class="sp-label">24px</span><div class="sp-box" style="width:24px"></div></div>
+    <div class="sp-row"><span class="sp-label">32px</span><div class="sp-box" style="width:32px"></div></div>
+    <div class="sp-row"><span class="sp-label">48px</span><div class="sp-box" style="width:48px"></div></div>
+  </div>
+</div>
+
+<script src="app.js?v=1016"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MACHINE SEARCH</string>
+    <string name="title_activity_main">MACHINE SEARCH</string>
+    <string name="package_name">com.machinesearch.offline</string>
+    <string name="custom_url_scheme">com.machinesearch.offline</string>
+</resources>

@@ -1,0 +1,54 @@
+:root {
+  /* Deep Navy & Cyberpunk Theme */
+  --bg: #0A0F1D; 
+  --surface: #151C2C; 
+  --card: #151C2C;
+  --text-primary: #12161F;
+  --text-secondary: #A0ABC0;
+  --text-muted: #64748B;
+  --border: #2A364F;
+  
+  --color-primary: #E63946; /* Alibaba Red */
+  --color-gold: #FFD700; /* Accent Only */
+  --color-success: #00E676;
+  --color-error: #FF4D5A;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Consolas", monospace;
+
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px; --r-pill: 999px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+  
+  --nav-bg: #0A0F1D;
+  --nav-inactive: #64748B;
+  --nav-active: #12161F; /* Active ကို အဖြူရောင်ပြောင်းမယ် */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans); background: var(--bg); color: var(--text-primary);
+  font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  min-height: 100vh; padding-bottom: 88px;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+img, svg { display: block; max-width: 100%; }
+button, input { font: inherit; color: inherit; outline: none; }
+button { cursor: pointer; background: none; border: none; }
+a { color: inherit; text-decoration: none; }
+
+.container { max-width: 640px; margin: 0 auto; padding: 0 var(--sp-4); }
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; } .w-full { width: 100%; } .text-center { text-align: center; }
+.hidden { display: none !important; }
+
+.section-title { 
+  margin: var(--sp-5) 0 var(--sp-3); 
+  font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; 
+  color: var(--text-secondary); 
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::before { content: ''; width: 4px; height: 14px; background: var(--color-primary); border-radius: 2px; }

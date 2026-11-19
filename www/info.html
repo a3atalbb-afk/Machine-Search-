@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Database Info — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+<style id="ms-black-bg-theme">
+  html, body {
+    background-color: #0B0E14;
+    color: #CBD5E1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
+  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
+    background-color: #10141C;
+    color: #CBD5E1;
+    border-color: #252C3A;
+  }
+
+  .card, .panel, .box, .ms-card, .state, [class*="card"] {
+    background: #12161F;
+    color: #CBD5E1;
+    border-color: #252C3A;
+    box-shadow: none;
+  }
+
+  input, select, textarea {
+    background-color: #090C11;
+    color: #CBD5E1;
+    border-color: #2D3648;
+  }
+
+  button, .btn {
+    background: #1B2230;
+    color: #E2E8F0;
+    border-color: #2D3648;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(async function() {
+  const app = document.getElementById('app');
+  const data = await MS.loadData();
+  
+  app.innerHTML = MS.backHeader('Database Information') + `
+    <main class="container" style="padding-top: var(--sp-4)">
+      <div class="card card--pad">
+        <div class="info-list">
+          <div class="info-row"><span class="info-row__key">Active File</span><span class="info-row__value">${data.meta.filename || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Sheet Name</span><span class="info-row__value">${data.meta.sheet || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Total Records</span><span class="info-row__value">${data.machines.length}</span></div>
+          <div class="info-row"><span class="info-row__key">Location</span><span class="info-row__value">${data.meta.location || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Last Import</span><span class="info-row__value">${data.meta.importedAt !== '—' ? new Date(data.meta.importedAt).toLocaleString() : '—'}</span></div>
+        </div>
+      </div>
+      
+      <button class="btn btn--danger btn--block" style="margin-top:24px" onclick="clearDb()">
+        CLEAR DATABASE
+      </button>
+    </main>
+  ` + MS.bottomNav('settings');
+
+  window.clearDb = function() {
+    if(confirm('Delete all imported data? This cannot be undone.')) {
+      MS.clearData();
+      MS.toast('Database cleared', 'ok');
+      setTimeout(()=>location.reload(), 800);
+    }
+  };
+})();
+</script>
+</body>
+</html>

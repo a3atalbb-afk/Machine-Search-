@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "filename": "A3 (5).xlsx",
+    "sheet": "Machine",
+    "location": "A3",
+    "importedAt": "2026-11-18T10:30:00",
+    "totalRecords": 12
+  },
+  "machines": [
+    {"no": 1, "code": "R_PRIZE_PRIZE RUSH_002", "name": "PRIZE PRIZE RUSH", "location": "A3", "number": 85, "arrival": "2024-01-15"},
+    {"no": 2, "code": "A_DANCE_DANCE RUSH_001", "name": "DANCE DANCE RUSH", "location": "A3", "number": 12, "arrival": "2024-02-03"},
+    {"no": 3, "code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE L)_001", "name": "OTHER FUTURE FIELD PRIZE PUSH (EPIC POKE L)", "location": "A3", "number": 44, "arrival": "2024-03-22"},
+    {"no": 4, "code": "R_PRIZE_SUPER LUCK HUNT_001", "name": "PRIZE SUPER LUCK HUNT", "location": "A3", "number": 67, "arrival": "2024-04-10"},
+    {"no": 5, "code": "M_BIG_GOLD FISH(8 PERSON)_017", "name": "BIG GOLD FISH(8 PERSON)", "location": "A3", "number": 3, "arrival": "2024-05-01"},
+    {"no": 6, "code": "P_PRIZE_GOLD FISH PRIZE_009", "name": "PRIZE GOLD FISH PRIZE", "location": "A3", "number": 21, "arrival": "2024-05-18"},
+    {"no": 7, "code": "A_DANCE_NEON BEAT_003", "name": "DANCE NEON BEAT", "location": "A3", "number": 90, "arrival": "2024-06-02"},
+    {"no": 8, "code": "R_PRIZE_LUCKY SPIN_011", "name": "PRIZE LUCKY SPIN", "location": "A3", "number": 55, "arrival": "2024-06-20"},
+    {"no": 9, "code": "P_OTHER_FUTURE FIELD PRIZE PUSH (EPIC POKE R)_002", "name": "OTHER FUTURE FIELD PRIZE PUSH (EPIC POKE R)", "location": "A3", "number": 46, "arrival": "2024-07-05"},
+    {"no": 10, "code": "M_BIG_GOLD FISH(4 PERSON)_018", "name": "BIG GOLD FISH(4 PERSON)", "location": "A3", "number": 8, "arrival": "2024-07-19"},
+    {"no": 11, "code": "R_PRIZE_PRIZE RUSH_003", "name": "PRIZE PRIZE RUSH", "location": "A3", "number": 86, "arrival": "2024-08-01"},
+    {"no": 12, "code": "A_DANCE_DANCE RUSH_002", "name": "DANCE DANCE RUSH", "location": "A3", "number": 13, "arrival": "2024-08-14"}
+  ]
+}

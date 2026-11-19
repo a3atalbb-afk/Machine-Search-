@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Machine Details — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<style>
+  /* အပေါ်က Hero နေရာကို အနက်ရောင်သေချာဖြစ်အောင် ပြင်ဆင်ခြင်း */
+  .detail-hero {
+    background: linear-gradient(160deg, #14213D 0%, #1B2D4A 100%) !important;
+    color: #ffffff; padding: 32px 16px 24px;
+    text-align: center; position: relative; overflow: hidden;
+    border-bottom: 4px solid var(--color-gold);
+  }
+  .detail-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(245,174,50,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,174,50,.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .detail-hero > * { position: relative; z-index: 1; }
+  
+  .detail-hero__icon {
+    width: 80px; height: 80px; margin: 0 auto 16px;
+    border-radius: var(--r-lg);
+    background: var(--color-gold);
+    color: var(--color-primary);
+    display: grid; place-items: center;
+    box-shadow: 0 8px 24px rgba(245,174,50,.3), inset 0 2px 4px rgba(255,255,255,.5);
+  }
+  .detail-hero__icon svg { width: 40px !important; height: 40px !important; }
+  
+  .detail-hero__name {
+    font-size: 24px; font-weight: 900; line-height: 1.2;
+    margin-bottom: 12px; word-break: break-word; color: #fff;
+  }
+  
+  .detail-hero__badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .detail-hero__badges .pill { 
+    background: rgba(255,255,255,.15); color: #fff; 
+    border: 1px solid rgba(255,255,255,.2); font-size: 12px;
+  }
+
+  /* Code Block ဒီဇိုင်း */
+  .code-block {
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: var(--r-md); padding: 16px; margin: 16px 0;
+  }
+  .code-block__label {
+    font-size: 11px; font-weight: 900; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+  }
+  .code-block__value {
+    font-family: var(--font-mono); font-size: 15px;
+    color: var(--text-primary); word-break: break-all;
+    line-height: 1.5; margin-bottom: 16px; font-weight: 600;
+  }
+  
+  /* Copy နဲ့ Favorite Button ကို ဘေးချင်းယှဉ်ခြင်း */
+  .action-row { display: flex; gap: 12px; }
+  .action-row .btn--copy-main {
+    flex: 1; height: 48px; background: var(--color-gold); color: var(--color-primary);
+    border-radius: var(--r-sm); font-weight: 900; font-size: 14px;
+    display: grid; place-items: center; border: none;
+    box-shadow: 0 4px 12px rgba(245,174,50,.3);
+  }
+  .action-row .fav-btn-main {
+    width: 48px; height: 48px; background: var(--bg); border: 2px solid var(--border);
+    border-radius: var(--r-sm); display: grid; place-items: center; color: var(--text-muted);
+  }
+  .action-row .fav-btn-main.is-active {
+    color: var(--color-gold); border-color: var(--color-gold); background: rgba(245,174,50,.1);
+  }
+  .action-row .fav-btn-main svg { width: 24px !important; height: 24px !important; fill: none; stroke: currentColor; stroke-width: 2; }
+  .action-row .fav-btn-main.is-active svg { fill: currentColor; }
+</style>
+<link rel="stylesheet" href="styles.css">
+
+<style id="ms-black-bg-theme">
+  html, body {
+    background-color: #0B0E14;
+    color: #CBD5E1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
+  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
+    background-color: #10141C;
+    color: #CBD5E1;
+    border-color: #252C3A;
+  }
+
+  .card, .panel, .box, .ms-card, .state, [class*="card"] {
+    background: #12161F;
+    color: #CBD5E1;
+    border-color: #252C3A;
+    box-shadow: none;
+  }
+
+  input, select, textarea {
+    background-color: #090C11;
+    color: #CBD5E1;
+    border-color: #2D3648;
+  }
+
+  button, .btn {
+    background: #1B2230;
+    color: #E2E8F0;
+    border-color: #2D3648;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(async function () {
+  const app = document.getElementById('app');
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+
+  if (!code) {
+    app.innerHTML = MS.backHeader('Machine Details') +
+      `<main class="container" style="padding-top: 32px;"><div class="state">
+        <div class="state__icon">${MS.ICON.warning}</div>
+        <div class="state__title">No machine specified</div>
+      </div></main>` + MS.bottomNav('database');
+    return;
+  }
+
+  const data = await MS.loadData();
+  const m = (data.machines || []).find(x => x.code === code);
+
+  if (!m) {
+    app.innerHTML = MS.backHeader('Machine Details') +
+      `<main class="container" style="padding-top: 32px;"><div class="state">
+        <div class="state__icon">${MS.ICON.warning}</div>
+        <div class="state__title">Machine not found</div>
+      </div></main>` + MS.bottomNav('search');
+    return;
+  }
+
+  const fav = MS.isFavorite(m.code);
+
+  // Location ကို သန့်ရှင်းအောင် လုပ်ခြင်း (ဥပမာ - A- A3 ကို A3 ဖြစ်အောင်)
+  const cleanLoc = (m.location || '').replace(/[^A-Za-z0-9]/g, '');
+
+  app.innerHTML = MS.backHeader('Machine Details') + `
+    <main style="padding-bottom: 32px;">
+      
+      <!-- Hero Section -->
+      <div class="detail-hero">
+        <div class="detail-hero__icon">${MS.ICON.machine}</div>
+        <div class="detail-hero__name">${MS.escapeHtml(m.name)}</div>
+        <div class="detail-hero__badges">
+          <span class="pill">📍 ${cleanLoc}</span>
+          <span class="pill">#${m.number ?? '—'}</span>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Code Block -->
+        <div class="code-block">
+          <div class="code-block__label">Original Machine Code</div>
+          <div class="code-block__value">${MS.escapeHtml(m.code)}</div>
+          
+          <div class="action-row">
+            <button class="btn--copy-main" id="copyBtn">COPY CODE</button>
+            <button class="fav-btn-main ${fav ? 'is-active' : ''}" id="favBtn">
+              ${fav ? MS.ICON.starFilled : MS.ICON.star}
+            </button>
+          </div>
+        </div>
+
+        <!-- Info Block -->
+        <div class="section-title">Information</div>
+        <div class="card card--pad">
+          <div class="info-list">
+            <div class="info-row"><span class="info-row__key">Name</span><span class="info-row__value">${MS.escapeHtml(m.name)}</span></div>
+            <div class="info-row"><span class="info-row__key">Location</span><span class="info-row__value">${cleanLoc}</span></div>
+            <div class="info-row"><span class="info-row__key">Number</span><span class="info-row__value">${m.number ?? '—'}</span></div>
+            ${m.arrival ? `<div class="info-row"><span class="info-row__key">Arrival Date</span><span class="info-row__value">${MS.escapeHtml(m.arrival)}</span></div>` : ''}
+            <div class="info-row"><span class="info-row__key">Source File</span><span class="info-row__value">${MS.escapeHtml(data.meta.filename || '—')}</span></div>
+          </div>
+        </div>
+
+        <!-- Search Similar Button -->
+        <div style="margin-top: 24px;">
+          <a href="search.html?q=${encodeURIComponent(m.name)}" class="btn btn--ghost" style="width: 100%; text-decoration: none; height: 48px;">
+            ${MS.ICON.search} &nbsp; SEARCH SIMILAR
+          </a>
+        </div>
+      </div>
+    </main>
+  ` + MS.bottomNav('database');
+
+  // Copy လုပ်တဲ့ အလုပ်
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const ok = await MS.copy(m.code);
+    if (ok) {
+      MS.toast('Code copied', 'ok');
+      const btn = document.getElementById('copyBtn');
+      const orig = btn.textContent;
+      btn.textContent = '✓ COPIED';
+      setTimeout(() => btn.textContent = orig, 1400);
+    } else MS.toast('Clipboard failed', 'err');
+  });
+
+  // Favorite လုပ်တဲ့ အလုပ်
+  document.getElementById('favBtn').addEventListener('click', () => {
+    const added = MS.toggleFavorite(m);
+    const btn = document.getElementById('favBtn');
+    btn.classList.toggle('is-active', added);
+    btn.innerHTML = added ? MS.ICON.starFilled : MS.ICON.star;
+    MS.toast(added ? 'Added to favorites' : 'Removed', added ? 'ok' : '');
+  });
+})();
+</script>
+</body>
+</html>

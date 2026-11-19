@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>အကြောင်းအရာ — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<style>
+  :root {
+    --ms-red: #E11D3E;
+    --ms-red-dark: #990B24;
+    --ms-red-bright: #FF2A4B;
+    --ms-bg: #141821;
+    --ms-bg-deep: #0D1017;
+    --ms-surface: #1C2230;
+    --ms-surface-elevated: #232B3D;
+    --ms-surface-soft: #171C28;
+    --ms-border: #2E374B;
+    --ms-border-strong: #3F4B66;
+    --ms-text: #F1F5F9;
+    --ms-text-secondary: #CBD5E1;
+    --ms-muted: #94A3B8;
+    --ms-ok: #22C55E;
+    --ms-3d-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
+    --ms-3d-red: 0 6px 14px rgba(225, 29, 62, 0.32), 0 2px 0 #690517;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body.ms-about-body {
+    background: radial-gradient(circle at top right, #1D2434 0%, var(--ms-bg) 52%, var(--ms-bg-deep) 100%) !important;
+    color: var(--ms-text) !important;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body.ms-about-body .topbar,
+  body.ms-about-body .app-header,
+  body.ms-about-body .ms-header {
+    background: var(--ms-surface) !important;
+    color: var(--ms-text) !important;
+    border-bottom: 2px solid var(--ms-red) !important;
+  }
+
+  .ms-shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 10px 12px 96px;
+  }
+
+  .ms-3d-brand {
+    color: #FF4D6A;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.4px;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.14),
+      0 2px 0 #6B0517,
+      0 5px 14px rgba(225, 29, 62, 0.35);
+  }
+
+  /* Hero Banner */
+  .ms-about-hero {
+    border-radius: 14px;
+    background: linear-gradient(115deg, var(--ms-surface-elevated) 0%, #241B29 54%, #7A0B20 84%, #3B0410 100%);
+    border: 1px solid var(--ms-border-strong);
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: var(--ms-3d-shadow);
+  }
+
+  .ms-about-hero-title {
+    margin: 0;
+    font-size: clamp(20px, 4.8vw, 28px);
+    font-weight: 900;
+    line-height: 1.25;
+    color: #FFFFFF;
+    text-shadow: 0 2px 0 #0A0D14, 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .ms-about-hero-sub {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ms-text-secondary);
+  }
+
+  .ms-meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .ms-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 800;
+    background: rgba(13, 16, 23, 0.84);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--ms-text);
+  }
+
+  /* Section Banner */
+  .ms-sec-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 14px 0 8px;
+  }
+
+  .ms-sec-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(90deg, var(--ms-red-bright), var(--ms-red-dark));
+    color: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 900;
+    padding: 5px 14px 5px 11px;
+    border-radius: 6px 16px 6px 6px;
+    box-shadow: var(--ms-3d-red);
+  }
+
+  /* Card */
+  .ms-card {
+    background: linear-gradient(180deg, var(--ms-surface-elevated) 0%, var(--ms-surface) 100%);
+    border: 1px solid var(--ms-border);
+    border-radius: 12px;
+    padding: 13px;
+    margin-bottom: 10px;
+    box-shadow: var(--ms-3d-shadow);
+  }
+
+  .ms-desc-para {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ms-text-secondary);
+  }
+
+  .ms-desc-para:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Features Grid */
+  .ms-feat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .ms-feat-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 11px;
+    border-radius: 9px;
+    background: var(--ms-surface-soft);
+    border: 1px solid var(--ms-border);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ms-text);
+    line-height: 1.4;
+  }
+
+  .ms-feat-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--ms-red-bright), var(--ms-red-dark));
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(225, 29, 62, 0.35);
+  }
+
+  /* Developer Profile Card */
+  .ms-dev-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #252E42 0%, #191F2D 100%);
+    border: 1px solid var(--ms-border-strong);
+  }
+
+  .ms-dev-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--ms-red-bright), var(--ms-red-dark));
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: var(--ms-3d-red);
+  }
+
+  .ms-dev-name {
+    font-size: 16px;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+  }
+
+  .ms-dev-role {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #FF6B84;
+    margin-top: 2px;
+  }
+
+  .ms-dev-app {
+    font-size: 12px;
+    color: var(--ms-text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Info Rows */
+  .ms-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .ms-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    background: var(--ms-surface-soft);
+    border: 1px solid var(--ms-border);
+    font-size: 12.5px;
+  }
+
+  .ms-info-key {
+    color: var(--ms-muted);
+    font-weight: 700;
+  }
+
+  .ms-info-val {
+    color: var(--ms-text);
+    font-weight: 800;
+    text-align: right;
+  }
+
+  .ms-copyright {
+    text-align: center;
+    padding: 12px 10px;
+    border-radius: 10px;
+    background: var(--ms-surface-soft);
+    border: 1px solid var(--ms-border);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--ms-text-secondary);
+  }
+
+  .ms-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .ms-btn {
+    flex: 1 1 150px;
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--ms-border-strong);
+    background: linear-gradient(180deg, #2C354A 0%, #1F2636 100%);
+    color: var(--ms-text);
+  }
+
+  .ms-btn-red {
+    background: linear-gradient(180deg, var(--ms-red-bright) 0%, var(--ms-red) 55%, var(--ms-red-dark) 100%);
+    color: #FFFFFF;
+    border: none;
+    box-shadow: var(--ms-3d-red);
+  }
+
+  @media (max-width: 600px) {
+    .ms-shell { padding: 8px 10px 92px; }
+    .ms-feat-grid { grid-template-columns: 1fr; }
+  }
+</style>
+<link rel="stylesheet" href="styles.css">
+
+<style id="ms-black-bg-theme">
+  html, body {
+    background-color: #0B0E14;
+    color: #CBD5E1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar, .app-header, .ms-header, .back-header, .ms-back-header, header,
+  .bottom-nav, .ms-bottom-nav, nav.bottom-nav {
+    background-color: #10141C;
+    color: #CBD5E1;
+    border-color: #252C3A;
+  }
+
+  .card, .panel, .box, .ms-card, .state, [class*="card"] {
+    background: #12161F;
+    color: #CBD5E1;
+    border-color: #252C3A;
+    box-shadow: none;
+  }
+
+  input, select, textarea {
+    background-color: #090C11;
+    color: #CBD5E1;
+    border-color: #2D3648;
+  }
+
+  button, .btn {
+    background: #1B2230;
+    color: #E2E8F0;
+    border-color: #2D3648;
+    box-shadow: none;
+  }
+</style>
+</head>
+<body class="ms-about-body">
+<div id="app"></div>
+
+<script src="app.js?v=1016"></script>
+<script>
+(function() {
+  const app = document.getElementById('app');
+  app.innerHTML =
+    MS.backHeader('အကြောင်းအရာ') +
+    `<main class="ms-shell">
+      <section class="ms-about-hero">
+        <h1 class="ms-about-hero-title"><span class="ms-3d-brand">MACHINE SEARCH</span> အကြောင်း</h1>
+        <div class="ms-about-hero-sub">Arcade Machine Information System · Offline Web Application</div>
+        <div class="ms-meta-pills">
+          <span class="ms-pill">ဗားရှင်း 1.0.0</span>
+          <span class="ms-pill" style="color:var(--ms-ok);">✓ 100% Offline အသုံးပြုနိုင်သည်</span>
+          <span class="ms-pill">Developer: Super ko Tint</span>
+        </div>
+      </section>
+
+      <div class="ms-sec-head">
+        <div class="ms-sec-pill"><span>📖</span><span>စနစ်ခြုံငုံသုံးသပ်ချက်</span></div>
+      </div>
+      <section class="ms-card">
+        <p class="ms-desc-para">
+          MACHINE SEARCH သည် Arcade Game Machine များ၏ အချက်အလက်များ၊ Error Code များ၊ Machine ပြဿနာများနှင့် ဖြေရှင်းနည်းများကို လွယ်ကူမြန်ဆန်စွာ ရှာဖွေကြည့်ရှုနိုင်ရန် ဖန်တီးထားသော စနစ်တစ်ခုဖြစ်ပါသည်။
+        </p>
+        <p class="ms-desc-para">
+          Machine အချက်အလက်များကို စနစ်တကျ စုစည်းထားပြီး အသုံးပြုသူများအနေဖြင့် လိုအပ်သော အချက်အလက်များကို အချိန်တိုအတွင်း ရှာဖွေနိုင်ပါသည်။
+        </p>
+        <p class="ms-desc-para">
+          Internet ချိတ်ဆက်မှုမရှိဘဲ Offline အသုံးပြုနိုင်ရန် ရည်ရွယ်ထားပြီး Arcade Machine နည်းပညာဆိုင်ရာ အချက်အလက်များ၊ ပြဿနာဖြေရှင်းနည်းများနှင့် အသုံးဝင်သော နည်းပညာအကြောင်းအရာများကို တစ်နေရာတည်းတွင် စုစည်းပေးထားပါသည်။
+        </p>
+      </section>
+
+      <div class="ms-sec-head">
+        <div class="ms-sec-pill"><span>⚡</span><span>အဓိက လုပ်ဆောင်ချက်များ</span></div>
+      </div>
+      <section class="ms-card">
+        <div class="ms-feat-grid">
+          <div class="ms-feat-item"><span class="ms-feat-badge">1</span><span>Machine အချက်အလက် ရှာဖွေခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">2</span><span>Error Code ရှာဖွေခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">3</span><span>Machine အမျိုးအစားများ စီမံခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">4</span><span>Error ဖြေရှင်းနည်းများ ကြည့်ရှုခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">5</span><span>Solution ပုံများ ကြည့်ရှုခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">6</span><span>Favorites သိမ်းဆည်းခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">7</span><span>Offline အသုံးပြုနိုင်ခြင်း</span></div>
+          <div class="ms-feat-item"><span class="ms-feat-badge">8</span><span>Database စီမံခန့်ခွဲခြင်း</span></div>
+        </div>
+      </section>
+
+      <div class="ms-sec-head">
+        <div class="ms-sec-pill"><span>👨‍💻</span><span>ဖန်တီးသူ အချက်အလက်</span></div>
+      </div>
+      <section class="ms-card">
+        <div class="ms-dev-card">
+          <div class="ms-dev-avatar">SKT</div>
+          <div>
+            <div class="ms-dev-name">SUPER KO TINT</div>
+            <div class="ms-dev-role">Creator &amp; Developer</div>
+            <div class="ms-dev-app">MACHINE SEARCH · Arcade Machine Information System</div>
+          </div>
+        </div>
+
+        <div class="ms-info-list">
+          <div class="ms-info-row">
+            <span class="ms-info-key">Application Name</span>
+            <span class="ms-info-val">MACHINE SEARCH</span>
+          </div>
+          <div class="ms-info-row">
+            <span class="ms-info-key">Developer</span>
+            <span class="ms-info-val">Super ko Tint</span>
+          </div>
+          <div class="ms-info-row">
+            <span class="ms-info-key">Version</span>
+            <span class="ms-info-val">1.0.0</span>
+          </div>
+          <div class="ms-info-row">
+            <span class="ms-info-key">Platform</span>
+            <span class="ms-info-val">Offline Web Application</span>
+          </div>
+        </div>
+
+        <div class="ms-btn-row">
+          <a href="settings.html" class="ms-btn ms-btn-red">Settings သို့သွားရန်</a>
+          <a href="troubleshoot.html" class="ms-btn">Solution Center</a>
+        </div>
+      </section>
+
+      <section class="ms-copyright">
+        <div>© 2026 MACHINE SEARCH</div>
+        <div>Developed by Super ko Tint</div>
+        <div>All rights reserved.</div>
+      </section>
+    </main>` +
+    MS.bottomNav('settings');
+})();
+</script>
+</body>
+</html>

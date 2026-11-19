@@ -1,0 +1,8 @@
+{
+  "appId": "com.machinesearch.offline",
+  "appName": "MACHINE SEARCH",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

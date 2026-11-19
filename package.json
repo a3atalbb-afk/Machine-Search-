@@ -1,0 +1,17 @@
+{
+  "name": "machine-search-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare:web": "node scripts/prepare-web.js",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npm run prepare:web && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.3",
+    "@capacitor/core": "^6.2.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.3"
+  }
+}
