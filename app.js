@@ -202,3 +202,22 @@ const MS = (() => {
     debounce, ICON, header, backHeader, bottomNav, FILTERS, matchFilter
   };
 })();
+
+// Android Back Button Fix
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+    const { App } = window.Capacitor.Plugins;
+    App.addListener('backButton', ({ canGoBack }) => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        // ပထမဆုံး Page ရောက်နေရင် ထွက်မသွားဘဲ အောက်က Toast လေးပဲပြမယ်
+        const toast = document.createElement('div');
+        toast.innerText = 'Press back again to exit';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#D32F2F;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;z-index:9999;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+      }
+    });
+  }
+});

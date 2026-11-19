@@ -5,17 +5,17 @@
 
 :root {
   /* Brand Colors */
-  --navy:        #17243B;
+  --navy:        #1A1A1A;
   --navy-light:  #24344F;
   --gold:        #F4A623;
   --gold-dark:   #D98A12;
-  --bg:          #F4F5F7;
-  --surface:     #12161F;
+  --bg: #0D131F;
+  --surface: #161D2B;
   --success:     #20A66A;
   --error:       #D94B4B;
-  --text:        #17243B;
-  --text-muted:  #6B7385;
-  --border:      #E2E5EB;
+  --text: #F4F5F7;
+  --text-muted: #64748B;
+  --border: #2A364F;
 
   /* Spacing Scale */
   --sp-1: 4px;
@@ -46,12 +46,12 @@
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0E1523;
-    --surface: #1B2537;
+    --bg: #0D131F;
+    --surface: #161D2B;
     --text: #F4F5F7;
-    --text-muted: #9AA3B2;
-    --border: #2A3A55;
-    --navy: #0E1523;
+    --text-muted: #64748B;
+    --border: #2A364F;
+    --navy: #FFFFFF;
     --navy-light: #24344F;
   }
 }
@@ -72,7 +72,7 @@ body {
 .header {
   position: sticky; top: 0; z-index: 50;
   background: var(--navy);
-  color: #12161F;
+  color: #FFFFFF;
   padding: var(--sp-4) var(--sp-4);
   display: flex; align-items: center; gap: var(--sp-3);
   box-shadow: var(--shadow-md);
@@ -168,7 +168,7 @@ body {
 /* ===== Stats ===== */
 .stats {
   background: linear-gradient(135deg, var(--navy), var(--navy-light));
-  color: #12161F; border-radius: var(--r-lg);
+  color: #FFFFFF; border-radius: var(--r-lg);
   padding: var(--sp-5); margin-bottom: var(--sp-5);
   box-shadow: var(--shadow-md);
 }
@@ -222,7 +222,7 @@ body {
   display: flex; align-items: center; gap: var(--sp-2);
 }
 @media (prefers-color-scheme: dark) {
-  .result-card .rc-code { background: #0E1523; color: #F4A623; }
+  .result-card .rc-code { background: #FFFFFF; color: #F4A623; }
 }
 .result-card .rc-code .lbl {
   font-family: var(--font); font-size: 9px; font-weight: 800;
@@ -240,7 +240,7 @@ body {
 }
 .btn-copy:hover { background: var(--gold-dark); }
 .btn-copy:active { transform: scale(.96); }
-.btn-copy.copied { background: var(--success); color: #12161F; }
+.btn-copy.copied { background: var(--success); color: #FFFFFF; }
 
 /* ===== Highlight ===== */
 mark { background: rgba(244,166,35,.45); color: inherit; border-radius: 3px; padding: 0 2px; }
@@ -257,7 +257,7 @@ mark { background: rgba(244,166,35,.45); color: inherit; border-radius: 3px; pad
 /* ===== Copy All bar ===== */
 .copy-all-bar {
   position: sticky; bottom: 80px;
-  background: var(--navy); color: #12161F;
+  background: var(--navy); color: #FFFFFF;
   border-radius: var(--r-md);
   padding: var(--sp-3) var(--sp-4);
   display: flex; align-items: center; justify-content: space-between;
@@ -288,7 +288,7 @@ mark { background: rgba(244,166,35,.45); color: inherit; border-radius: 3px; pad
 .toast {
   position: fixed; bottom: 90px; left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--navy); color: #12161F;
+  background: var(--navy); color: #FFFFFF;
   padding: 10px 20px; border-radius: var(--r-pill);
   font-size: 13px; font-weight: 600;
   opacity: 0; pointer-events: none;
@@ -335,12 +335,12 @@ mark { background: rgba(244,166,35,.45); color: inherit; border-radius: 3px; pad
 /* ===== Back header ===== */
 .back-header {
   position: sticky; top: 0; z-index: 50;
-  background: var(--navy); color: #12161F;
+  background: var(--navy); color: #FFFFFF;
   padding: var(--sp-3) var(--sp-4);
   display: flex; align-items: center; gap: var(--sp-3);
   box-shadow: var(--shadow-md);
 }
-.back-header a { color: #12161F; text-decoration: none; font-size: 22px; line-height: 1; }
+.back-header a { color: #FFFFFF; text-decoration: none; font-size: 22px; line-height: 1; }
 .back-header h1 { font-size: 16px; font-weight: 700; }
 
 /* ===== Responsive ===== */
