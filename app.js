@@ -211,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.history.length > 1) {
         window.history.back();
       } else {
-        // ပထမဆုံး Page ရောက်နေရင် ထွက်မသွားဘဲ အောက်က Toast လေးပဲပြမယ်
         const toast = document.createElement('div');
         toast.innerText = 'Press back again to exit';
         toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#D32F2F;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;z-index:9999;';
@@ -220,31 +219,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-});
-
-// Search Box ရဲ့ ညာဘက်မှာ How To Use ခလုတ် ထည့်ဖို့ Script
-document.addEventListener('DOMContentLoaded', () => {
-  setInterval(() => {
-    // Search Box ကို ရှာမယ်
-    const searchBox = document.querySelector('.arc-search-box');
-    if (searchBox && !document.getElementById('my-help-btn')) {
-      
-      // ခလုတ်အသစ် ဖန်တီးမယ်
-      const btn = document.createElement('button');
-      btn.id = 'my-help-btn';
-      btn.innerHTML = `❓ How To Use`;
-      btn.style.cssText = 'background: rgba(225, 29, 62, 0.1); color: #E11D3E; border: 1px solid #E11D3E; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 8px; white-space: nowrap;';
-      
-      // ခလုတ်နှိပ်ရင် Popup ပွင့်အောင်
-      btn.onclick = () => {
-        let modal = document.getElementById('helpModal');
-        if(modal) modal.style.display = 'flex';
-      };
-
-      // Search Box ရဲ့ ဘေးမှာ ထည့်မယ်
-      searchBox.parentNode.style.display = 'flex';
-      searchBox.parentNode.style.alignItems = 'center';
-      searchBox.parentNode.appendChild(btn);
-    }
-  }, 1000); // စက္ကန့်တိုင်း စစ်ပါမယ် (JavaScript က ကုဒ်တွေ ပြန်မဖျက်နိုင်အောင်)
 });
