@@ -1,59 +1,63 @@
 :root {
-  --bg: #0A0F1D !important;
-  --surface: #151C2C !important;
-  --card: #151C2C !important;
-  --nav-bg: #0A0F1D !important;
-  --navy: #0A0F1D !important;
-  --navy-light: #1E293B !important;
-  --text-primary: #F4F5F7 !important;
-  --text-secondary: #A0ABC0 !important;
-  --text-muted: #64748B !important;
-  --border: #2A364F !important;
-  --gold: #F4A623 !important;
-  --gold-dark: #D98E1A !important;
-  --success: #20A66A !important;
-  --color-primary: #D32F2F !important;
+  /* Core Colors */
+  --bg: #0A0F1D;
+  --surface: #151C2C;
+  --card: #151C2C;
+  --nav-bg: #0A0F1D;
+  --navy: #0A0F1D;
+  --navy-light: #1E293B;
+  
+  /* Text Colors */
+  --text-primary: #F4F5F7;
+  --text-secondary: #A0ABC0;
+  --text-muted: #64748B;
+  
+  /* Borders */
+  --border: #2A364F;
+  
+  /* Brand Colors */
+  --gold: #F4A623;
+  --gold-dark: #D98E1A;
+  --success: #20A66A;
+  --color-primary: #D32F2F;
+  
+  /* Fonts */
   --font-sans: system-ui, -apple-system, sans-serif;
 }
 
 body {
-  font-family: var(--font-sans); 
-  background: var(--bg) !important; 
-  color: var(--text-primary) !important;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
 }
 
 button { cursor: pointer; background: none; border: none; }
 .section-title::before { content: ''; width: 4px; height: 14px; background: var(--color-primary); border-radius: 2px; }
-h1, h2, h3, h4, h5, h6 { color: var(--text-primary) !important; }
+h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
 p, span, div, strong, b { color: inherit; }
-.text-secondary { color: var(--text-secondary) !important; }
+.text-secondary { color: var(--text-secondary); }
 
 /* Database Page Specific Fix */
 .db-list-item, .db-list-item * {
-  color: #F4F5F7 !important;
+  color: #F4F5F7;
 }
 .db-list-item h3, .db-list-item .title {
-  color: #FFFFFF !important;
-}
-
-/* Database List Items Fix */
-.db-list-item, .db-list-item *, .db-list-item h3, .db-list-item .title, .db-list-item .subtitle {
-  color: #F4F5F7 !important;
+  color: #FFFFFF;
 }
 
 /* Link တွေရဲ့ အောက်မျဉ်းနဲ့ အပြာရောင်တွေ ဖျောက်ဖို့ */
 a, a:link, a:visited, a:hover, a:active {
-  text-decoration: none !important;
-  color: inherit !important;
+  text-decoration: none;
+  color: inherit;
 }
 .db-list-item {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 /* Details Page Fix */
 #app, #app *, .info-row, .info-row span, .info-row div, .code-val, .detail-val {
-  color: #FFFFFF !important;
+  color: #FFFFFF;
 }
 .text-muted, .info-label {
-  color: #A0ABC0 !important;
+  color: #A0ABC0;
 }
