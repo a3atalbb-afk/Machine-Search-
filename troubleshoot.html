@@ -1727,22 +1727,16 @@
   init();
 })();
 </script>
+
 <!-- Help Modal (Popup) -->
 <div id="helpModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px);">
   <div style="background: linear-gradient(180deg, #1C2230 0%, #141821 100%); border-radius: 16px; padding: 24px; border: 1px solid #2E374B; max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-    
     <button onclick="document.getElementById('helpModal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94A3B8; font-size: 24px; cursor: pointer;">&times;</button>
-    
-    <h2 style="color: #FFFFFF; font-size: 22px; margin-bottom: 4px; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">SOLUTION CENTER</h2>
+    <h2 style="color: #FFFFFF; font-size: 22px; margin-bottom: 4px; font-weight: 900;">SOLUTION CENTER</h2>
     <p style="color: #E11D3E; font-size: 13px; font-weight: bold; margin-bottom: 20px;">Your Personal Machine Solution Library</p>
-    
-    <p style="color: #CBD5E1; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-      Machine Error များနှင့် ဖြေရှင်းနည်းများကို ကိုယ်တိုင်မှတ်တမ်းတင်ပြီး လိုအပ်သည့်အချိန်တွင် ပြန်လည်အသုံးပြုနိုင်ပါသည်။
-    </p>
-
-    <!-- အသုံးပြုနည်း -->
+    <p style="color: #CBD5E1; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">Machine Error များနှင့် ဖြေရှင်းနည်းများကို ကိုယ်တိုင်မှတ်တမ်းတင်ပြီး လိုအပ်သည့်အချိန်တွင် ပြန်လည်အသုံးပြုနိုင်ပါသည်။</p>
     <div style="background: rgba(255,255,255,0.03); border: 1px solid #2E374B; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">⚙️ အသုံးပြုနည်း</h3>
+      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px;">⚙️ အသုံးပြုနည်း</h3>
       <ol style="color: #CBD5E1; font-size: 13.5px; line-height: 1.8; padding-left: 20px; margin: 0;">
         <li><b>Add Solution</b> ကိုနှိပ်ပါ။</li>
         <li>Machine Name၊ Error Name နှင့် ဖြေရှင်းနည်းများ ထည့်သွင်းပါ။</li>
@@ -1751,10 +1745,8 @@
         <li><b>Search</b> မှ သိမ်းဆည်းထားသော Solution များကို ပြန်ရှာပါ။</li>
       </ol>
     </div>
-
-    <!-- အကျိုးပြုပုံ -->
     <div style="background: rgba(255,255,255,0.03); border: 1px solid #2E374B; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">✨ အကျိုးပြုပုံ</h3>
+      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px;">✨ အကျိုးပြုပုံ</h3>
       <ul style="color: #CBD5E1; font-size: 13.5px; line-height: 1.8; padding-left: 20px; margin: 0; list-style-type: disc;">
         <li><b>Edit</b> — သိမ်းဆည်းထားသော အချက်အလက်များကို ပြန်ပြင်နိုင်သည်။</li>
         <li><b>Delete</b> — မလိုအပ်တော့သော Solution များကို ဖယ်ရှားနိုင်သည်။</li>
@@ -1762,16 +1754,32 @@
         <li><b>Build Your Library</b> — မိမိ၏ Machine Error အတွေ့အကြုံများကို စုစည်းထားနိုင်သည်။</li>
       </ul>
     </div>
-
-    <p style="color: #CBD5E1; font-size: 13px; line-height: 1.6; margin-bottom: 20px; text-align: center; font-style: italic;">
-      မိမိကြုံတွေ့ခဲ့သော ပြဿနာများကို သိမ်းဆည်းထားခြင်းဖြင့် နောက်တစ်ကြိမ် ပြန်လည်ကြုံတွေ့လာပါက အချိန်ကုန်သက်သာစွာ ရှာဖွေဖြေရှင်းနိုင်ပါသည်။
-    </p>
-
-    <p style="color: #F4A623; font-size: 14px; font-weight: 900; text-align: center; margin-top: 10px; letter-spacing: 0.5px;">
-      Save Once · Find Anytime · Solve Smarter
-    </p>
+    <p style="color: #CBD5E1; font-size: 13px; line-height: 1.6; margin-bottom: 20px; text-align: center; font-style: italic;">မိမိကြုံတွေ့ခဲ့သော ပြဿနာများကို သိမ်းဆည်းထားခြင်းဖြင့် နောက်တစ်ကြိမ် ပြန်လည်ကြုံတွေ့လာပါက အချိန်ကုန်သက်သာစွာ ရှာဖွေဖြေရှင်းနိုင်ပါသည်။</p>
+    <p style="color: #F4A623; font-size: 14px; font-weight: 900; text-align: center; margin-top: 10px; letter-spacing: 0.5px;">Save Once · Find Anytime · Solve Smarter</p>
   </div>
 </div>
 <!-- End Help Guide -->
+<!-- Help Button Script -->
+<script>
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var searchBox = document.querySelector('.arc-search-box');
+      if (searchBox && !document.getElementById('my-custom-help-btn')) {
+        var btn = document.createElement('button');
+        btn.id = 'my-custom-help-btn';
+        btn.innerHTML = '❓ How To Use';
+        btn.style.cssText = 'background: rgba(225, 29, 62, 0.1); color: #E11D3E; border: 1px solid #E11D3E; height: 38px; padding: 0 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; margin-left: 8px; white-space: nowrap; display: flex; align-items: center; gap: 6px;';
+        btn.onclick = function() {
+          var modal = document.getElementById('helpModal');
+          if(modal) modal.style.display = 'flex';
+        };
+        searchBox.parentNode.style.display = 'flex';
+        searchBox.parentNode.style.alignItems = 'center';
+        searchBox.parentNode.appendChild(btn);
+      }
+    }, 500);
+  });
+</script>
+<!-- End Help Button Script -->
 </body>
 </html>
