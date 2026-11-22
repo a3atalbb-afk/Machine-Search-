@@ -10,86 +10,34 @@
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  /* ===== CUSTOM HEADER ===== */
-  .custom-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    background: #0A0E14;
-    border-bottom: 1px solid rgba(220, 38, 38, 0.3);
-  }
-  .custom-header__brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .custom-header__logo {
-    width: 44px;
-    height: 44px;
-  }
-  .custom-header__divider {
-    width: 1px;
-    height: 32px;
-    background: rgba(255,255,255,0.1);
-  }
-  .custom-header__text {
-    display: flex;
-    flex-direction: column;
-  }
-  .custom-header__name {
-    font-size: 18px;
-    font-weight: 900;
-    color: #fff;
-    letter-spacing: 0.5px;
-    line-height: 1.1;
-  }
-  .custom-header__tag {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .custom-header__settings {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: #141A24;
-    border: 1px solid #2A3441;
-    display: grid;
-    place-items: center;
-    color: #94A3B8;
-    text-decoration: none;
-  }
-  .custom-header__settings svg {
-    width: 20px !important;
-    height: 20px !important;
+  /* ===== HOME SPECIFIC (Mobile Fixed) ===== */
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
   }
 
-  /* ===== HERO SECTION ===== */
+  /* Header (Static, No sticky) */
+  .custom-header {
+    position: relative; /* Sticky မဟုတ်တော့ဘူး */
+    z-index: 10;
+  }
+
   .home-hero {
     padding: 24px 16px 16px;
+    text-align: center;
   }
   .home-hero h2 {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 900;
     line-height: 1.1;
     color: #fff;
     margin: 0 0 8px;
     letter-spacing: -0.5px;
   }
-  .home-hero h2 .accent {
-    color: #EF4444;
-  }
-  .home-hero p {
-    color: #94A3B8;
-    font-size: 15px;
-    margin: 0;
-  }
+  .home-hero h2 .accent { color: #EF4444; }
+  .home-hero p { color: #94A3B8; font-size: 14px; margin: 0; }
 
-  /* ===== SEARCH BAR ===== */
   .home-search-wrap {
     padding: 0 16px 20px;
     display: flex;
@@ -104,25 +52,18 @@
     border: 2px solid #DC2626;
     border-radius: 30px;
     padding: 0 16px;
-    height: 56px;
-    box-shadow: 0 0 15px rgba(220,38,38,0.2);
+    height: 52px;
+    box-shadow: 0 0 15px rgba(220,38,38,0.15);
     text-decoration: none;
   }
-  .home-search-box__icon {
-    color: #fff;
-    display: flex;
-    margin-right: 12px;
-  }
-  .home-search-box__icon svg {
-    width: 22px !important;
-    height: 22px !important;
-  }
+  .home-search-box__icon { color: #fff; display: flex; margin-right: 12px; }
+  .home-search-box__icon svg { width: 20px !important; height: 20px !important; }
   .home-search-box__input {
     flex: 1;
     background: transparent;
     border: none;
     color: #64748B;
-    font-size: 16px;
+    font-size: 15px;
     outline: none;
   }
   .home-search-box__filter {
@@ -132,12 +73,8 @@
     padding-left: 12px;
     border-left: 1px solid rgba(255,255,255,0.1);
   }
-  .home-search-box__filter svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
+  .home-search-box__filter svg { width: 20px !important; height: 20px !important; }
 
-  /* ===== STATS CARDS ===== */
   .home-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -153,35 +90,14 @@
     align-items: center;
     gap: 12px;
   }
-  .home-stat-card--red {
-    border-color: rgba(220,38,38,0.4);
-  }
-  .home-stat-card--gold {
-    border-color: rgba(245,158,11,0.4);
-  }
-  .home-stat-card__icon {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .home-stat-card__icon svg {
-    width: 32px !important;
-    height: 32px !important;
-  }
+  .home-stat-card--red { border-color: rgba(220,38,38,0.4); }
+  .home-stat-card--gold { border-color: rgba(245,158,11,0.4); }
+  .home-stat-card__icon { width: 40px; height: 40px; display: grid; place-items: center; flex-shrink: 0; }
+  .home-stat-card__icon svg { width: 32px !important; height: 32px !important; }
   .home-stat-card__icon--red { color: #fff; }
   .home-stat-card__icon--gold { color: #F59E0B; }
-  
-  .home-stat-card__divider {
-    width: 1px;
-    height: 32px;
-    background: rgba(255,255,255,0.1);
-  }
-  .home-stat-card__info {
-    display: flex;
-    flex-direction: column;
-  }
+  .home-stat-card__divider { width: 1px; height: 32px; background: rgba(255,255,255,0.1); }
+  .home-stat-card__info { display: flex; flex-direction: column; }
   .home-stat-card__label {
     font-size: 10px;
     font-weight: 800;
@@ -190,19 +106,9 @@
     letter-spacing: 0.5px;
     margin-bottom: 2px;
   }
-  .home-stat-card__value {
-    font-size: 20px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1;
-  }
-  .home-stat-card__value--gold {
-    color: #F59E0B;
-    font-size: 14px;
-    margin-top: 2px;
-  }
+  .home-stat-card__value { font-size: 20px; font-weight: 900; color: #fff; line-height: 1; }
+  .home-stat-card__value--gold { color: #F59E0B; font-size: 14px; margin-top: 2px; }
 
-  /* ===== QUICK ACCESS ===== */
   .section-header-row {
     display: flex;
     align-items: center;
@@ -225,13 +131,8 @@
     background: #DC2626;
     border-radius: 2px;
   }
-  .section-header-row .arrow {
-    color: #64748B;
-  }
-  .section-header-row .arrow svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
+  .section-header-row .arrow { color: #64748B; }
+  .section-header-row .arrow svg { width: 20px !important; height: 20px !important; }
 
   .home-quick-grid {
     display: grid;
@@ -251,47 +152,20 @@
     color: #fff;
     transition: background 0.2s;
   }
-  .home-quick-card:hover {
-    background: #1C2330;
-  }
+  .home-quick-card:hover { background: #1C2330; }
   .home-quick-card--red-border {
     border-color: rgba(220,38,38,0.5);
     background: rgba(220,38,38,0.05);
   }
-  .home-quick-card__icon {
-    width: 24px;
-    height: 24px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .home-quick-card__icon svg {
-    width: 24px !important;
-    height: 24px !important;
-  }
+  .home-quick-card__icon { width: 24px; height: 24px; display: grid; place-items: center; flex-shrink: 0; }
+  .home-quick-card__icon svg { width: 24px !important; height: 24px !important; }
   .home-quick-card__icon--grey { color: #CBD5E1; }
   .home-quick-card__icon--red { color: #EF4444; }
-  
-  .home-quick-card__divider {
-    width: 1px;
-    height: 24px;
-    background: rgba(255,255,255,0.1);
-  }
-  .home-quick-card__title {
-    flex: 1;
-    font-size: 15px;
-    font-weight: 700;
-  }
-  .home-quick-card__arrow {
-    color: #64748B;
-    display: flex;
-  }
-  .home-quick-card__arrow svg {
-    width: 16px !important;
-    height: 16px !important;
-  }
+  .home-quick-card__divider { width: 1px; height: 24px; background: rgba(255,255,255,0.1); }
+  .home-quick-card__title { flex: 1; font-size: 15px; font-weight: 700; }
+  .home-quick-card__arrow { color: #64748B; display: flex; }
+  .home-quick-card__arrow svg { width: 16px !important; height: 16px !important; }
 
-  /* ===== HOW IT WORKS ===== */
   .home-how {
     margin: 0 16px 24px;
     background: #141A24;
@@ -321,13 +195,8 @@
     background: #DC2626;
     border-radius: 2px;
   }
-  .home-how__info {
-    color: #64748B;
-  }
-  .home-how__info svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
+  .home-how__info { color: #64748B; }
+  .home-how__info svg { width: 18px !important; height: 18px !important; }
   .home-how__steps {
     display: flex;
     justify-content: space-between;
@@ -377,7 +246,7 @@
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1006"></script>
+<script src="app.js?v=1008"></script>
 <script>
 (async function () {
   const app = document.getElementById('app');
@@ -386,10 +255,14 @@
   try {
     data = await MS.loadData();
   } catch (e) {
-    app.innerHTML = '<div class="state" style="padding-top:40px;">' +
-      '<div class="state__icon">' + MS.ICON.warning + '</div>' +
-      '<div class="state__title">Database load failed</div>' +
-      '</div>';
+    app.innerHTML = MS.header() +
+      '<main class="container">' +
+        '<div class="state" style="padding-top:40px;">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('home');
     return;
   }
 
@@ -397,28 +270,21 @@
   const has = data.meta && data.meta.filename !== '—';
   const count = machines.length;
 
-  // Custom Header HTML (to match the image)
-  const customHeader = `
-    <header class="custom-header">
-      <div class="custom-header__brand">
-        <svg class="custom-header__logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#DC2626" stroke-width="6" fill="none"/>
-          <circle cx="50" cy="50" r="15" stroke="#DC2626" stroke-width="6" fill="none"/>
-          <path d="M65 65 L80 80" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/>
-        </svg>
-        <div class="custom-header__divider"></div>
-        <div class="custom-header__text">
-          <div class="custom-header__name">MACHINE SEARCH</div>
-          <div class="custom-header__tag">OFFLINE DATABASE</div>
-        </div>
-      </div>
-      <a href="settings.html" class="custom-header__settings" aria-label="Settings">
-        ${MS.ICON.settings}
-      </a>
-    </header>
-  `;
+  app.innerHTML = 
+    // Custom Header (With settings icon)
+    '<header class="back-header" style="border-bottom:none; justify-content:space-between; padding-right:16px;">' +
+      '<div style="display:flex; align-items:center; gap:12px;">' +
+        '<div class="custom-header__brand">' +
+          '<svg class="custom-header__logo" style="width:32px;height:32px;" viewBox="0 0 100 100" fill="none"><path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#DC2626" stroke-width="6" fill="none"/><circle cx="50" cy="50" r="15" stroke="#DC2626" stroke-width="6" fill="none"/><path d="M65 65 L80 80" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/></svg>' +
+          '<div class="custom-header__text">' +
+            '<div class="custom-header__name" style="font-size:16px;">MACHINE <span style="color:#EF4444;">SEARCH</span></div>' +
+            '<div class="custom-header__tag" style="font-size:9px;">OFFLINE DATABASE</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<a href="settings.html" class="custom-header__settings" style="width:36px;height:36px;">' + MS.ICON.settings + '</a>' +
+    '</header>' +
 
-  app.innerHTML = customHeader +
     '<main style="padding-bottom: 80px;">' +
       
       // Hero Text
@@ -451,9 +317,7 @@
           '</div>' +
         '</div>' +
         '<div class="home-stat-card home-stat-card--gold">' +
-          '<div class="home-stat-card__icon home-stat-card__icon--gold">' +
-            MS.ICON.database +
-          '</div>' +
+          '<div class="home-stat-card__icon home-stat-card__icon--gold">' + MS.ICON.database + '</div>' +
           '<div class="home-stat-card__divider"></div>' +
           '<div class="home-stat-card__info">' +
             '<div class="home-stat-card__label">DATABASE</div>' +
