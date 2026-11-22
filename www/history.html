@@ -9,53 +9,160 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
+<style>
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .history-item:hover {
+    border-color: var(--color-primary, #D32F2F);
+  }
+  .history-item__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--surface, #151C2C);
+    color: var(--text-muted, #64748B);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .history-item__icon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .history-item__text {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    word-break: break-word;
+  }
+  .history-item__remove {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #64748B);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .history-item__remove:hover {
+    color: var(--color-primary, #D32F2F);
+    background: rgba(211,47,47,0.1);
+  }
+  .history-item__remove svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
 
-
+  .history-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+  .btn-clear-history {
+    padding: 8px 16px;
+    background: transparent;
+    color: var(--color-primary, #D32F2F);
+    border: 1px solid var(--color-primary, #D32F2F);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .btn-clear-history:active {
+    background: rgba(211,47,47,0.1);
+  }
+</style>
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1006"></script>
 <script>
-(function() {
+(function () {
   const app = document.getElementById('app');
-  app.innerHTML = MS.backHeader('Search History') + `
-    <main class="container" style="padding-top: var(--sp-4)">
-      <div id="list"></div>
-    </main>
-  ` + MS.bottomNav('search');
+
+  app.innerHTML = MS.backHeader('Search History') +
+    '<main class="container" style="padding-top: var(--sp-4, 16px);">' +
+      '<div class="history-actions" id="actions"></div>' +
+      '<div id="list"></div>' +
+    '</main>' +
+    MS.bottomNav('search');
+
+  const list = document.getElementById('list');
+  const actions = document.getElementById('actions');
 
   function render() {
-    const list = document.getElementById('list');
     const hist = MS.getHistory();
 
     if (hist.length === 0) {
-      list.innerHTML = `<div class="state">
-        <div class="state__icon">${MS.ICON.clock}</div>
-        <div class="state__title">No search history</div>
-        <div class="state__subtitle">Your recent searches will appear here.</div>
-      </div>`;
+      actions.innerHTML = '';
+      list.innerHTML = '<div class="state">' +
+        '<div class="state__icon">' + MS.ICON.clock + '</div>' +
+        '<div class="state__title">No search history</div>' +
+        '<div class="state__subtitle">Your recent searches will appear here.</div>' +
+      '</div>';
       return;
     }
 
-    list.innerHTML = hist.map(q => `
-      <div class="db-list-item" style="margin-bottom:8px" onclick="location.href='search.html?q=${encodeURIComponent(q)}'">
-        <div class="db-list-item__icon" style="background:var(--surface-2);color:var(--text-secondary)">
-          ${MS.ICON.clock}
-        </div>
-        <div class="db-list-item__body">
-          <div class="db-list-item__name" style="margin-top:6px">${MS.escapeHtml(q)}</div>
-        </div>
-        <button class="icon-btn" onclick="event.stopPropagation(); removeHist('${MS.escapeHtml(q)}')" style="color:var(--text-muted)">
-          ${MS.ICON.close}
-        </button>
-      </div>
-    `).join('');
-  }
+    actions.innerHTML = '<button class="btn-clear-history" id="clearBtn">Clear All</button>';
 
-  window.removeHist = function(q) {
-    MS.removeHistory(q);
-    render();
-  };
+    list.innerHTML = hist.map(q =>
+      '<div class="history-item" data-query="' + MS.escapeHtml(q) + '">' +
+        '<div class="history-item__icon">' + MS.ICON.clock + '</div>' +
+        '<div class="history-item__text">' + MS.escapeHtml(q) + '</div>' +
+        '<button class="history-item__remove" data-remove="' + MS.escapeHtml(q) + '" aria-label="Remove">' +
+          MS.ICON.close +
+        '</button>' +
+      '</div>'
+    ).join('');
+
+    // Click on item → open search
+    list.querySelectorAll('.history-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        // Ignore if clicked on remove button
+        if (e.target.closest('[data-remove]')) return;
+        const q = item.dataset.query;
+        location.href = 'search.html?q=' + encodeURIComponent(q);
+      });
+    });
+
+    // Remove individual item
+    list.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        MS.removeHistory(btn.dataset.remove);
+        render();
+      });
+    });
+
+    // Clear all
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Clear all search history?')) {
+          MS.clearHistory();
+          MS.toast('History cleared', 'ok');
+          render();
+        }
+      });
+    }
+  }
 
   render();
 })();

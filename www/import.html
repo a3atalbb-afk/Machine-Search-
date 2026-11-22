@@ -8,172 +8,244 @@
 <link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
 <script src="lib/xlsx.full.min.js"></script>
+<script src="excel-parser.js"></script>
 <style>
-  /* Excel ဖိုင်ရွေးချယ်သည့် နေရာ (Drop Zone) */
   .upload-zone {
-    border: 2px dashed var(--border); border-radius: 12px;
-    padding: 32px 16px; text-align: center; cursor: pointer;
-    background: var(--card); transition: border-color 0.2s, background 0.2s;
+    border: 2px dashed var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 32px 16px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--card, #151C2C);
+    transition: border-color 0.2s, background 0.2s;
     margin-bottom: 24px;
   }
-  .upload-zone:hover { border-color: var(--color-primary); background: rgba(229,57,53,0.05); }
-  .upload-zone__icon { color: var(--color-primary); margin-bottom: 12px; display: flex; justify-content: center; }
+  .upload-zone:hover {
+    border-color: var(--color-primary, #D32F2F);
+    background: rgba(229,57,53,0.05);
+  }
+  .upload-zone__icon {
+    color: var(--color-primary, #D32F2F);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+  }
   .upload-zone__icon svg { width: 48px !important; height: 48px !important; }
   .upload-zone__title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-  .upload-zone__sub { font-size: 13px; color: var(--text-secondary); }
+  .upload-zone__sub { font-size: 13px; color: var(--text-secondary, #A0ABC0); }
 
-  /* မြန်မာစာ လမ်းညွှန် Section */
   .guide-section {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 20px; margin-bottom: 16px;
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
   }
   .guide-title {
-    font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 16px;
-    display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px;
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border, #2A364F);
+    padding-bottom: 12px;
   }
-  .guide-title svg { color: var(--color-primary); width: 20px !important; height: 20px !important; }
+  .guide-title svg { color: var(--color-primary, #D32F2F); width: 20px !important; height: 20px !important; }
 
   .step-list { list-style: none; padding: 0; margin: 0; }
   .step-item { display: flex; gap: 12px; margin-bottom: 16px; }
   .step-item:last-child { margin-bottom: 0; }
   .step-num {
-    width: 24px; height: 24px; border-radius: 50%; background: var(--color-primary);
-    color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 12px; flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary, #D32F2F);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 12px;
+    flex-shrink: 0;
   }
-  .step-text { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+  .step-text { font-size: 14px; color: var(--text-secondary, #A0ABC0); line-height: 1.6; }
   .step-text b { color: #fff; }
 
-  /* သတိပြုရန် (Warning Box) */
   .warn-box {
-    background: rgba(255, 152, 0, 0.1); border-left: 4px solid #FF9800;
-    padding: 12px 16px; border-radius: 4px; margin-top: 16px;
+    background: rgba(255, 152, 0, 0.1);
+    border-left: 4px solid #FF9800;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-top: 16px;
   }
-  .warn-title { color: #FF9800; font-weight: 800; font-size: 14px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .warn-title {
+    color: #FF9800;
+    font-weight: 800;
+    font-size: 14px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
   .warn-text { color: #FFCDD2; font-size: 13px; line-height: 1.5; }
 
-  /* Progress Bar */
   .progress-wrap { display: none; margin-top: 16px; }
-  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; width: 0%; background: var(--color-primary); transition: width 0.3s; }
-  .progress-text { font-size: 12px; color: var(--color-primary); text-align: center; margin-top: 8px; font-weight: 700; }
+  .progress-bar {
+    height: 6px;
+    background: var(--border, #2A364F);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--color-primary, #D32F2F);
+    transition: width 0.3s;
+  }
+  .progress-text {
+    font-size: 12px;
+    color: var(--color-primary, #D32F2F);
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 700;
+  }
 
-  /* လက်ရှိ Database အနေအထား */
-  .current-db { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 24px; }
-  .current-db .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+  .current-db {
+    background: var(--surface, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .current-db .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
   .current-db .row:last-child { margin-bottom: 0; }
-  .current-db .k { color: var(--text-secondary); }
+  .current-db .k { color: var(--text-secondary, #A0ABC0); }
   .current-db .v { font-weight: 800; color: #fff; text-align: right; }
 
-  /* Confirmation Modal */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .preview-box {
+    background: var(--surface, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .preview-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .preview-stat {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    background: var(--card, #151C2C);
+    border-radius: 8px;
+  }
+  .preview-stat__v { font-size: 20px; font-weight: 900; color: #fff; }
+  .preview-stat__l { font-size: 11px; color: var(--text-muted, #64748B); text-transform: uppercase; font-weight: 700; }
+  .preview-stat--ok .preview-stat__v { color: #22C55E; }
+  .preview-stat--warn .preview-stat__v { color: #FF9800; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
   .modal-overlay.show { display: flex; }
-  .modal { background: var(--card); border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
+  .modal {
+    background: var(--card, #151C2C);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border, #2A364F);
+  }
   .modal h3 { color: #fff; font-size: 18px; font-weight: 900; margin-bottom: 8px; }
-  .modal p { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+  .modal p { color: var(--text-secondary, #A0ABC0); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
   .modal-actions { display: flex; gap: 12px; }
-  .modal-actions button { flex: 1; height: 44px; border-radius: 8px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
-  .btn-cancel { background: var(--surface); color: #fff; border: 1px solid var(--border) !important; }
-  .btn-confirm { background: var(--color-primary); color: #fff; }
+  .modal-actions button {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-cancel {
+    background: var(--surface, #151C2C);
+    color: #fff;
+    border: 1px solid var(--border, #2A364F) !important;
+  }
+  .btn-confirm {
+    background: var(--color-primary, #D32F2F);
+    color: #fff;
+  }
 </style>
-<link rel="stylesheet" href="styles.css">
-
-
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1006"></script>
 <script>
-(function() {
+(function () {
   const app = document.getElementById('app');
-  const iconInfo = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
-  const iconWarn = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+  const iconInfo = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+  const iconWarn = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 
-  app.innerHTML = MS.backHeader('Excel Import') + `
-    <main class="container" style="padding-top: 16px; padding-bottom: 32px;">
-      
-      <!-- Current Database Status -->
-      <div class="section-title">လက်ရှိ Database အနေအထား</div>
-      <div class="current-db" id="currentDb">
-        <div style="text-align: center; color: var(--text-muted); font-size: 13px;">Loading...</div>
-      </div>
+  app.innerHTML = MS.backHeader('Excel Import') +
+    '<main class="container" style="padding-top: 16px; padding-bottom: 32px;">' +
+      '<div class="section-title">လက်ရှိ Database အနေအထား</div>' +
+      '<div class="current-db" id="currentDb">' +
+        '<div style="text-align: center; color: var(--text-muted); font-size: 13px;">Loading...</div>' +
+      '</div>' +
 
-      <!-- Upload Zone -->
-      <div class="upload-zone" id="drop">
-        <div class="upload-zone__icon">${MS.ICON.upload}</div>
-        <div class="upload-zone__title">Excel ဖိုင် ရွေးချယ်ရန် နှိပ်ပါ</div>
-        <div class="upload-zone__sub">(.xlsx သို့မဟုတ် .xls ဖိုင်များ ရပါသည်)</div>
-        <input type="file" id="file" accept=".xlsx,.xls" hidden>
-      </div>
+      '<div class="upload-zone" id="drop">' +
+        '<div class="upload-zone__icon">' + MS.ICON.upload + '</div>' +
+        '<div class="upload-zone__title">Excel ဖိုင် ရွေးချယ်ရန် နှိပ်ပါ</div>' +
+        '<div class="upload-zone__sub">(.xlsx သို့မဟုတ် .xls ဖိုင်များ ရပါသည်)</div>' +
+        '<input type="file" id="file" accept=".xlsx,.xls" hidden>' +
+      '</div>' +
 
-      <!-- Progress Bar -->
-      <div class="progress-wrap" id="progressWrap">
-        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <div class="progress-text" id="progressText">Reading file...</div>
-      </div>
+      '<div class="progress-wrap" id="progressWrap">' +
+        '<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>' +
+        '<div class="progress-text" id="progressText">Reading file...</div>' +
+      '</div>' +
 
-      <!-- Error Box -->
-      <div id="errBox" style="display:none; padding:16px; background:rgba(229,57,53,0.1); border:1px solid var(--color-primary); border-radius:12px; color:var(--color-primary); font-size:14px; font-weight:bold; margin-top:16px;">
-        <div style="display:flex; gap:8px; align-items:center;">${iconWarn} <span id="errMsg">Error</span></div>
-      </div>
+      '<div id="errBox" style="display:none; padding:16px; background:rgba(229,57,53,0.1); border:1px solid var(--color-primary); border-radius:12px; color:var(--color-primary); font-size:14px; font-weight:bold; margin-top:16px;">' +
+        '<div style="display:flex; gap:8px; align-items:center;">' + iconWarn + ' <span id="errMsg">Error</span></div>' +
+      '</div>' +
 
-      <!-- မြန်မာစာ လမ်းညွှန် -->
-      <div class="section-title" style="margin-top:32px;">အသုံးပြုနည်း လမ်းညွှန်</div>
-      
-      <div class="guide-section">
-        <div class="guide-title">${iconInfo} Excel ဖိုင် ဘယ်လိုထည့်ရမလဲ？</div>
-        <ul class="step-list">
-          <li class="step-item">
-            <div class="step-num">၁</div>
-            <div class="step-text">
-              သင့်ဖုန်းရဲ့ <b>Files (သို့) Downloads</b> ထဲမှာ သိမ်းထားတဲ့ Machine Code တွေပါဝင်တဲ့ <b>Excel ဖိုင် (.xlsx)</b> ကို အရင်ရှာပါ။
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">၂</div>
-            <div class="step-text">
-              အပေါ်က <b>"Excel ဖိုင် ရွေးချယ်ရန် နှိပ်ပါ"</b> ဆိုတဲ့ အကွက်ကို နှိပ်ပါ။
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">၃</div>
-            <div class="step-text">
-              ဖုန်းထဲက ဖိုင်တွေပေါ်လာရင် သင်ရှာထားတဲ့ <b>Excel ဖိုင်ကို ရွေးချယ်ပေးပါ။</b>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">၄</div>
-            <div class="step-text">
-              App က အလိုအလျောက် ဖတ်ပြီး <b>"Replace Database"</b> ဆိုတဲ့ အတည်ပြုချက်လေး ပေါ်လာပါလိမ့်မယ်။ အဲဒါကို နှိပ်လိုက်ရင် Data တွေ ဝင်သွားပါပြီ။
-            </div>
-          </li>
-        </ul>
+      '<div id="previewBox" style="display:none;"></div>' +
 
-        <div class="warn-box">
-          <div class="warn-title">${iconWarn} သတိပြုရန်</div>
-          <div class="warn-text">
-            Excel ဖိုင်အသစ် ထည့်လိုက်တိုင်း အရင် Data အဟောင်းတွေကို အစားထိုး (Replace) လုပ်သွားမှာဖြစ်ပါတယ်။ ဒါကြောင့် Data အဟောင်းတွေ မပျောက်စေချင်ရင် သေချာစစ်ဆေးပြီးမှ ထည့်သွင်းပါ။
-          </div>
-        </div>
-      </div>
-
-    </main>
-  ` + MS.bottomNav('import');
-
-  // Modal အပိုင်း
-  const modalHTML = `
-    <div class="modal-overlay" id="confirmModal">
-      <div class="modal">
-        <h3>Database အစားထိုးမလား？</h3>
-        <p>လက်ရှိ Data အဟောင်းတွေအားလုံး ပျက်သွားပြီး ဒီ Excel ဖိုင်ထဲက Data အသစ်တွေနဲ့ အစားထိုးသွားပါမယ်။ သေချာပြီလား？</p>
-        <div class="modal-actions">
-          <button class="btn-cancel" onclick="closeModal()">မလုပ်တော့ပါ</button>
-          <button class="btn-confirm" id="confirmBtn">အစားထိုးမယ်</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', modalHTML);
+      '<div class="section-title" style="margin-top:32px;">အသုံးပြုနည်း လမ်းညွှန်</div>' +
+      '<div class="guide-section">' +
+        '<div class="guide-title">' + iconInfo + ' Excel ဖိုင် ဘယ်လိုထည့်ရမလဲ？</div>' +
+        '<ul class="step-list">' +
+          '<li class="step-item"><div class="step-num">၁</div><div class="step-text">သင့်ဖုန်းရဲ့ <b>Files (သို့) Downloads</b> ထဲမှာ သိမ်းထားတဲ့ Machine Code တွေပါဝင်တဲ့ <b>Excel ဖိုင် (.xlsx)</b> ကို အရင်ရှာပါ။</div></li>' +
+          '<li class="step-item"><div class="step-num">၂</div><div class="step-text">အပေါ်က <b>"Excel ဖိုင် ရွေးချယ်ရန် နှိပ်ပါ"</b> ဆိုတဲ့ အကွက်ကို နှိပ်ပါ။</div></li>' +
+          '<li class="step-item"><div class="step-num">၃</div><div class="step-text">ဖုန်းထဲက ဖိုင်တွေပေါ်လာရင် သင်ရှာထားတဲ့ <b>Excel ဖိုင်ကို ရွေးချယ်ပေးပါ။</b></div></li>' +
+          '<li class="step-item"><div class="step-num">၄</div><div class="step-text">App က အလိုအလျောက် ဖတ်ပြီး <b>Preview</b> ပြပါလိမ့်မယ်။ အတည်ပြုပြီးရင် <b>"Import"</b> ကို နှိပ်ပါ။</div></li>' +
+        '</ul>' +
+        '<div class="warn-box">' +
+          '<div class="warn-title">' + iconWarn + ' သတိပြုရန်</div>' +
+          '<div class="warn-text">Excel ဖိုင်အသစ် ထည့်လိုက်တိုင်း အရင် Data အဟောင်းတွေကို <b>Backup</b> ယူပြီးမှ အစားထိုး (Replace) လုပ်သွားမှာဖြစ်ပါတယ်။ ဒါကြောင့် Data အဟောင်းတွေ လုံးဝ မပျောက်ပါဘူး။</div>' +
+        '</div>' +
+      '</div>' +
+    '</main>' +
+    MS.bottomNav('import');
 
   const drop = document.getElementById('drop');
   const file = document.getElementById('file');
@@ -182,120 +254,108 @@
   const progressText = document.getElementById('progressText');
   const errBox = document.getElementById('errBox');
   const errMsg = document.getElementById('errMsg');
-  const modal = document.getElementById('confirmModal');
+  const previewBox = document.getElementById('previewBox');
 
   let parsedData = null;
 
-  // Current DB info
   async function loadCurrent() {
-    const data = await MS.loadData();
-    const has = data.meta && data.meta.filename !== '—';
-    document.getElementById('currentDb').innerHTML = `
-      <div class="row"><span class="k">ဖိုင်အမည်</span><span class="v" style="word-break:break-all; max-width:60%;">${has ? MS.escapeHtml(data.meta.filename) : 'မရှိပါ'}</span></div>
-      <div class="row"><span class="k">စက်အရေအတွက်</span><span class="v">${data.machines.length}</span></div>
-      <div class="row"><span class="k">တည်နေရာ</span><span class="v">${has ? MS.escapeHtml(data.meta.location) : '—'}</span></div>
-    `;
+    try {
+      const data = await MS.loadData();
+      const has = data.meta && data.meta.filename !== '—';
+      document.getElementById('currentDb').innerHTML =
+        '<div class="row"><span class="k">ဖိုင်အမည်</span><span class="v" style="word-break:break-all; max-width:60%;">' + (has ? MS.escapeHtml(data.meta.filename) : 'မရှိပါ') + '</span></div>' +
+        '<div class="row"><span class="k">စက်အရေအတွက်</span><span class="v">' + data.machines.length + '</span></div>' +
+        '<div class="row"><span class="k">တည်နေရာ</span><span class="v">' + (has ? MS.escapeHtml(data.meta.location) : '—') + '</span></div>';
+    } catch (e) {
+      document.getElementById('currentDb').innerHTML = '<div style="text-align:center;color:var(--color-primary);font-size:13px;">Failed to load current database</div>';
+    }
   }
   loadCurrent();
-
-  window.closeModal = () => modal.classList.remove('show');
 
   drop.addEventListener('click', () => file.click());
 
   file.addEventListener('change', async (e) => {
     const f = e.target.files[0];
-    if(!f) return;
+    if (!f) return;
 
     errBox.style.display = 'none';
+    previewBox.style.display = 'none';
     progressWrap.style.display = 'block';
-    progressFill.style.width = '10%';
-    progressText.textContent = 'ဖိုင်ကို ဖတ်နေပါသည်...';
+    progressFill.style.width = '0%';
+    progressText.textContent = 'Starting...';
 
     try {
-      const buf = await f.arrayBuffer();
-      const workbook = XLSX.read(buf, { type: 'array' });
-      
-      progressFill.style.width = '40%';
-      progressText.textContent = 'Worksheet များကို စစ်ဆေးနေသည်...';
+      const result = await ExcelParser.parseFile(f, (pct, text) => {
+        progressFill.style.width = pct + '%';
+        progressText.textContent = text;
+      });
 
-      // Sheet Detector Logic
-      let chosen = null;
-      for(const name of workbook.SheetNames) {
-        if(name.toLowerCase().includes('machine')) { chosen = name; break; }
-      }
-      if(!chosen) chosen = workbook.SheetNames[0];
+      parsedData = result;
 
-      progressFill.style.width = '70%';
-      progressText.textContent = `'${chosen}' Sheet ကို ဖတ်နေသည်...`;
-
-      const ws = workbook.Sheets[chosen];
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-      
-      let headerRow = 0;
-      let codeIdx = -1;
-      let locIdx = -1;
-      
-      for(let i=0; i<Math.min(rows.length, 10); i++) {
-        const r = rows[i].map(x => String(x).toLowerCase().trim());
-        const c = r.indexOf('machine code');
-        if(c >= 0) { 
-          headerRow = i; 
-          codeIdx = c; 
-          locIdx = r.indexOf('location');
-          break; 
-        }
-      }
-
-      if(codeIdx === -1) throw new Error('Excel ထဲမှာ "Machine Code" ကော်လံ မတွေ့ပါ။');
-
-      const machines = [];
-      for(let i=headerRow+1; i<rows.length; i++) {
-        const r = rows[i];
-        const code = String(r[codeIdx] || '').trim();
-        if(!code) continue;
-        
-        let rawLoc = locIdx >= 0 ? String(r[locIdx] || 'A3').trim() : 'A3';
-        let cleanLoc = rawLoc.replace(/[^A-Za-z0-9]/g, '') || 'A3';
-
-        machines.push({
-          no: machines.length + 1,
-          code: code,
-          name: MS.parseMachineCode(code),
-          location: cleanLoc,
-          number: machines.length + 1
-        });
-      }
-
-      if(machines.length === 0) throw new Error('မှန်ကန်သော Data များ မတွေ့ပါ။');
-
-      parsedData = {
-        meta: { filename: f.name, sheet: chosen, location: 'A3', importedAt: new Date().toISOString(), totalRecords: machines.length },
-        machines: machines
-      };
+      const stats = result.stats || { total: result.machines.length, duplicates: 0, invalid: 0 };
 
       progressFill.style.width = '100%';
       progressText.textContent = 'အဆင်သင့်ဖြစ်ပါပြီ။';
-      
+
       setTimeout(() => {
         progressWrap.style.display = 'none';
-        modal.classList.add('show');
-      }, 400);
+        previewBox.style.display = 'block';
+        previewBox.innerHTML =
+          '<div class="section-title">Preview</div>' +
+          '<div class="preview-box">' +
+            '<div class="preview-stats">' +
+              '<div class="preview-stat preview-stat--ok"><div class="preview-stat__v">' + stats.total + '</div><div class="preview-stat__l">Valid</div></div>' +
+              '<div class="preview-stat preview-stat--warn"><div class="preview-stat__v">' + stats.duplicates + '</div><div class="preview-stat__l">Duplicates</div></div>' +
+            '</div>' +
+            '<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">' +
+              'Sheet: <b style="color:#fff">' + MS.escapeHtml(result.meta.sheet) + '</b><br>' +
+              'Common Location: <b style="color:#fff">' + MS.escapeHtml(result.meta.location) + '</b><br>' +
+              'File: <b style="color:#fff">' + MS.escapeHtml(result.meta.filename) + '</b>' +
+            '</div>' +
+            '<div style="display:flex;gap:12px;margin-top:16px;">' +
+              '<button class="btn-cancel" id="cancelImport" style="flex:1;height:44px;border-radius:8px;font-weight:800;font-size:14px;border:1px solid var(--border);background:var(--surface);color:#fff;cursor:pointer;">Cancel</button>' +
+              '<button class="btn-confirm" id="confirmImport" style="flex:1;height:44px;border-radius:8px;font-weight:800;font-size:14px;border:none;background:var(--color-primary);color:#fff;cursor:pointer;">Import</button>' +
+            '</div>' +
+          '</div>';
 
-    } catch(err) {
+        document.getElementById('cancelImport').addEventListener('click', () => {
+          previewBox.style.display = 'none';
+          parsedData = null;
+          file.value = '';
+        });
+
+        document.getElementById('confirmImport').addEventListener('click', () => {
+          doImport();
+        });
+      }, 300);
+    } catch (err) {
       progressWrap.style.display = 'none';
       errBox.style.display = 'block';
       errMsg.textContent = 'Error: ' + err.message;
     }
   });
 
-  document.getElementById('confirmBtn').addEventListener('click', () => {
-    if(!parsedData) return;
-    MS.saveData(parsedData);
-    modal.classList.remove('show');
-    MS.toast(`စက် ${parsedData.machines.length} ခု ထည့်သွင်းပြီးပါပြီ`, 'ok');
-    loadCurrent(); // Update info
-    setTimeout(() => location.href = 'database.html', 1200);
-  });
+  function doImport() {
+    if (!parsedData) return;
+
+    // Backup existing data first
+    try {
+      const current = localStorage.getItem('ms_data_v2');
+      if (current) {
+        localStorage.setItem('ms_data_v2_backup_' + Date.now(), current);
+      }
+    } catch (e) { console.warn('backup failed', e); }
+
+    const ok = MS.saveData(parsedData);
+    if (ok) {
+      MS.toast('စက် ' + parsedData.machines.length + ' ခု ထည့်သွင်းပြီးပါပြီ', 'ok');
+      previewBox.style.display = 'none';
+      loadCurrent();
+      setTimeout(() => location.href = 'database.html', 1200);
+    } else {
+      MS.toast('Import failed — storage may be full', 'err');
+    }
+  }
 })();
 </script>
 </body>

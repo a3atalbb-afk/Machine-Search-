@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Search — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(async function () {
+  const app = document.getElementById('app');
+  const data = await MS.loadData();
+  const machines = data.machines || [];
+  
+  app.innerHTML = MS.backHeader('Live Search') + `
+    <main class="container" style="padding-top: 16px;">
+      <div class="input-wrap" id="sw">
+        <span class="input-wrap__icon">${MS.ICON.search}</span>
+        <input type="text" id="q" placeholder="Type machine name..." autocomplete="off" autofocus>
+        <button class="input-wrap__clear" id="clearBtn">${MS.ICON.close}</button>
+      </div>
+      <div id="results" style="margin-top: 16px;"></div>
+    </main>
+  ` + MS.bottomNav('search');
+
+  const input = document.getElementById('q');
+  const wrap = document.getElementById('sw');
+  const resultsEl = document.getElementById('results');
+
+  function renderCard(m, query) {
+    const fav = MS.isFavorite(m.code);
+    return `<div class="result-card">
+      <div class="result-card__head">
+        <a href="details.html?code=${encodeURIComponent(m.code)}" class="icon-box icon-box--gold">${MS.ICON.machine}</a>
+        <div class="flex-1">
+          <div class="result-card__name">${MS.highlight(m.name, query)}</div>
+          <div class="result-card__meta">
+            <span class="pill">📍 ${m.location}</span>
+            <span class="pill">#${m.number ?? '—'}</span>
+          </div>
+        </div>
+        <button class="fav-btn ${fav ? 'is-active' : ''}" data-fav="${MS.escapeHtml(m.code)}">
+          ${fav ? MS.ICON.starFilled : MS.ICON.star}
+        </button>
+      </div>
+      <div class="result-card__code">
+        <div class="result-card__code-value">${MS.highlight(m.code, query)}</div>
+        <button class="btn--copy" style="color:#fff;" data-copy="${MS.escapeHtml(m.code)}">COPY</button>
+      </div>
+    </div>`;
+  }
+
+  function render(query) {
+    const q = (query || '').trim();
+    wrap.classList.toggle('has-value', q.length > 0);
+
+    if (!q) {
+      resultsEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.search}</div><div class="state__title">Start typing to search</div></div>`;
+      return;
+    }
+
+    let matches = MS.search(machines, q);
+
+    if (matches.length === 0) {
+      resultsEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.search}</div><div class="state__title">No results found</div></div>`;
+      return;
+    }
+
+    resultsEl.innerHTML = matches.map(m => renderCard(m, q)).join('');
+
+    resultsEl.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await MS.copy(btn.dataset.copy);
+        btn.textContent = '✓ COPIED'; btn.classList.add('is-copied');
+        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('is-copied'); }, 1400);
+      });
+    });
+    resultsEl.querySelectorAll('[data-fav]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const m = matches.find(x => x.code === btn.dataset.fav);
+        const added = MS.toggleFavorite(m);
+        btn.classList.toggle('is-active', added);
+        btn.innerHTML = added ? MS.ICON.starFilled : MS.ICON.star;
+      });
+    });
+  }
+
+  input.addEventListener('input', MS.debounce(e => render(e.target.value), 130));
+  document.getElementById('clearBtn').addEventListener('click', () => { input.value = ''; render(''); });
+  render('');
+})();
+</script>
+</body>
+</html>

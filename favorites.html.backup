@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Favorites — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(function() {
+  const app = document.getElementById('app');
+  app.innerHTML = MS.backHeader('Favorites') + `
+    <main class="container" style="padding-top: 16px;">
+      <div id="list"></div>
+    </main>
+  ` + MS.bottomNav('favorites');
+
+  function render() {
+    const list = document.getElementById('list');
+    const favs = MS.getFavorites();
+
+    if (favs.length === 0) {
+      list.innerHTML = `<div class="state">
+        <div class="state__icon">${MS.ICON.star}</div>
+        <div class="state__title">No favorites yet</div>
+        <div class="state__subtitle">Tap the star icon on any machine to save it here.</div>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = favs.map(f => {
+      // Location ကို သန့်ရှင်းအောင် လုပ်ခြင်း (A- A3 ကို A3 ဖြစ်အောင်)
+      const cleanLoc = (f.location || '').replace(/[^A-Za-z0-9]/g, '');
+
+      return `
+      <div class="result-card" style="margin-bottom:8px">
+        <div class="result-card__head">
+          <a href="details.html?code=${encodeURIComponent(f.code)}" class="result-card__icon" style="text-decoration:none">
+            ${MS.ICON.machine}
+          </a>
+          <div class="result-card__body flex-1" style="min-width:0">
+            <div class="result-card__name">${MS.escapeHtml(f.name)}</div>
+            <div class="result-card__meta">
+              <span class="pill">📍 ${cleanLoc}</span>
+            </div>
+          </div>
+          <button class="fav-btn is-active" onclick="removeFav('${MS.escapeHtml(f.code)}')">
+            ${MS.ICON.starFilled}
+          </button>
+        </div>
+        <div class="result-card__code">
+          <div style="flex:1;min-width:0">
+            <div class="result-card__code-value">${MS.escapeHtml(f.code)}</div>
+          </div>
+          <button class="btn--copy" onclick="copyCode('${MS.escapeHtml(f.code)}', this)">COPY</button>
+        </div>
+      </div>
+    `}).join('');
+  }
+
+  window.removeFav = function(code) {
+    MS.removeFavorite(code);
+    MS.toast('Removed from favorites');
+    render();
+  };
+
+  window.copyCode = async function(code, btn) {
+    const ok = await MS.copy(code);
+    if(ok) {
+      btn.textContent = '✓'; 
+      btn.classList.add('is-copied');
+      MS.toast('Copied', 'ok');
+      setTimeout(()=>{
+        btn.textContent='COPY'; 
+        btn.classList.remove('is-copied');
+      }, 1200);
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -3,57 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#0A0E14">
 <title>Database — MACHINE SEARCH</title>
 <link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
+<style>
+  .db-header-card {
+    background: #141A24;
+    border: 1px solid #2A3441;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .db-header-card__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .db-header-card__label { font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px; }
+  .db-header-card__name { font-weight: 800; font-size: 16px; margin-top: 2px; color: #fff; word-break: break-all; }
+  .db-header-card__count { font-size: 12px; color: #CBD5E1; margin-top: 2px; }
+  .db-replace-btn {
+    height: 36px;
+    padding: 0 16px;
+    background: #DC2626;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+  }
 
+  .db-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #141A24;
+    border: 1px solid #2A3441;
+    border-radius: 10px;
+    padding: 0 12px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+  .db-search__icon { color: #64748B; display: flex; align-items: center; }
+  .db-search__icon svg { width: 18px !important; height: 18px !important; }
+  .db-search input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: #fff;
+    outline: none;
+    font-family: inherit;
+  }
+  .db-search input::placeholder { color: #64748B; }
 
+  .db-count { font-size: 12px; color: #64748B; margin-bottom: 8px; padding-left: 4px; }
+  .db-load-more {
+    width: 100%;
+    height: 44px;
+    margin-top: 12px;
+    background: #141A24;
+    border: 1px solid #2A3441;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .db-load-more:hover { border-color: #DC2626; }
+
+  .db-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #141A24;
+    border: 1px solid #2A3441;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s;
+  }
+  .db-item:hover { border-color: #DC2626; }
+  .db-item__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #1C2330;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: #DC2626;
+  }
+  .db-item__icon svg { width: 20px !important; height: 20px !important; }
+  .db-item__body { flex: 1; min-width: 0; }
+  .db-item__name { font-weight: 800; font-size: 14px; color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .db-item__code { font-family: var(--font-mono, monospace); font-size: 11px; color: #F59E0B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .db-item__loc { font-size: 11px; color: #64748B; flex-shrink: 0; white-space: nowrap; }
+</style>
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1007"></script>
 <script>
 (async function () {
   const app = document.getElementById('app');
-  const data = await MS.loadData();
-  const machines = data.machines || [];
-  const hasDb = data.meta && data.meta.filename !== '—';
 
-  app.innerHTML = MS.backHeader('Database') + `
-    <main class="container" style="padding-top: 16px;">
-      <div class="card card--pad" style="margin-bottom: 16px;">
-        <div class="row" style="justify-content: space-between;">
-          <div>
-            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Active Database</div>
-            <div style="font-weight: 800; font-size: 16px; margin-top: 2px; color: #FFFFFF;">${hasDb ? MS.escapeHtml(data.meta.filename) : 'Empty'}</div>
-            <div style="font-size: 12px; color: var(--text-secondary);">${machines.length} records</div>
-          </div>
-          <a href="import.html" class="btn btn--primary" style="height: 36px; text-decoration: none; font-size: 12px;">REPLACE</a>
-        </div>
-      </div>
-      <div id="list"></div>
-    </main>
-  ` + MS.bottomNav('database');
-
-  const listEl = document.getElementById('list');
-  
-  if(machines.length === 0) {
-    listEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.database}</div><div class="state__title">No database loaded</div></div>`;
+  let data;
+  try {
+    data = await MS.loadData();
+  } catch (e) {
+    app.innerHTML = MS.header() +
+      '<main class="container">' +
+        '<div class="state" style="padding-top:40px;">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('database');
     return;
   }
 
-  listEl.innerHTML = machines.map(m => `
-    <a class="db-list-item" href="details.html?code=${encodeURIComponent(m.code)}">
-      <div class="icon-box">${MS.ICON.machine}</div>
-      <div class="flex-1">
-        <div class="db-list-item__name">${MS.escapeHtml(m.name)}</div>
-        <div class="db-list-item__code">${MS.escapeHtml(m.code)}</div>
-      </div>
-    </a>
-  `).join('');
+  const machines = data.machines || [];
+  const hasDb = data.meta && data.meta.filename !== '—';
+
+  app.innerHTML = 
+    '<header class="back-header" style="border-bottom:none;">' +
+      '<a href="index.html" class="back-header__back" aria-label="Back">' + MS.ICON.back + '</a>' +
+      '<div class="back-header__title">Database</div>' +
+    '</header>' +
+    '<main class="container" style="padding-top: 16px; padding-bottom: 96px;">' +
+      '<div class="db-header-card">' +
+        '<div class="db-header-card__row">' +
+          '<div style="min-width:0;">' +
+            '<div class="db-header-card__label">Active Database</div>' +
+            '<div class="db-header-card__name">' + (hasDb ? MS.escapeHtml(data.meta.filename) : 'Empty') + '</div>' +
+            '<div class="db-header-card__count">' + machines.length + ' records</div>' +
+          '</div>' +
+          '<a href="import.html" class="db-replace-btn">REPLACE</a>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="db-search">' +
+        '<span class="db-search__icon">' + MS.ICON.search + '</span>' +
+        '<input type="text" id="dbQuery" placeholder="Filter machines..." autocomplete="off">' +
+      '</div>' +
+
+      '<div class="db-count" id="dbCount"></div>' +
+      '<div id="list"></div>' +
+      '<div id="loadMoreWrap"></div>' +
+    '</main>' +
+    MS.bottomNav('database');
+
+  const listEl = document.getElementById('list');
+  const countEl = document.getElementById('dbCount');
+  const loadMoreWrap = document.getElementById('loadMoreWrap');
+  const input = document.getElementById('dbQuery');
+
+  const PAGE_SIZE = 100;
+  let filtered = machines;
+  let rendered = 0;
+
+  function renderItem(m) {
+    const loc = m.location || '—';
+    return '<a class="db-item" href="details.html?code=' + encodeURIComponent(m.code) + '">' +
+      '<div class="db-item__icon">' + MS.ICON.machine + '</div>' +
+      '<div class="db-item__body">' +
+        '<div class="db-item__name">' + MS.escapeHtml(m.name) + '</div>' +
+        '<div class="db-item__code">' + MS.escapeHtml(m.code) + '</div>' +
+      '</div>' +
+      '<div class="db-item__loc">' + MS.escapeHtml(loc) + '</div>' +
+    '</a>';
+  }
+
+  function appendPage() {
+    const end = Math.min(rendered + PAGE_SIZE, filtered.length);
+    const chunk = filtered.slice(rendered, end);
+    const html = chunk.map(renderItem).join('');
+    listEl.insertAdjacentHTML('beforeend', html);
+    rendered = end;
+
+    if (rendered < filtered.length) {
+      loadMoreWrap.innerHTML = '<button class="db-load-more" id="loadMoreBtn">Load More (' + (filtered.length - rendered) + ' remaining)</button>';
+      document.getElementById('loadMoreBtn').addEventListener('click', appendPage);
+    } else {
+      loadMoreWrap.innerHTML = '';
+    }
+  }
+
+  function updateCount() { countEl.textContent = 'Showing ' + rendered + ' of ' + filtered.length + ' machines'; }
+
+  function resetList() {
+    listEl.innerHTML = '';
+    rendered = 0;
+    loadMoreWrap.innerHTML = '';
+  }
+
+  function applyFilter() {
+    const q = (input.value || '').toLowerCase().trim();
+    if (!q) { filtered = machines; }
+    else {
+      filtered = machines.filter(m => {
+        const name = (m.name || '').toLowerCase();
+        const code = (m.code || '').toLowerCase();
+        return name.includes(q) || code.includes(q);
+      });
+    }
+    resetList();
+
+    if (filtered.length === 0) {
+      countEl.textContent = 'No matches';
+      listEl.innerHTML = '<div class="state">' +
+        '<div class="state__icon">' + MS.ICON.search + '</div>' +
+        '<div class="state__title">No matches found</div>' +
+        '<div class="state__subtitle">Try a different keyword</div>' +
+      '</div>';
+      return;
+    }
+
+    appendPage();
+    updateCount();
+  }
+
+  if (machines.length === 0) {
+    countEl.textContent = '';
+    listEl.innerHTML = '<div class="state">' +
+      '<div class="state__icon">' + MS.ICON.database + '</div>' +
+      '<div class="state__title">No database loaded</div>' +
+      '<div class="state__subtitle">Go to Import to add an Excel file</div>' +
+    '</div>';
+    return;
+  }
+
+  applyFilter();
+  const debouncedFilter = MS.debounce(applyFilter, 150);
+  input.addEventListener('input', debouncedFilter);
 })();
 </script>
 </body>

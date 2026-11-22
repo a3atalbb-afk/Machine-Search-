@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Solution — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<style>
+  :root {
+    --arc-red: #E11D3E;
+    --arc-red-dark: #990B24;
+    --arc-red-bright: #FF2A4B;
+    --arc-bg: #141821;
+    --arc-bg-deep: #0E1118;
+    --arc-surface: #1C2230;
+    --arc-surface-elevated: #232A3B;
+    --arc-surface-soft: #181D29;
+    --arc-border: #2E374B;
+    --arc-border-strong: #3E4A63;
+    --arc-text: #F1F5F9;
+    --arc-text-secondary: #CBD5E1;
+    --arc-muted: #94A3B8;
+    --arc-3d-shadow: 0 10px 24px rgba(0, 0, 0, 0.36), 0 2px 6px rgba(0, 0, 0, 0.25);
+    --arc-3d-red: 0 6px 14px rgba(225, 29, 62, 0.34), 0 2px 0 #6B0517;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body.arc-solution-body {
+    background: radial-gradient(circle at top right, #1D2434 0%, var(--arc-bg) 52%, var(--arc-bg-deep) 100%) !important;
+    color: var(--arc-text) !important;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body.arc-solution-body 
+
+  .arc-shell {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px 12px 96px;
+  }
+
+  /* 3D Typography Helper */
+  .arc-3d-text-red {
+    color: #FF4D6A;
+    font-weight: 900;
+    font-style: italic;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.14),
+      0 2px 0 #590412,
+      0 5px 14px rgba(225, 29, 62, 0.35);
+  }
+
+  .arc-3d-badge-title {
+    display: inline-block;
+    font-size: clamp(16px, 3.8vw, 22px);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #FF4D6A;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.18),
+      0 2px 0 #6E0618,
+      0 4px 0 #0B0E14,
+      0 7px 16px rgba(225, 29, 62, 0.35);
+  }
+
+  /* Search & Filter Toolbar */
+  .arc-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    background: linear-gradient(180deg, var(--arc-surface-elevated) 0%, var(--arc-surface) 100%);
+    border: 1px solid var(--arc-border);
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-shadow: var(--arc-3d-shadow);
+  }
+  .arc-search-box {
+    flex: 1 1 220px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--arc-bg-deep);
+    border: 1px solid var(--arc-border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    min-width: 0;
+    height: 38px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+  }
+  .arc-search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--arc-text);
+    font-size: 13px;
+    padding: 2px;
+    outline: none;
+    min-width: 0;
+  }
+  .arc-search-box input::placeholder {
+    color: var(--arc-muted);
+  }
+  .arc-filter-controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .arc-machine-select {
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid var(--arc-border-strong);
+    background: var(--arc-bg-deep);
+    color: var(--arc-text);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 0 10px;
+    outline: none;
+    max-width: 190px;
+  }
+  .arc-btn-red {
+    height: 38px;
+    background: linear-gradient(180deg, var(--arc-red-bright) 0%, var(--arc-red) 55%, var(--arc-red-dark) 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 0 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--arc-3d-red);
+    transition: transform 0.1s ease;
+  }
+  .arc-btn-red:active {
+    transform: translateY(2px);
+  }
+  .arc-btn-light {
+    height: 38px;
+    background: linear-gradient(180deg, #2B3346 0%, #1E2433 100%);
+    color: var(--arc-text);
+    border: 1px solid var(--arc-border-strong);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 0 #0D1017;
+    transition: transform 0.1s ease;
+  }
+  .arc-btn-light:active {
+    transform: translateY(2px);
+  }
+
+  /* Hero Banner */
+  .arc-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    background: linear-gradient(110deg, #1E2536 0%, #241B29 52%, #7D0B20 82%, #3D0410 100%);
+    border: 1px solid var(--arc-border-strong);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: var(--arc-3d-shadow);
+  }
+  .arc-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .arc-wrench-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--arc-red-bright) 0%, var(--arc-red-dark) 100%);
+    color: #FFFFFF;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    font-weight: 900;
+    box-shadow: var(--arc-3d-red);
+    flex-shrink: 0;
+  }
+  .arc-hero-title {
+    margin: 0;
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    line-height: 1.05;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 #0B0E14, 0 4px 12px rgba(0, 0, 0, 0.55);
+  }
+  .arc-hero-sub {
+    margin-top: 3px;
+    font-size: 11.5px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--arc-text-secondary);
+  }
+  .arc-hero-ribbon {
+    margin-top: 6px;
+    display: inline-block;
+    background: linear-gradient(90deg, var(--arc-red-dark), var(--arc-red-bright));
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 800;
+    font-style: italic;
+    padding: 3px 10px;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    transform: skewX(-10deg);
+  }
+  .arc-hero-ribbon > span {
+    display: inline-block;
+    transform: skewX(10deg);
+  }
+  .arc-stats-strip {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .arc-stat-pill {
+    background: rgba(16, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 6px 10px;
+    text-align: center;
+    min-width: 64px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  }
+  .arc-stat-num {
+    font-size: 14px;
+    font-weight: 900;
+    color: #FF4D6A;
+    line-height: 1.1;
+  }
+  .arc-stat-lbl {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: var(--arc-muted);
+    text-transform: uppercase;
+  }
+
+  /* Red Slanted Section Header */
+  .arc-sec-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .arc-sec-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(90deg, var(--arc-red-bright), var(--arc-red-dark));
+    color: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 0.25px;
+    padding: 5px 14px 5px 11px;
+    border-radius: 6px 16px 6px 6px;
+    box-shadow: var(--arc-3d-red);
+  }
+  .arc-viewall-btn {
+    background: var(--arc-red);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* Machine Information Card */
+  .arc-info-card {
+    background: linear-gradient(180deg, var(--arc-surface-elevated) 0%, var(--arc-surface) 100%);
+    border: 1px solid var(--arc-border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: minmax(120px, 165px) 1fr auto;
+    gap: 14px;
+    align-items: center;
+    box-shadow: var(--arc-3d-shadow);
+  }
+  .arc-info-thumb-box {
+    border: 1px solid var(--arc-border-strong);
+    border-radius: 9px;
+    overflow: hidden;
+    background: var(--arc-bg-deep);
+    height: 112px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+  .arc-info-thumb-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .arc-info-empty-box {
+    color: var(--arc-muted);
+    font-size: 11.5px;
+    font-weight: 800;
+    text-align: center;
+    padding: 8px;
+    text-transform: uppercase;
+  }
+  .arc-kv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .arc-kv-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 13px;
+  }
+  .arc-kv-key {
+    font-weight: 800;
+    color: var(--arc-text-secondary);
+    min-width: 66px;
+    flex-shrink: 0;
+  }
+  .arc-kv-val {
+    font-weight: 900;
+    font-style: italic;
+    color: #FF5874;
+    word-break: break-word;
+  }
+  .arc-3d-showcase {
+    text-align: right;
+    padding-left: 8px;
+  }
+  .arc-3d-caption {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--arc-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-top: 3px;
+  }
+
+  /* Combined Problem & Solution Card */
+  .arc-panel-card {
+    background: linear-gradient(180deg, var(--arc-surface-elevated) 0%, var(--arc-surface) 100%);
+    border: 1px solid var(--arc-border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: var(--arc-3d-shadow);
+  }
+  .arc-prob-head {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--arc-border);
+  }
+  .arc-prob-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--arc-red-bright) 0%, var(--arc-red-dark) 100%);
+    color: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 3px 8px rgba(225, 29, 62, 0.35);
+  }
+  .arc-prob-title {
+    font-size: 14.5px;
+    font-weight: 900;
+    color: #FF5874;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  .arc-prob-desc {
+    font-size: 12.5px;
+    color: var(--arc-text-secondary);
+    margin-top: 4px;
+    line-height: 1.45;
+    white-space: pre-line;
+    word-break: break-word;
+  }
+  .arc-img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .arc-img-tile {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--arc-border-strong);
+    background: var(--arc-bg-deep);
+    height: 74px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  }
+  .arc-img-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .arc-steps-heading {
+    font-size: 12px;
+    font-weight: 900;
+    color: #FF5874;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 8px;
+  }
+  .arc-steps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .arc-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--arc-text);
+    line-height: 1.45;
+    word-break: break-word;
+  }
+  .arc-step-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--arc-red-bright) 0%, var(--arc-red-dark) 100%);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    box-shadow: 0 2px 6px rgba(225, 29, 62, 0.35);
+  }
+  .arc-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--arc-border);
+  }
+  .arc-btn-edit {
+    flex: 1;
+    height: 36px;
+    background: linear-gradient(180deg, #2C354A 0%, #1F2636 100%);
+    color: var(--arc-text);
+    border: 1px solid var(--arc-border-strong);
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #0D1017;
+  }
+  .arc-btn-del {
+    flex: 1;
+    height: 36px;
+    background: linear-gradient(180deg, #3A151E 0%, #260D14 100%);
+    color: #FF6B84;
+    border: 1px solid #6E2232;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #140509;
+  }
+
+  /* Organized Machine & Error Directory */
+  .arc-directory-wrap {
+    background: linear-gradient(180deg, var(--arc-surface-elevated) 0%, var(--arc-surface) 100%);
+    border: 1px solid var(--arc-border);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: var(--arc-3d-shadow);
+  }
+  .arc-directory-bar {
+    background: linear-gradient(90deg, var(--arc-red-dark), var(--arc-red-bright), var(--arc-red-dark));
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #FFFFFF;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  }
+  .arc-directory-title {
+    font-size: 12px;
+    font-weight: 900;
+    font-style: italic;
+  }
+  .arc-machine-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .arc-mgroup {
+    border: 1px solid var(--arc-border);
+    border-radius: 9px;
+    background: var(--arc-surface-soft);
+    overflow: hidden;
+  }
+  .arc-mgroup-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    background: #232B3D;
+    border-bottom: 1px solid var(--arc-border);
+  }
+  .arc-mgroup-name {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--arc-text);
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+  }
+  .arc-mgroup-count {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #FF6B84;
+    background: #33131B;
+    border: 1px solid #6E2232;
+    padding: 1px 7px;
+    border-radius: 999px;
+  }
+  .arc-mgroup-grid {
+    padding: 7px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 7px;
+  }
+  .arc-err-card {
+    background: var(--arc-surface);
+    border: 1px solid var(--arc-border);
+    border-radius: 9px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+  .arc-err-card.is-selected {
+    border-color: var(--arc-red-bright);
+    box-shadow: 0 0 0 2px rgba(255, 42, 75, 0.28), 0 6px 14px rgba(0, 0, 0, 0.35);
+  }
+  .arc-err-thumb {
+    width: 100%;
+    height: 62px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--arc-bg-deep);
+    display: grid;
+    place-items: center;
+    color: var(--arc-muted);
+    font-size: 10.5px;
+    font-weight: 800;
+  }
+  .arc-err-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .arc-err-name {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--arc-text);
+    line-height: 1.25;
+    text-align: center;
+    word-break: break-word;
+  }
+  .arc-view-sol-btn {
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(180deg, var(--arc-red-bright), var(--arc-red-dark));
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(225, 29, 62, 0.3);
+  }
+
+  /* Mobile-Specific Adjustments */
+  @media (max-width: 780px) {
+    .arc-info-card {
+      grid-template-columns: 1fr;
+      gap: 9px;
+      padding: 10px;
+    }
+    .arc-info-thumb-box {
+      height: 140px;
+    }
+    .arc-3d-showcase {
+      text-align: left;
+      padding-left: 0;
+      padding-top: 6px;
+      border-top: 1px dashed var(--arc-border-strong);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .arc-shell {
+      padding: 8px 10px 92px;
+    }
+    .arc-toolbar {
+      padding: 7px;
+      gap: 6px;
+    }
+    .arc-search-box {
+      flex: 1 1 100%;
+    }
+    .arc-filter-controls {
+      width: 100%;
+    }
+    .arc-machine-select {
+      flex: 1;
+      max-width: none;
+    }
+    .arc-hero {
+      padding: 10px 12px;
+      gap: 8px;
+    }
+    .arc-wrench-badge {
+      width: 38px;
+      height: 38px;
+      font-size: 17px;
+    }
+    .arc-stats-strip {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .arc-stat-pill {
+      min-width: 0;
+      padding: 5px 6px;
+    }
+    .arc-mgroup-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .arc-img-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Modals */
+  .arc-modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    background: rgba(5, 7, 12, 0.82);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+  .arc-modal-bg.is-open {
+    display: flex;
+  }
+  .arc-modal-card {
+    width: 100%;
+    max-width: 520px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--arc-surface);
+    color: var(--arc-text);
+    border: 1px solid var(--arc-border-strong);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.65);
+  }
+  .arc-modal-card.is-narrow {
+    max-width: 350px;
+  }
+  .arc-modal-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 9px;
+    margin-bottom: 11px;
+    border-bottom: 1px solid var(--arc-border);
+  }
+  .arc-modal-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: #FF5874;
+  }
+  .arc-modal-x {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--arc-border-strong);
+    background: var(--arc-surface-elevated);
+    color: var(--arc-text);
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .arc-field {
+    margin-bottom: 10px;
+  }
+  .arc-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--arc-text-secondary);
+    margin-bottom: 4px;
+  }
+  .arc-input {
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--arc-border-strong);
+    background: var(--arc-bg-deep);
+    color: var(--arc-text);
+    font-size: 13px;
+    outline: none;
+  }
+  .arc-input:focus {
+    border-color: var(--arc-red-bright);
+  }
+  textarea.arc-input {
+    resize: vertical;
+    min-height: 68px;
+  }
+  .arc-upload-area {
+    position: relative;
+    border: 1px dashed var(--arc-red-bright);
+    background: rgba(225, 29, 62, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #FF6B84;
+    cursor: pointer;
+  }
+  .arc-upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .arc-draft-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 7px;
+    margin-top: 8px;
+  }
+  .arc-draft-item {
+    position: relative;
+    height: 56px;
+  }
+  .arc-draft-item img {
+    width: 100%;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--arc-border-strong);
+  }
+  .arc-draft-item button {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: var(--arc-red-bright);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 18px;
+    padding: 0;
+    cursor: pointer;
+  }
+  .arc-modal-foot {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--arc-border);
+  }
+  .arc-del-summary {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #33131B;
+    border: 1px solid #6E2232;
+    color: #FF6B84;
+    font-size: 12px;
+    font-weight: 800;
+    word-break: break-word;
+  }
+
+  /* Image Viewer */
+  .arc-viewer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: #060911;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .arc-viewer.is-open {
+    display: flex;
+  }
+  .arc-viewer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px 10px;
+    background: #121826;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    z-index: 3;
+    flex-wrap: wrap;
+  }
+  .arc-viewer-count {
+    font-size: 12px;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+  .arc-viewer-btns {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .arc-vbtn {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .arc-vbtn-close {
+    background: var(--arc-red);
+    border-color: var(--arc-red);
+  }
+  .arc-viewer-stage {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    touch-action: none;
+  }
+  .arc-viewer-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    user-select: none;
+    -webkit-user-drag: none;
+    cursor: grab;
+  }
+  .arc-viewer-img.is-dragging {
+    cursor: grabbing;
+  }
+  .arc-nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(18, 24, 38, 0.88);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 900;
+    cursor: pointer;
+    z-index: 3;
+  }
+  .arc-nav-prev { left: 8px; }
+  .arc-nav-next { right: 8px; }
+  .arc-viewer-foot {
+    padding: 7px 10px;
+    text-align: center;
+    font-size: 10.5px;
+    color: #9AA6BF;
+    background: #121826;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+</style>
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body class="arc-solution-body">
+<div id="app"></div>
+
+<!-- Add / Edit Modal -->
+<div class="arc-modal-bg" id="formModal" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
+  <div class="arc-modal-card" onclick="event.stopPropagation()">
+    <div class="arc-modal-top">
+      <div class="arc-modal-title" id="formModalTitle">Solution</div>
+      <button type="button" class="arc-modal-x" onclick="closeFormModal()" aria-label="Close">×</button>
+    </div>
+
+    <div class="arc-field">
+      <label class="arc-label" for="inpMachine">Machine</label>
+      <input type="text" id="inpMachine" class="arc-input" list="machineSuggestions">
+      <datalist id="machineSuggestions"></datalist>
+    </div>
+
+    <div class="arc-field">
+      <label class="arc-label" for="inpError">Error</label>
+      <input type="text" id="inpError" class="arc-input">
+    </div>
+
+    <div class="arc-field">
+      <label class="arc-label" for="inpDesc">Note</label>
+      <textarea id="inpDesc" class="arc-input" style="min-height:52px;"></textarea>
+    </div>
+
+    <div class="arc-field">
+      <label class="arc-label" for="inpSteps">Solution Steps</label>
+      <textarea id="inpSteps" class="arc-input"></textarea>
+    </div>
+
+    <div class="arc-field">
+      <label class="arc-label" for="inpImages">Images</label>
+      <div class="arc-upload-area">
+        <span>+</span>
+        <input type="file" id="inpImages" accept="image/*" multiple onchange="onSelectImages(event)">
+      </div>
+      <div class="arc-draft-list" id="draftPreview"></div>
+    </div>
+
+    <div class="arc-modal-foot">
+      <button type="button" class="arc-btn-light" style="flex:1;" onclick="closeFormModal()">Cancel</button>
+      <button type="button" class="arc-btn-red" style="flex:1;" onclick="saveRecord()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Delete Confirmation Modal -->
+<div class="arc-modal-bg" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+  <div class="arc-modal-card is-narrow" onclick="event.stopPropagation()">
+    <div class="arc-modal-top">
+      <div class="arc-modal-title" id="deleteModalTitle">Delete</div>
+      <button type="button" class="arc-modal-x" onclick="closeDeleteModal()" aria-label="Close">×</button>
+    </div>
+    <div style="font-size:13px; line-height:1.5;">Confirm delete?</div>
+    <div class="arc-del-summary" id="deleteTargetLabel"></div>
+    <div class="arc-modal-foot">
+      <button type="button" class="arc-btn-light" style="flex:1;" onclick="closeDeleteModal()">Cancel</button>
+      <button type="button" class="arc-btn-red" style="flex:1;" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Viewer -->
+<div class="arc-viewer" id="imageViewer" role="dialog" aria-modal="true">
+  <div class="arc-viewer-bar">
+    <span class="arc-viewer-count" id="viewerCounter">0 / 0</span>
+    <div class="arc-viewer-btns">
+      <button type="button" class="arc-vbtn" onclick="zoomBy(-0.25)">-</button>
+      <button type="button" class="arc-vbtn" id="viewerZoomLabel" onclick="resetZoom()">100%</button>
+      <button type="button" class="arc-vbtn" onclick="zoomBy(0.25)">+</button>
+      <button type="button" class="arc-vbtn" onclick="toggleFullscreen()">FS</button>
+      <button type="button" class="arc-vbtn arc-vbtn-close" onclick="closeViewer()">✕</button>
+    </div>
+  </div>
+
+  <div class="arc-viewer-stage" id="viewerStage" onclick="closeViewer()">
+    <button type="button" class="arc-nav-arrow arc-nav-prev" id="viewerPrev" onclick="event.stopPropagation(); stepViewer(-1)">‹</button>
+    <img id="viewerImg" class="arc-viewer-img" src="" alt="" onclick="event.stopPropagation()">
+    <button type="button" class="arc-nav-arrow arc-nav-next" id="viewerNext" onclick="event.stopPropagation(); stepViewer(1)">›</button>
+  </div>
+
+  <div class="arc-viewer-foot">← / → · + / - · 0 · ESC</div>
+</div>
+
+<script src="app.js?v=1006"></script>
+<script>
+(function() {
+  const DB_NAME = 'MS_TroubleshootDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'records';
+  const LEGACY_KEY = 'ms_troubleshoot_v2';
+
+  let db = null;
+  let records = [];
+  let selectedMachineFilter = 'ALL';
+  let activeRecordId = null;
+  let showAllGroups = false;
+
+  let draftImages = [];
+  let editingId = null;
+  let pendingDeleteId = null;
+
+  let viewerSlides = [];
+  let viewerIndex = 0;
+  let scale = 1;
+  let panX = 0;
+  let panY = 0;
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+
+  let guardPushed = false;
+  let ignoreNextPop = false;
+
+  const app = document.getElementById('app');
+  app.innerHTML =
+    MS.backHeader('Solution') +
+    `<main class="arc-shell">
+      <div class="arc-toolbar">
+        <div class="arc-search-box">
+          <span>${MS.ICON.search}</span>
+          <input type="text" id="searchInput" placeholder="Machine / Error..." autocomplete="off">
+        </div>
+        <div class="arc-filter-controls">
+          <select id="machineSelect" class="arc-machine-select" aria-label="Machine">
+            <option value="ALL">ALL MACHINES</option>
+          </select>
+          <button type="button" class="arc-btn-light" id="clearFilterBtn" onclick="resetFilters()">Reset</button>
+          <button type="button" class="arc-btn-red" onclick="openFormModal()">+ Add</button>
+        </div>
+      </div>
+      <div id="solutionWorkspace"></div>
+    </main>` +
+    MS.bottomNav('troubleshoot');
+
+  function ensureBackAnchor() {
+    if (guardPushed) return;
+    try {
+      const stateObj = { ...(history.state || {}), msTroubleshootGuard: true };
+      history.replaceState(stateObj, '', location.href);
+      history.pushState({ msTroubleshootActive: true }, '', location.href);
+      guardPushed = true;
+    } catch (_) {}
+  }
+
+  function closeTopOverlay() {
+    if (document.getElementById('imageViewer').classList.contains('is-open')) {
+      closeViewer(false);
+      return true;
+    }
+    if (document.getElementById('deleteModal').classList.contains('is-open')) {
+      closeDeleteModal(false);
+      return true;
+    }
+    if (document.getElementById('formModal').classList.contains('is-open')) {
+      closeFormModal(false);
+      return true;
+    }
+    return false;
+  }
+
+  window.addEventListener('popstate', function() {
+    if (ignoreNextPop) {
+      ignoreNextPop = false;
+      return;
+    }
+    if (closeTopOverlay()) {
+      ensureBackAnchor();
+      return;
+    }
+    try {
+      history.pushState({ msTroubleshootStay: true }, '', location.href);
+      guardPushed = true;
+    } catch (_) {}
+  });
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains(STORE_NAME)) {
+          const st = d.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          st.createIndex('machine', 'machine', { unique: false });
+          st.createIndex('updatedAt', 'updatedAt', { unique: false });
+        }
+      };
+      req.onsuccess = (e) => resolve(e.target.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbAll() {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbPut(rec) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).put(rec);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function dbDelete(id) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function migrateLegacy(existing) {
+    if (existing.length > 0) return existing;
+    try {
+      const raw = localStorage.getItem(LEGACY_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr) || !arr.length) return [];
+      const valid = arr.map((r, i) => ({
+        id: r.id || (Date.now() + i),
+        machine: String(r.machine || '').trim().toUpperCase(),
+        error: String(r.error || '').trim(),
+        desc: String(r.desc || '').trim(),
+        steps: String(r.steps || '').trim(),
+        images: Array.isArray(r.images) ? r.images : [],
+        updatedAt: r.updatedAt || (Date.now() - i * 1000)
+      })).filter(r => r.machine && r.error && r.steps);
+      for (const rec of valid) await dbPut(rec);
+      localStorage.removeItem(LEGACY_KEY);
+      return valid;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  async function init() {
+    ensureBackAnchor();
+    try {
+      db = await openDB();
+      const raw = await dbAll();
+      records = await migrateLegacy(raw);
+      records.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+      syncMachineControls();
+      renderPage(getQuery());
+    } catch (_) {
+      document.getElementById('solutionWorkspace').innerHTML =
+        `<div class="state"><div class="state__icon">${MS.ICON.warning}</div><div class="state__title">IndexedDB</div></div>`;
+    }
+  }
+
+  function getQuery() {
+    const el = document.getElementById('searchInput');
+    return el ? el.value : '';
+  }
+
+  function getUniqueMachines() {
+    return [...new Set(records.map(r => (r.machine || '').trim().toUpperCase()).filter(Boolean))].sort();
+  }
+
+  function syncMachineControls() {
+    const machines = getUniqueMachines();
+    if (selectedMachineFilter !== 'ALL' && !machines.includes(selectedMachineFilter)) {
+      selectedMachineFilter = 'ALL';
+    }
+
+    const dl = document.getElementById('machineSuggestions');
+    if (dl) {
+      dl.innerHTML = machines.map(m => `<option value="${MS.escapeHtml(m)}"></option>`).join('');
+    }
+
+    const sel = document.getElementById('machineSelect');
+    if (sel) {
+      sel.innerHTML =
+        `<option value="ALL">ALL (${machines.length})</option>` +
+        machines.map(m => {
+          const cnt = records.filter(r => (r.machine || '').toUpperCase() === m).length;
+          return `<option value="${MS.escapeHtml(m)}" ${selectedMachineFilter === m ? 'selected' : ''}>${MS.escapeHtml(m)} (${cnt})</option>`;
+        }).join('');
+    }
+  }
+
+  window.resetFilters = function() {
+    selectedMachineFilter = 'ALL';
+    activeRecordId = null;
+    const inp = document.getElementById('searchInput');
+    if (inp) inp.value = '';
+    syncMachineControls();
+    renderPage('');
+  };
+
+  function compressImage(file, maxEdge = 1400, quality = 0.82) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxEdge || height > maxEdge) {
+            if (width >= height) {
+              height = Math.round((height * maxEdge) / width);
+              width = maxEdge;
+            } else {
+              width = Math.round((width * maxEdge) / height);
+              height = maxEdge;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  window.openFormModal = function(id = null) {
+    ensureBackAnchor();
+    syncMachineControls();
+    editingId = id;
+    const inp = document.getElementById('inpImages');
+    if (inp) inp.value = '';
+
+    document.getElementById('formModalTitle').textContent = id !== null ? 'Edit' : '+ Add';
+
+    if (id !== null) {
+      const rec = records.find(r => String(r.id) === String(id));
+      if (!rec) return;
+      document.getElementById('inpMachine').value = rec.machine || '';
+      document.getElementById('inpError').value = rec.error || '';
+      document.getElementById('inpDesc').value = rec.desc || '';
+      document.getElementById('inpSteps').value = rec.steps || '';
+      draftImages = Array.isArray(rec.images) ? [...rec.images] : [];
+    } else {
+      document.getElementById('inpMachine').value = selectedMachineFilter !== 'ALL' ? selectedMachineFilter : '';
+      document.getElementById('inpError').value = '';
+      document.getElementById('inpDesc').value = '';
+      document.getElementById('inpSteps').value = '';
+      draftImages = [];
+    }
+
+    renderDrafts();
+    document.getElementById('formModal').classList.add('is-open');
+    setTimeout(() => document.getElementById('inpMachine').focus(), 25);
+  };
+
+  window.closeFormModal = function() {
+    document.getElementById('formModal').classList.remove('is-open');
+    const inp = document.getElementById('inpImages');
+    if (inp) inp.value = '';
+    draftImages = [];
+    editingId = null;
+  };
+
+  window.onSelectImages = async function(ev) {
+    const files = Array.from(ev.target.files || []);
+    if (!files.length) return;
+    for (const f of files) {
+      const out = await compressImage(f);
+      if (out) draftImages.push(out);
+    }
+    ev.target.value = '';
+    renderDrafts();
+  };
+
+  function renderDrafts() {
+    const wrap = document.getElementById('draftPreview');
+    wrap.innerHTML = draftImages.map((src, i) => `
+      <div class="arc-draft-item">
+        <img src="${src}" alt="">
+        <button type="button" onclick="removeDraft(${i})" aria-label="Remove">×</button>
+      </div>
+    `).join('');
+  }
+
+  window.removeDraft = function(i) {
+    draftImages.splice(i, 1);
+    renderDrafts();
+  };
+
+  window.saveRecord = async function() {
+    const machine = document.getElementById('inpMachine').value.trim().toUpperCase();
+    const error = document.getElementById('inpError').value.trim();
+    const desc = document.getElementById('inpDesc').value.trim();
+    const steps = document.getElementById('inpSteps').value.trim();
+
+    if (!machine || !error || !steps) {
+      if (!machine) document.getElementById('inpMachine').focus();
+      else if (!error) document.getElementById('inpError').focus();
+      else document.getElementById('inpSteps').focus();
+      return;
+    }
+
+    const now = Date.now();
+    let rec;
+
+    if (editingId !== null) {
+      const idx = records.findIndex(r => String(r.id) === String(editingId));
+      if (idx === -1) return;
+      rec = { ...records[idx], machine, error, desc, steps, images: [...draftImages], updatedAt: now };
+      records[idx] = rec;
+    } else {
+      rec = { id: now, machine, error, desc, steps, images: [...draftImages], updatedAt: now };
+      records.unshift(rec);
+    }
+
+    await dbPut(rec);
+    records.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    selectedMachineFilter = machine;
+    activeRecordId = rec.id;
+
+    syncMachineControls();
+    closeFormModal();
+    renderPage(getQuery());
+  };
+
+  window.openDeleteModal = function(id) {
+    const rec = records.find(r => String(r.id) === String(id));
+    if (!rec) return;
+    ensureBackAnchor();
+    pendingDeleteId = rec.id;
+    document.getElementById('deleteTargetLabel').textContent = `${rec.machine} — ${rec.error}`;
+    document.getElementById('deleteModal').classList.add('is-open');
+  };
+
+  window.closeDeleteModal = function() {
+    pendingDeleteId = null;
+    document.getElementById('deleteModal').classList.remove('is-open');
+  };
+
+  document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+    if (pendingDeleteId === null) return;
+    const id = pendingDeleteId;
+    closeDeleteModal();
+    await dbDelete(id);
+    records = records.filter(r => String(r.id) !== String(id));
+    if (String(activeRecordId) === String(id)) activeRecordId = null;
+    syncMachineControls();
+    renderPage(getQuery());
+  });
+
+  window.selectErrorRecord = function(id) {
+    activeRecordId = id;
+    renderPage(getQuery());
+    const topEl = document.getElementById('solutionTopAnchor');
+    if (topEl) topEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.toggleShowAllGroups = function() {
+    showAllGroups = !showAllGroups;
+    renderPage(getQuery());
+  };
+
+  function renderPage(query) {
+    const q = (query || '').toLowerCase().trim();
+    const workspace = document.getElementById('solutionWorkspace');
+    const allMachines = getUniqueMachines();
+
+    const filtered = records.filter(r => {
+      const mMatch = selectedMachineFilter === 'ALL' || (r.machine || '').toUpperCase() === selectedMachineFilter;
+      if (!mMatch) return false;
+      if (!q) return true;
+      return (
+        (r.machine || '').toLowerCase().includes(q) ||
+        (r.error || '').toLowerCase().includes(q) ||
+        (r.desc || '').toLowerCase().includes(q) ||
+        (r.steps || '').toLowerCase().includes(q)
+      );
+    });
+
+    const current = filtered.find(r => String(r.id) === String(activeRecordId)) || filtered[0] || null;
+    if (current) activeRecordId = current.id;
+
+    const heroHtml = `
+      <section class="arc-hero" id="solutionTopAnchor">
+        <div class="arc-hero-left">
+          <div class="arc-wrench-badge">🔧</div>
+          <div>
+            <h1 class="arc-hero-title">SOLUTION</h1>
+            <div class="arc-hero-sub">Machine Error Diagnostic &amp; Step-by-Step Fix</div>
+            <div class="arc-hero-ribbon"><span>Find Error · Get Solution · Keep Running</span></div>
+          </div>
+        </div>
+        <div class="arc-stats-strip">
+          <div class="arc-stat-pill">
+            <div class="arc-stat-num">${allMachines.length}</div>
+            <div class="arc-stat-lbl">Machines</div>
+          </div>
+          <div class="arc-stat-pill">
+            <div class="arc-stat-num">${records.length}</div>
+            <div class="arc-stat-lbl">Errors</div>
+          </div>
+          <div class="arc-stat-pill">
+            <div class="arc-stat-num">${filtered.length}</div>
+            <div class="arc-stat-lbl">Matched</div>
+          </div>
+        </div>
+      </section>
+    `;
+
+    if (!current) {
+      workspace.innerHTML = heroHtml + `
+        <div class="arc-panel-card" style="text-align:center; padding:24px 14px;">
+          <div class="arc-3d-badge-title" style="margin-bottom:10px;">0</div>
+          <button type="button" class="arc-btn-red" onclick="openFormModal()">+ Add</button>
+        </div>
+      `;
+      return;
+    }
+
+    const imgs = Array.isArray(current.images) ? current.images : [];
+    const firstImg = imgs[0] || '';
+    const steps = (current.steps || '').split('\n').map(s => s.trim()).filter(Boolean);
+    const curIdStr = String(current.id);
+
+    const infoCardHtml = `
+      <div class="arc-sec-banner">
+        <div class="arc-sec-pill"><span>📋</span><span>Machine Information</span></div>
+      </div>
+      <section class="arc-info-card">
+        <div class="arc-info-thumb-box" onclick="${firstImg ? `openViewer('${curIdStr}', 0)` : ''}">
+          ${firstImg
+            ? `<img src="${firstImg}" alt="">`
+            : `<div class="arc-info-empty-box">${MS.escapeHtml(current.machine)}</div>`}
+        </div>
+        <div class="arc-kv-list">
+          <div class="arc-kv-row">
+            <span class="arc-kv-key">Machine :</span>
+            <span class="arc-kv-val">${MS.escapeHtml(current.machine)}</span>
+          </div>
+          <div class="arc-kv-row">
+            <span class="arc-kv-key">Error :</span>
+            <span class="arc-kv-val">${MS.escapeHtml(current.error)}</span>
+          </div>
+          <div class="arc-kv-row">
+            <span class="arc-kv-key">Images :</span>
+            <span class="arc-kv-val">${imgs.length}</span>
+          </div>
+        </div>
+        <div class="arc-3d-showcase">
+          <div class="arc-3d-badge-title">${MS.escapeHtml(current.error)}</div>
+          <div class="arc-3d-caption">${MS.escapeHtml(current.machine)}</div>
+        </div>
+      </section>
+    `;
+
+    const thumbsHtml = imgs.length
+      ? `<div class="arc-img-grid">
+          ${imgs.map((src, idx) => `<div class="arc-img-tile" onclick="openViewer('${curIdStr}', ${idx})"><img src="${src}" alt=""></div>`).join('')}
+         </div>`
+      : '';
+
+    const stepsHtml = steps.map((stepText, idx) => `
+      <li class="arc-step-item">
+        <span class="arc-step-num">${idx + 1}</span>
+        <span>${MS.escapeHtml(stepText.replace(/^\d+[\.)]\s*/, ''))}</span>
+      </li>
+    `).join('');
+
+    const combinedSolutionHtml = `
+      <div class="arc-sec-banner">
+        <div class="arc-sec-pill"><span>🔧</span><span>Problem &amp; Solution Steps</span></div>
+      </div>
+      <section class="arc-panel-card">
+        <div class="arc-prob-head">
+          <div class="arc-prob-icon">!</div>
+          <div>
+            <div class="arc-prob-title arc-3d-text-red">${MS.escapeHtml(current.error)}</div>
+            ${current.desc ? `<div class="arc-prob-desc">${MS.escapeHtml(current.desc)}</div>` : ''}
+          </div>
+        </div>
+        ${thumbsHtml}
+        <div class="arc-steps-heading">Solution Steps</div>
+        <ol class="arc-steps-list">${stepsHtml}</ol>
+        <div class="arc-card-actions">
+          <button type="button" class="arc-btn-edit" onclick="openFormModal('${curIdStr}')">Edit</button>
+          <button type="button" class="arc-btn-del" onclick="openDeleteModal('${curIdStr}')">Delete</button>
+        </div>
+      </section>
+    `;
+
+    const groupMap = new Map();
+    for (const r of filtered) {
+      const mKey = (r.machine || '').trim().toUpperCase();
+      if (!groupMap.has(mKey)) groupMap.set(mKey, []);
+      groupMap.get(mKey).push(r);
+    }
+
+    const allGroupEntries = Array.from(groupMap.entries());
+    const hasManyGroups = !q && selectedMachineFilter === 'ALL' && allGroupEntries.length > 5;
+    const shownGroups = hasManyGroups && !showAllGroups ? allGroupEntries.slice(0, 5) : allGroupEntries;
+
+    const groupsHtml = shownGroups.map(([mName, mItems]) => {
+      const cardsHtml = mItems.map(r => {
+        const rid = String(r.id);
+        const rImgs = Array.isArray(r.images) ? r.images : [];
+        const selCls = rid === curIdStr ? 'is-selected' : '';
+        return `
+          <div class="arc-err-card ${selCls}" onclick="selectErrorRecord('${rid}')">
+            <div class="arc-err-thumb">
+              ${rImgs[0] ? `<img src="${rImgs[0]}" alt="">` : `<span>${rImgs.length} IMG</span>`}
+            </div>
+            <div class="arc-err-name">${MS.escapeHtml(r.error)}</div>
+            <button type="button" class="arc-view-sol-btn" onclick="event.stopPropagation(); selectErrorRecord('${rid}')">🔍 View Solution</button>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="arc-mgroup">
+          <div class="arc-mgroup-head">
+            <span class="arc-mgroup-name">${MS.escapeHtml(mName)}</span>
+            <span class="arc-mgroup-count">${mItems.length}</span>
+          </div>
+          <div class="arc-mgroup-grid">${cardsHtml}</div>
+        </div>
+      `;
+    }).join('');
+
+    const directoryHtml = `
+      <section class="arc-directory-wrap">
+        <div class="arc-directory-bar">
+          <div class="arc-directory-title">📄 Machines (${allGroupEntries.length}) · Errors (${filtered.length})</div>
+          ${hasManyGroups
+            ? `<button type="button" class="arc-viewall-btn" onclick="toggleShowAllGroups()">${showAllGroups ? 'Less' : 'View All →'}</button>`
+            : ''}
+        </div>
+        <div class="arc-machine-groups">${groupsHtml}</div>
+      </section>
+    `;
+
+    workspace.innerHTML = heroHtml + infoCardHtml + combinedSolutionHtml + directoryHtml;
+  }
+
+  // Image Viewer
+  function applyViewerTransform() {
+    const img = document.getElementById('viewerImg');
+    img.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    document.getElementById('viewerZoomLabel').textContent = `${Math.round(scale * 100)}%`;
+  }
+
+  function syncViewer() {
+    if (!viewerSlides.length) return;
+    document.getElementById('viewerImg').src = viewerSlides[viewerIndex];
+    document.getElementById('viewerCounter').textContent = `${viewerIndex + 1} / ${viewerSlides.length}`;
+    document.getElementById('viewerPrev').style.display = viewerSlides.length > 1 ? 'block' : 'none';
+    document.getElementById('viewerNext').style.display = viewerSlides.length > 1 ? 'block' : 'none';
+    applyViewerTransform();
+  }
+
+  window.openViewer = function(recIdStr, startIdx) {
+    const rec = records.find(r => String(r.id) === String(recIdStr));
+    if (!rec || !Array.isArray(rec.images) || !rec.images.length) return;
+    ensureBackAnchor();
+    viewerSlides = rec.images;
+    viewerIndex = Math.max(0, Math.min(startIdx || 0, viewerSlides.length - 1));
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    syncViewer();
+    document.getElementById('imageViewer').classList.add('is-open');
+  };
+
+  window.closeViewer = function() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    document.getElementById('imageViewer').classList.remove('is-open');
+    document.getElementById('viewerImg').src = '';
+    viewerSlides = [];
+    scale = 1;
+    panX = 0;
+    panY = 0;
+  };
+
+  window.stepViewer = function(delta) {
+    if (!viewerSlides.length) return;
+    viewerIndex = (viewerIndex + delta + viewerSlides.length) % viewerSlides.length;
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    syncViewer();
+  };
+
+  window.zoomBy = function(delta) {
+    scale = Math.max(0.5, Math.min(5, Number((scale + delta).toFixed(2))));
+    if (scale === 1) {
+      panX = 0;
+      panY = 0;
+    }
+    applyViewerTransform();
+  };
+
+  window.resetZoom = function() {
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    applyViewerTransform();
+  };
+
+  window.toggleFullscreen = function() {
+    const el = document.getElementById('imageViewer');
+    if (!document.fullscreenElement) el.requestFullscreen().catch(() => {});
+    else document.exitFullscreen().catch(() => {});
+  };
+
+  const vImg = document.getElementById('viewerImg');
+  vImg.addEventListener('pointerdown', (e) => {
+    if (scale <= 1) return;
+    dragging = true;
+    dragStartX = e.clientX - panX;
+    dragStartY = e.clientY - panY;
+    vImg.classList.add('is-dragging');
+    vImg.setPointerCapture(e.pointerId);
+  });
+  vImg.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    panX = e.clientX - dragStartX;
+    panY = e.clientY - dragStartY;
+    applyViewerTransform();
+  });
+  vImg.addEventListener('pointerup', () => {
+    dragging = false;
+    vImg.classList.remove('is-dragging');
+  });
+
+  document.getElementById('viewerStage').addEventListener('wheel', (e) => {
+    e.preventDefault();
+    zoomBy(e.deltaY < 0 ? 0.2 : -0.2);
+  }, { passive: false });
+
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('imageViewer').classList.contains('is-open')) {
+      if (e.key === 'Escape') closeViewer();
+      else if (e.key === 'ArrowLeft') stepViewer(-1);
+      else if (e.key === 'ArrowRight') stepViewer(1);
+      else if (e.key === '+' || e.key === '=') zoomBy(0.25);
+      else if (e.key === '-') zoomBy(-0.25);
+      else if (e.key === '0') resetZoom();
+      return;
+    }
+    if (e.key === 'Escape') {
+      closeDeleteModal();
+      closeFormModal();
+    }
+  });
+
+  document.getElementById('machineSelect').addEventListener('change', (e) => {
+    selectedMachineFilter = e.target.value;
+    activeRecordId = null;
+    renderPage(getQuery());
+  });
+
+  document.getElementById('searchInput').addEventListener('input', MS.debounce((e) => {
+    activeRecordId = null;
+    renderPage(e.target.value);
+  }, 150));
+
+  init();
+})();
+</script>
+
+<!-- Help Modal (Popup) -->
+<div id="helpModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px);">
+  <div style="background: linear-gradient(180deg, #1C2230 0%, #141821 100%); border-radius: 16px; padding: 24px; border: 1px solid #2E374B; max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
+    <button onclick="document.getElementById('helpModal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94A3B8; font-size: 24px; cursor: pointer;">&times;</button>
+    <h2 style="color: #FFFFFF; font-size: 22px; margin-bottom: 4px; font-weight: 900;">SOLUTION CENTER</h2>
+    <p style="color: #E11D3E; font-size: 13px; font-weight: bold; margin-bottom: 20px;">Your Personal Machine Solution Library</p>
+    <p style="color: #CBD5E1; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">Machine Error များနှင့် ဖြေရှင်းနည်းများကို ကိုယ်တိုင်မှတ်တမ်းတင်ပြီး လိုအပ်သည့်အချိန်တွင် ပြန်လည်အသုံးပြုနိုင်ပါသည်။</p>
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid #2E374B; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px;">⚙️ အသုံးပြုနည်း</h3>
+      <ol style="color: #CBD5E1; font-size: 13.5px; line-height: 1.8; padding-left: 20px; margin: 0;">
+        <li><b>Add Solution</b> ကိုနှိပ်ပါ။</li>
+        <li>Machine Name၊ Error Name နှင့် ဖြေရှင်းနည်းများ ထည့်သွင်းပါ။</li>
+        <li>လိုအပ်ပါက Error ပုံနှင့် Solution ပုံများ ထည့်ပါ။</li>
+        <li><b>Save</b> နှိပ်ပြီး မှတ်တမ်းသိမ်းဆည်းပါ။</li>
+        <li><b>Search</b> မှ သိမ်းဆည်းထားသော Solution များကို ပြန်ရှာပါ။</li>
+      </ol>
+    </div>
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid #2E374B; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+      <h3 style="color: #FFFFFF; font-size: 16px; margin-bottom: 12px;">✨ အကျိုးပြုပုံ</h3>
+      <ul style="color: #CBD5E1; font-size: 13.5px; line-height: 1.8; padding-left: 20px; margin: 0; list-style-type: disc;">
+        <li><b>Edit</b> — သိမ်းဆည်းထားသော အချက်အလက်များကို ပြန်ပြင်နိုင်သည်။</li>
+        <li><b>Delete</b> — မလိုအပ်တော့သော Solution များကို ဖယ်ရှားနိုင်သည်။</li>
+        <li><b>Reuse</b> — ယခင်ဖြေရှင်းနည်းများကို ပြန်လည်အသုံးချနိုင်သည်။</li>
+        <li><b>Build Your Library</b> — မိမိ၏ Machine Error အတွေ့အကြုံများကို စုစည်းထားနိုင်သည်။</li>
+      </ul>
+    </div>
+    <p style="color: #CBD5E1; font-size: 13px; line-height: 1.6; margin-bottom: 20px; text-align: center; font-style: italic;">မိမိကြုံတွေ့ခဲ့သော ပြဿနာများကို သိမ်းဆည်းထားခြင်းဖြင့် နောက်တစ်ကြိမ် ပြန်လည်ကြုံတွေ့လာပါက အချိန်ကုန်သက်သာစွာ ရှာဖွေဖြေရှင်းနိုင်ပါသည်။</p>
+    <p style="color: #F4A623; font-size: 14px; font-weight: 900; text-align: center; margin-top: 10px; letter-spacing: 0.5px;">Save Once · Find Anytime · Solve Smarter</p>
+  </div>
+</div>
+<!-- End Help Guide -->
+<!-- Help Button Script -->
+<script>
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var searchBox = document.querySelector('.arc-search-box');
+      if (searchBox && !document.getElementById('my-custom-help-btn')) {
+        var btn = document.createElement('button');
+        btn.id = 'my-custom-help-btn';
+        btn.innerHTML = '❓ How To Use';
+        btn.style.cssText = 'background: rgba(225, 29, 62, 0.1); color: #E11D3E; border: 1px solid #E11D3E; height: 38px; padding: 0 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; margin-left: 8px; white-space: nowrap; display: flex; align-items: center; gap: 6px;';
+        btn.onclick = function() {
+          var modal = document.getElementById('helpModal');
+          if(modal) modal.style.display = 'flex';
+        };
+        searchBox.parentNode.style.display = 'flex';
+        searchBox.parentNode.style.alignItems = 'center';
+        searchBox.parentNode.appendChild(btn);
+      }
+    }, 500);
+  });
+</script>
+<!-- End Help Button Script -->
+</body>
+</html>

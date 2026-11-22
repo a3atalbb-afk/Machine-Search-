@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .home-hero {
+    position: relative;
+    text-align: center;
+    padding: 32px 16px 24px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .home-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(211,47,47,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .home-hero__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--color-primary, #D32F2F), #990B24);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(211,47,47,0.4);
+    position: relative;
+    z-index: 1;
+  }
+  .home-hero__icon svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .home-hero h2 {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #fff;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+  }
+  .home-hero h2 .accent {
+    color: var(--color-primary, #D32F2F);
+  }
+  .home-hero p {
+    color: var(--text-secondary, #A0ABC0);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-search-link {
+    display: block;
+    text-decoration: none;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .home-search-link .input-wrap {
+    height: 56px;
+    border-radius: 14px;
+    background: var(--surface, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .home-search-link .input-wrap:hover {
+    border-color: var(--color-primary, #D32F2F);
+    box-shadow: 0 4px 20px rgba(211,47,47,0.2);
+  }
+  .home-search-link .input-wrap input {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted, #64748B);
+  }
+
+  .home-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .home-stat {
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 16px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--color-primary, #D32F2F);
+  }
+  .home-stat--gold::before {
+    background: var(--gold, #F4A623);
+  }
+  .home-stat--green::before {
+    background: var(--success, #20A66A);
+  }
+  .home-stat--muted::before {
+    background: var(--text-muted, #64748B);
+  }
+  .home-stat__value {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .home-stat__label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-muted, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .home-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .home-quick {
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .home-quick:hover {
+    border-color: var(--color-primary, #D32F2F);
+    transform: translateY(-2px);
+  }
+  .home-quick:active {
+    transform: scale(0.97);
+  }
+  .home-quick__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--surface, #151C2C);
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+  .home-quick__icon svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .home-quick__icon--red {
+    background: linear-gradient(135deg, var(--color-primary, #D32F2F), #990B24);
+    box-shadow: 0 4px 12px rgba(211,47,47,0.3);
+  }
+  .home-quick__icon--gold {
+    background: linear-gradient(135deg, var(--gold, #F4A623), #D98A12);
+    box-shadow: 0 4px 12px rgba(244,166,35,0.3);
+  }
+  .home-quick__title {
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+
+  .home-recent {
+    margin-bottom: 24px;
+  }
+  .home-recent__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+  .home-recent__title {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-muted, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .home-recent__link {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--color-primary, #D32F2F);
+    text-decoration: none;
+  }
+  .home-recent__link:hover {
+    text-decoration: underline;
+  }
+  .home-recent__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #fff;
+    transition: border-color 0.15s;
+  }
+  .home-recent__item:hover {
+    border-color: var(--color-primary, #D32F2F);
+  }
+  .home-recent__item:last-child {
+    margin-bottom: 0;
+  }
+  .home-recent__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface, #151C2C);
+    display: grid;
+    place-items: center;
+    color: var(--text-muted, #64748B);
+    flex-shrink: 0;
+  }
+  .home-recent__icon svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .home-recent__text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .home-recent__meta {
+    font-size: 11px;
+    color: var(--text-muted, #64748B);
+    flex-shrink: 0;
+  }
+
+  .home-footer {
+    text-align: center;
+    color: var(--text-muted, #64748B);
+    font-size: 11px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1006"></script>
+<script>
+(async function () {
+  const app = document.getElementById('app');
+
+  let data;
+  try {
+    data = await MS.loadData();
+  } catch (e) {
+    app.innerHTML = MS.header() +
+      '<main class="container">' +
+        '<div class="state" style="padding-top:32px;">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('home');
+    return;
+  }
+
+  const machines = data.machines || [];
+  const has = data.meta && data.meta.filename !== '—';
+  const loc = has ? (data.meta.location || '—') : '—';
+  const favs = MS.getFavorites();
+  const hist = MS.getHistory();
+
+  // Recent searches (top 5)
+  const recentSearches = hist.slice(0, 5);
+
+  // Recent favorites (top 3)
+  const recentFavs = favs.slice(0, 3);
+
+  function buildRecentSearches() {
+    if (recentSearches.length === 0) return '';
+    return '<div class="home-recent">' +
+      '<div class="home-recent__header">' +
+        '<div class="home-recent__title">Recent Searches</div>' +
+        '<a href="history.html" class="home-recent__link">View All</a>' +
+      '</div>' +
+      recentSearches.map(q =>
+        '<a href="search.html?q=' + encodeURIComponent(q) + '" class="home-recent__item">' +
+          '<div class="home-recent__icon">' + MS.ICON.clock + '</div>' +
+          '<div class="home-recent__text">' + MS.escapeHtml(q) + '</div>' +
+        '</a>'
+      ).join('') +
+    '</div>';
+  }
+
+  function buildRecentFavs() {
+    if (recentFavs.length === 0) return '';
+    return '<div class="home-recent">' +
+      '<div class="home-recent__header">' +
+        '<div class="home-recent__title">Recent Favorites</div>' +
+        '<a href="favorites.html" class="home-recent__link">View All</a>' +
+      '</div>' +
+      recentFavs.map(f =>
+        '<a href="details.html?code=' + encodeURIComponent(f.code) + '" class="home-recent__item">' +
+          '<div class="home-recent__icon" style="color:var(--gold);">' + MS.ICON.starFilled + '</div>' +
+          '<div class="home-recent__text">' + MS.escapeHtml(f.name) + '</div>' +
+          '<div class="home-recent__meta">' + MS.escapeHtml(f.location || '—') + '</div>' +
+        '</a>'
+      ).join('') +
+    '</div>';
+  }
+
+  app.innerHTML = MS.header() +
+    '<main class="container">' +
+      // Hero
+      '<section class="home-hero">' +
+        '<div class="home-hero__icon">' + MS.ICON.machine + '</div>' +
+        '<h2>FIND YOUR <span class="accent">MACHINE</span></h2>' +
+        '<p>Search arcade machines and discover their original codes instantly.</p>' +
+      '</section>' +
+
+      // Search
+      '<a href="search.html" class="home-search-link">' +
+        '<div class="input-wrap">' +
+          '<span class="input-wrap__icon">' + MS.ICON.search + '</span>' +
+          '<input type="text" placeholder="Search machines..." readonly style="cursor:pointer;">' +
+        '</div>' +
+      '</a>' +
+
+      // Stats (4)
+      '<div class="home-stats">' +
+        '<div class="home-stat">' +
+          '<div class="home-stat__value">' + (has ? machines.length : '0') + '</div>' +
+          '<div class="home-stat__label">Machines</div>' +
+        '</div>' +
+        '<div class="home-stat home-stat--gold">' +
+          '<div class="home-stat__value">' + favs.length + '</div>' +
+          '<div class="home-stat__label">Favorites</div>' +
+        '</div>' +
+        '<div class="home-stat home-stat--green">' +
+          '<div class="home-stat__value">' + hist.length + '</div>' +
+          '<div class="home-stat__label">Searches</div>' +
+        '</div>' +
+        '<div class="home-stat home-stat--muted">' +
+          '<div class="home-stat__value">' + MS.escapeHtml(loc) + '</div>' +
+          '<div class="home-stat__label">Location</div>' +
+        '</div>' +
+      '</div>' +
+
+      // Quick Access
+      '<div class="section-title">Quick Access</div>' +
+      '<div class="home-quick-grid">' +
+        '<a href="database.html" class="home-quick">' +
+          '<div class="home-quick__icon">' + MS.ICON.database + '</div>' +
+          '<div class="home-quick__title">Database</div>' +
+        '</a>' +
+        '<a href="import.html" class="home-quick">' +
+          '<div class="home-quick__icon home-quick__icon--red">' + MS.ICON.upload + '</div>' +
+          '<div class="home-quick__title">Import</div>' +
+        '</a>' +
+        '<a href="favorites.html" class="home-quick">' +
+          '<div class="home-quick__icon home-quick__icon--gold">' + MS.ICON.star + '</div>' +
+          '<div class="home-quick__title">Favorites</div>' +
+        '</a>' +
+        '<a href="history.html" class="home-quick">' +
+          '<div class="home-quick__icon">' + MS.ICON.clock + '</div>' +
+          '<div class="home-quick__title">History</div>' +
+        '</a>' +
+      '</div>' +
+
+      // Recent Searches
+      buildRecentSearches() +
+
+      // Recent Favorites
+      buildRecentFavs() +
+
+      // Footer
+      '<div class="home-footer">' +
+        'MACHINE SEARCH v1.0.0 · 100% Offline' +
+      '</div>' +
+    '</main>' +
+    MS.bottomNav('home');
+})();
+</script>
+</body>
+</html>

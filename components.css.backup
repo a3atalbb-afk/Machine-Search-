@@ -1,0 +1,154 @@
+/* ── HEADERS ── */
+.app-header {
+  position: sticky; top: 0; z-index: 40; 
+  background: var(--color-primary); 
+  color: #1B212C; padding: 12px 16px; 
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+.app-header__logo { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; background-color: var(--card); padding: 4px; }
+.app-header__title { display: flex; flex-direction: column; }
+.app-header__name { font-size: 18px; font-weight: 900; letter-spacing: .05em; line-height: 1.1; }
+.app-header__tagline { font-size: 10px; color: #FFCDD2; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+
+/* ── ICONS ── */
+.icon-box {
+  width: 44px; height: 44px; border-radius: 8px;
+  background: var(--surface); color: var(--text-primary); border: 1px solid var(--border);
+  color: #1B212C; display: grid; place-items: center; flex-shrink: 0;
+}
+.icon-box svg { width: 20px !important; height: 20px !important; }
+.icon-box--red {
+  background: var(--color-primary); color: #1B212C; border: none;
+  box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; background: var(--card); border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border); display: flex; padding: 8px 0 12px 0;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+.bottom-nav__item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 6px 0; color: var(--nav-inactive); font-size: 10px; font-weight: 700; text-transform: uppercase;
+}
+.bottom-nav__item svg { width: 24px !important; height: 24px !important; transition: transform 0.2s; }
+.bottom-nav__item.is-active { color: var(--nav-active); }
+.bottom-nav__item.is-active::before {
+  content: ''; position: absolute; top: 0; width: 100%; height: 3px; background: var(--color-primary);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.card--pad { padding: 16px; }
+
+/* ── INPUTS ── */
+.input-wrap {
+  display: flex; align-items: center; gap: 12px; background: var(--surface); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 10px; padding: 0 16px;
+  height: 54px; transition: border-color 0.2s;
+}
+.input-wrap:focus-within { border-color: var(--color-primary); }
+.input-wrap__icon { color: var(--text-muted); }
+.input-wrap__icon svg { width: 20px !important; height: 20px !important; }
+.input-wrap input { flex: 1; border: none; background: transparent; font-size: 15px; color: #1B212C; }
+.input-wrap input::placeholder { color: var(--text-muted); }
+
+/* ── RESULT CARD ── */
+.result-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.result-card__name { font-size: 16px; font-weight: 900; color: #1B212C; margin-bottom: 4px; }
+.pill { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 800; background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
+
+.result-card__code {
+  margin-top: 12px; background: var(--card); border: 1px solid #333;
+  border-radius: 6px; padding: 12px; display: flex; align-items: center; gap: 12px;
+}
+.result-card__code-value { flex: 1; font-family: var(--font-mono); font-size: 13px; word-break: break-all; color: #1B212C; }
+
+/* ── LISTS & INFO ROWS ── */
+.db-list-item { display: flex; gap: 12px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; align-items: center; }
+.db-list-item__name { font-weight: 800; font-size: 15px; margin-bottom: 2px; color: #1B212C; }
+.db-list-item__code { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+
+.info-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.info-row:last-child { border-bottom: none; }
+.info-row__key { color: var(--text-secondary); font-weight: 500; }
+.info-row__value { font-weight: 800; text-align: right; color: #1B212C; }
+
+/* ── EMPTY STATE ── */
+.state { text-align: center; padding: 48px 16px; }
+.state__icon { width: 72px; height: 72px; margin: 0 auto 16px; border-radius: 50%; background: var(--surface); color: var(--text-primary); border: 1px solid var(--border); color: var(--text-muted); display: grid; place-items: center; }
+.state__title { font-size: 16px; font-weight: 800; margin-bottom: 4px; color: #1B212C; }
+
+/* ============================================================
+   GLOBAL ICON SIZE FIX (Back arrow, Nav icons, etc.)
+   ============================================================ */
+.back-header__back svg {
+  width: 24px !important;
+  height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  stroke-width: 2.5;
+}
+
+.back-header__title {
+  font-size: 18px !important;
+}
+
+.app-header__logo img {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain;
+}
+
+/* Bottom Nav Icons */
+.bottom-nav__item svg {
+  width: 24px !important;
+  height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+}
+
+/* Empty State Icons */
+.state__icon svg {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+}
+
+/* Info Section Icons */
+.info-section h3 svg, .info-item__icon svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+}
+
+/* Result Card Icons */
+.icon-box svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+}
+
+/* ============================================================
+   RESULT CARD ICON FIX
+   ============================================================ */
+.result-card__icon, .result-card__icon svg {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+}
+.result-card__head {
+  align-items: center !important; /* Icon နဲ့ စာသား အလယ်ကျအောင် */
+}

@@ -1,0 +1,4 @@
+body {
+  background: linear-gradient(160deg, #0A0F1D 0%, #151C2C 100%);
+  color: var(--text-primary);
+}

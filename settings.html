@@ -3,393 +3,498 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#0A0E14">
 <title>Settings — MACHINE SEARCH</title>
 <link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  :root {
-    --ms-red: #E11D3E;
-    --ms-red-dark: #990B24;
-    --ms-red-bright: #FF2A4B;
-    --ms-bg: #141821;
-    --ms-bg-deep: #0D1017;
-    --ms-surface: #1C2230;
-    --ms-surface-elevated: #232B3D;
-    --ms-surface-soft: #171C28;
-    --ms-border: #2E374B;
-    --ms-border-strong: #3F4B66;
-    --ms-text: #F1F5F9;
-    --ms-text-secondary: #CBD5E1;
-    --ms-muted: #94A3B8;
-    --ms-ok: #22C55E;
-    --ms-3d-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
-    --ms-3d-red: 0 6px 14px rgba(225, 29, 62, 0.32), 0 2px 0 #690517;
+  /* ===== SETTINGS SPECIFIC ===== */
+  .settings-hero {
+    background: linear-gradient(135deg, #1C2330 0%, #141A24 100%);
+    border-bottom: 1px solid #2A3441;
+    padding: 24px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-
-  *, *::before, *::after {
-    box-sizing: border-box;
+  .settings-hero__icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: radial-gradient(circle, #DC2626, #990B24);
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 0 20px rgba(220,38,38,0.4);
   }
+  .settings-hero__icon svg { width: 32px !important; height: 32px !important; }
+  .settings-hero__title { font-size: 24px; font-weight: 900; color: #fff; line-height: 1.1; margin: 0; }
+  .settings-hero__sub { font-size: 12px; color: #94A3B8; margin-top: 4px; }
 
-  body.ms-settings-body {
-    background: radial-gradient(circle at top right, #1D2434 0%, var(--ms-bg) 52%, var(--ms-bg-deep) 100%) !important;
-    color: var(--ms-text) !important;
-    margin: 0;
-    min-height: 100vh;
-    overflow-x: hidden;
+  .settings-section { margin: 16px; background: #141A24; border: 1px solid #2A3441; border-radius: 12px; overflow: hidden; }
+  .settings-section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid #2A3441; background: #1C2330;
   }
+  .settings-section-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: #fff; }
+  .settings-section-title::before { content: ''; width: 3px; height: 14px; background: #DC2626; border-radius: 2px; }
+  .settings-section-title svg { width: 18px !important; height: 18px !important; color: #DC2626; }
 
+  .settings-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #2A3441; text-decoration: none; color: #fff; }
+  .settings-item:last-child { border-bottom: none; }
   
-
-  .ms-shell {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 12px 12px 96px;
+  .settings-item__icon {
+    width: 40px; height: 40px; border-radius: 8px; background: #1C2330;
+    display: grid; place-items: center; flex-shrink: 0;
   }
+  .settings-item__icon svg { width: 20px !important; height: 20px !important; }
+  
+  /* Custom Colors for Icons */
+  .icon-excel { background: rgba(34,197,94,0.15); color: #22C55E; }
+  .icon-db { background: rgba(59,130,246,0.15); color: #3B82F6; }
+  .icon-pref { background: rgba(220,38,38,0.15); color: #EF4444; }
+  .icon-pref-search { background: transparent; color: #EF4444; }
+  .icon-update { background: transparent; color: #3B82F6; }
+  .icon-star { background: transparent; color: #F59E0B; }
+  .icon-android { background: transparent; color: #22C55E; }
+  .icon-privacy { background: transparent; color: #EF4444; }
 
-  .ms-3d-title {
-    color: #FF4D6A;
-    font-weight: 900;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.14),
-      0 2px 0 #6B0517,
-      0 5px 14px rgba(225, 29, 62, 0.35);
-  }
+  .settings-item__content { flex: 1; min-width: 0; }
+  .settings-item__title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .settings-item__desc { font-size: 12px; color: #94A3B8; }
+  .settings-item__arrow { color: #64748B; flex-shrink: 0; }
+  .settings-item__arrow svg { width: 18px !important; height: 18px !important; }
 
-  .ms-hero {
-    border-radius: 14px;
-    background: linear-gradient(115deg, var(--ms-surface-elevated) 0%, #241B29 55%, #7A0B20 85%, #3B0410 100%);
-    border: 1px solid var(--ms-border-strong);
-    padding: 14px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-    box-shadow: var(--ms-3d-shadow);
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800;
   }
+  .status-pill--healthy { background: rgba(34,197,94,0.1); color: #22C55E; border: 1px solid rgba(34,197,94,0.3); }
 
-  .ms-hero-title {
-    margin: 0;
-    font-size: clamp(20px, 4.8vw, 26px);
-    font-weight: 900;
-    font-style: italic;
-    line-height: 1.1;
-    color: #FFFFFF;
-    text-shadow: 0 2px 0 #0A0D14, 0 4px 12px rgba(0, 0, 0, 0.5);
-  }
+  .storage-bar-wrap { padding: 12px 16px; background: #1C2330; border-bottom: 1px solid #2A3441; }
+  .storage-bar-text { display: flex; justify-content: space-between; font-size: 11px; color: #94A3B8; margin-bottom: 6px; font-weight: 700; }
+  .storage-bar { height: 6px; background: #2A3441; border-radius: 3px; overflow: hidden; }
+  .storage-bar__fill { height: 100%; background: #DC2626; border-radius: 3px; width: 10%; }
+  .storage-bar__fill--green { background: #22C55E; }
+  .storage-bar__fill--gold { background: #F59E0B; }
+  .storage-bar__fill--red { background: #EF4444; }
 
-  .ms-hero-sub {
-    margin-top: 4px;
-    font-size: 12px;
-    color: var(--ms-text-secondary);
+  .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; background: #1C2330; border-top: 1px solid #2A3441; }
+  .btn-action {
+    height: 40px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    border: 1px solid #2A3441; background: #141A24; color: #fff;
   }
+  .btn-action--red { background: #DC2626; border-color: #DC2626; color: #fff; }
+  .btn-action svg { width: 16px !important; height: 16px !important; }
 
-  .ms-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 11px;
-    border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 800;
-    background: rgba(13, 16, 23, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: var(--ms-ok);
+  .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #2A3441; transition: .3s; border-radius: 24px; }
+  .toggle-slider:before {
+    position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+    background: #fff; transition: .3s; border-radius: 50%;
   }
+  input:checked + .toggle-slider { background: #DC2626; }
+  input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-  .ms-sec-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: linear-gradient(90deg, var(--ms-red-bright), var(--ms-red-dark));
-    color: #FFFFFF;
-    font-size: 12px;
-    font-weight: 900;
-    font-style: italic;
-    padding: 5px 14px 5px 11px;
-    border-radius: 6px 16px 6px 6px;
-    margin: 12px 0 8px;
-    box-shadow: var(--ms-3d-red);
-  }
+  .version-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; }
+  .version-row__label { font-size: 14px; font-weight: 700; color: #CBD5E1; }
+  .version-row__value { font-size: 12px; font-weight: 800; color: #64748B; background: #1C2330; padding: 4px 8px; border-radius: 6px; }
 
-  .ms-card {
-    background: linear-gradient(180deg, var(--ms-surface-elevated) 0%, var(--ms-surface) 100%);
-    border: 1px solid var(--ms-border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    box-shadow: var(--ms-3d-shadow);
+  .ms-alert-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 10000; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);
   }
-
-  .ms-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px;
-    text-decoration: none;
-    color: var(--ms-text);
-    border-bottom: 1px solid var(--ms-border);
-    min-height: 48px;
+  .ms-alert-modal.show { display: flex; }
+  .ms-alert-box {
+    background: #141A24; border: 1px solid #DC2626; border-radius: 16px;
+    width: 100%; max-width: 320px; padding: 24px; text-align: center;
+    box-shadow: 0 10px 40px rgba(220,38,38,0.2);
   }
-
-  .ms-item:last-child {
-    border-bottom: none;
+  .ms-alert-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(220,38,38,0.1); color: #DC2626;
+    display: grid; place-items: center; margin: 0 auto 16px;
   }
-
-  .ms-item-title {
-    font-size: 13.5px;
-    font-weight: 800;
-  }
-
-  .ms-item-sub {
-    font-size: 11.5px;
-    color: var(--ms-muted);
-    margin-top: 2px;
-  }
-
-  .ms-item-val {
-    font-size: 12.5px;
-    font-weight: 800;
-    color: #FF5874;
-    white-space: nowrap;
-  }
-
-  .ms-item--danger {
-    color: #FF6B84;
-    cursor: pointer;
-    background: transparent;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    width: 100%;
-    text-align: left;
-  }
-
-  .ms-btn-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 12px;
-    background: var(--ms-surface-soft);
-    border-top: 1px solid var(--ms-border);
-  }
-
-  .ms-btn {
-    min-height: 38px;
-    padding: 0 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    border: 1px solid var(--ms-border-strong);
-    background: linear-gradient(180deg, #2C354A 0%, #1F2636 100%);
-    color: var(--ms-text);
-  }
-
-  .ms-btn-red {
-    background: linear-gradient(180deg, var(--ms-red-bright) 0%, var(--ms-red) 55%, var(--ms-red-dark) 100%);
-    color: #FFFFFF;
-    border: none;
-    box-shadow: var(--ms-3d-red);
-  }
-
-  .ms-toast {
-    position: fixed;
-    left: 50%;
-    bottom: 78px;
-    transform: translateX(-50%);
-    background: var(--ms-surface-elevated);
-    color: var(--ms-text);
-    border: 1px solid var(--ms-red-bright);
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 800;
-    z-index: 9999;
-    display: none;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
-  }
-
-  .ms-toast.is-open {
-    display: block;
-  }
-
-  @media (max-width: 600px) {
-    .ms-shell { padding: 10px 10px 92px; }
-    .ms-btn-row { grid-template-columns: 1fr; }
-  }
+  .ms-alert-icon svg { width: 32px !important; height: 32px !important; }
+  .ms-alert-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 8px; }
+  .ms-alert-text { font-size: 13px; color: #94A3B8; line-height: 1.5; margin-bottom: 24px; white-space: pre-line; }
+  .ms-alert-actions { display: flex; gap: 8px; }
+  .ms-alert-btn { flex: 1; height: 44px; border-radius: 8px; font-size: 15px; font-weight: 800; border: none; cursor: pointer; }
+  .ms-alert-btn--cancel { background: #1C2330; color: #fff; border: 1px solid #2A3441; }
+  .ms-alert-btn--confirm { background: #DC2626; color: #fff; }
 </style>
-
-
 </head>
-<body class="ms-settings-body">
+<body>
 <div id="app"></div>
-<div class="ms-toast" id="toast"></div>
-<input type="file" id="backupInput" accept=".json,application/json" style="display:none;" onchange="importBackup(event)">
+<input type="file" id="backupInput" accept=".json" style="display: none;">
 
-<script src="app.js?v=1016"></script>
+<script src="app.js?v=1007"></script>
 <script>
-(function() {
-  const DB_NAME = 'MS_TroubleshootDB';
-  const STORE_NAME = 'records';
-  const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--ms-muted);"><path d="M9 18l6-6-6-6"/></svg>`;
-
+(function () {
   const app = document.getElementById('app');
-  app.innerHTML =
-    MS.backHeader('Settings') +
-    `<main class="ms-shell">
-      <section class="ms-hero">
-        <div>
-          <h1 class="ms-hero-title"><span class="ms-3d-title">SETTINGS</span></h1>
-          <div class="ms-hero-sub">Developer: <strong>Super ko Tint</strong></div>
-        </div>
-        <div class="ms-pill">✓ 100% Offline</div>
-      </section>
+  const backupInput = document.getElementById('backupInput');
 
-      <div class="ms-sec-pill">Database</div>
-      <div class="ms-card">
-        <a href="import.html" class="ms-item">
-          <div>
-            <div class="ms-item-title">Import Excel</div>
-            <div class="ms-item-sub">Import machine database spreadsheet</div>
+  const SETTINGS_KEY = 'ms_settings_v1';
+  const SOL_KEY = 'ms_solutions_v1';
+
+  // ===== Custom Alert =====
+  function showAlert(title, text, isConfirm = false, onConfirm) {
+    let alertModal = document.getElementById('msCustomAlert');
+    if (!alertModal) {
+      alertModal = document.createElement('div');
+      alertModal.id = 'msCustomAlert';
+      alertModal.className = 'ms-alert-modal';
+      alertModal.innerHTML = `
+        <div class="ms-alert-box">
+          <div class="ms-alert-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </div>
-          <span>${arrow}</span>
-        </a>
-        <a href="info.html" class="ms-item">
-          <div>
-            <div class="ms-item-title">Database Info</div>
-            <div class="ms-item-sub" id="dbSummaryText">Checking records...</div>
+          <div class="ms-alert-title" id="msAlertTitle"></div>
+          <div class="ms-alert-text" id="msAlertText"></div>
+          <div class="ms-alert-actions">
+            <button class="ms-alert-btn ms-alert-btn--cancel" id="msAlertCancel" style="display:none;">Cancel</button>
+            <button class="ms-alert-btn ms-alert-btn--confirm" id="msAlertOk">OK</button>
           </div>
-          <span>${arrow}</span>
-        </a>
-        <div class="ms-btn-row">
-          <button type="button" class="ms-btn ms-btn-red" onclick="exportBackup()">Export Backup</button>
-          <button type="button" class="ms-btn" onclick="document.getElementById('backupInput').click()">Restore Backup</button>
         </div>
-      </div>
+      `;
+      document.body.appendChild(alertModal);
+    }
 
-      <div class="ms-sec-pill">Data</div>
-      <div class="ms-card">
-        <button type="button" class="ms-item ms-item--danger" onclick="clearHist()">
-          <div>
-            <div class="ms-item-title">Clear Search History</div>
-            <div class="ms-item-sub">Remove saved search queries only</div>
-          </div>
-          <span>${arrow}</span>
-        </button>
-      </div>
+    document.getElementById('msAlertTitle').textContent = title;
+    document.getElementById('msAlertText').textContent = text;
+    const cancelBtn = document.getElementById('msAlertCancel');
+    const okBtn = document.getElementById('msAlertOk');
 
-      <div class="ms-sec-pill">Application</div>
-      <div class="ms-card">
-        <a href="update.html" class="ms-item">
-          <div class="ms-item-title">App Updates</div>
-          <span>${arrow}</span>
-        </a>
-        <a href="about.html" class="ms-item">
-          <div class="ms-item-title">About MACHINE SEARCH</div>
-          <span>${arrow}</span>
-        </a>
-        <div class="ms-item">
-          <span class="ms-item-title" style="color:var(--ms-muted);">Version</span>
-          <span class="ms-item-val">1.0.0 (Offline)</span>
-        </div>
-      </div>
-    </main>` +
-    MS.bottomNav('settings');
-
-  function showToast(msg) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('is-open');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => el.classList.remove('is-open'), 2000);
+    if (isConfirm) {
+      cancelBtn.style.display = 'block';
+      okBtn.textContent = 'Yes';
+      okBtn.style.background = '#EF4444';
+      okBtn.onclick = () => { alertModal.classList.remove('show'); if(onConfirm) onConfirm(); };
+    } else {
+      cancelBtn.style.display = 'none';
+      okBtn.textContent = 'OK';
+      okBtn.style.background = '#DC2626';
+      okBtn.onclick = () => alertModal.classList.remove('show');
+    }
+    alertModal.classList.add('show');
+    cancelBtn.onclick = () => alertModal.classList.remove('show');
   }
 
-  function getRecords() {
-    return new Promise((resolve) => {
+  // ===== Data Helpers =====
+  function getSettings() {
+    try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{"compactResults":true,"searchSuggestions":true,"reduceAnimations":false}'); }
+    catch { return { compactResults: true, searchSuggestions: true, reduceAnimations: false }; }
+  }
+  function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
+  function getSolutions() { try { return JSON.parse(localStorage.getItem(SOL_KEY) || '[]'); } catch { return []; } }
+
+  // ===== Icons =====
+  const iconExcel = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>';
+  const iconDb = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>';
+  const iconDownload = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  const iconUpload = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+  const iconSliders = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>';
+  const iconGrid = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
+  const iconSearch = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  const iconRefresh = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>';
+  const iconInfo = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1" stroke-linecap="round"/></svg>';
+  const iconStar = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.7 6.3.9-4.6 4.4 1.1 6.2L12 17.3 6.5 20.2 7.6 14 3 9.6l6.3-.9L12 3z"/></svg>';
+  const iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+  const iconAndroid = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 16V9a7 7 0 0 1 14 0v7"/><line x1="5" y1="16" x2="19" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="15" y1="16" x2="15" y2="21"/></svg>';
+  const iconCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  async function renderUI() {
+    let data = { machines: [] };
+    try { data = await MS.loadData(); } catch(e) {}
+    
+    const machinesCount = (data.machines || []).length;
+    const solutionsCount = getSolutions().length;
+    const historyCount = MS.getHistory().length;
+    const favsCount = MS.getFavorites().length;
+    const settings = getSettings();
+
+    let lsSize = 0;
+    for (let key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+        lsSize += (localStorage[key].length * 2) / 1024 / 1024;
+      }
+    }
+    const lsUsed = lsSize.toFixed(2);
+    const lsTotal = 5.00;
+    const lsPercent = Math.min((lsSize / lsTotal) * 100, 100).toFixed(1);
+
+    app.innerHTML = 
+      '<header class="back-header" style="border-bottom:none; justify-content:space-between; padding-right:16px;">' +
+        '<div style="display:flex; align-items:center; gap:12px;">' +
+          // Back Button (Fixed: using history.back)
+          '<a href="#" class="back-header__back" aria-label="Back" onclick="event.preventDefault(); history.back();">' + MS.ICON.back + '</a>' +
+          '<div class="custom-header__brand">' +
+            '<svg class="custom-header__logo" style="width:32px;height:32px;" viewBox="0 0 100 100" fill="none"><path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#DC2626" stroke-width="6" fill="none"/><circle cx="50" cy="50" r="15" stroke="#DC2626" stroke-width="6" fill="none"/><path d="M65 65 L80 80" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/></svg>' +
+            '<div class="custom-header__text">' +
+              '<div class="custom-header__name" style="font-size:16px;">MACHINE <span style="color:#EF4444;">SEARCH</span></div>' +
+              '<div class="custom-header__tag" style="font-size:9px;">OFFLINE • v1.0.0</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        // Settings Icon (Current Page, so no action needed, or just a visual indicator)
+        '<div class="custom-header__settings" style="width:36px;height:36px; color:#DC2626;">' + MS.ICON.settings + '</div>' +
+      '</header>' +
+
+      '<div class="settings-hero">' +
+        '<div style="display:flex; align-items:center; gap:16px;">' +
+          '<div class="settings-hero__icon">' + MS.ICON.settings + '</div>' +
+          '<div>' +
+            '<h1 class="settings-hero__title">Settings</h1>' +
+            '<div class="settings-hero__sub">Customize your experience</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<main style="padding-bottom: 100px;">' +
+
+        '<div class="settings-section">' +
+          '<div class="settings-section-header">' +
+            '<div class="settings-section-title">' + iconDb + ' Data & Backup</div>' +
+          '</div>' +
+          
+          '<a href="import.html" class="settings-item">' +
+            '<div class="settings-item__icon icon-excel">' + iconExcel + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Import Excel</div>' +
+              '<div class="settings-item__desc">Add or update machine data</div>' +
+            '</div>' +
+            '<div class="settings-item__arrow">' + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>' + '</div>' +
+          '</a>' +
+
+          '<a href="info.html" class="settings-item" style="border-bottom:none;">' +
+            '<div class="settings-item__icon icon-db">' + iconDb + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Database Status</div>' +
+              '<div class="settings-item__desc">' + (machinesCount > 0 ? machinesCount + ' machines' : '0 machines') + ' &middot; ' + solutionsCount + ' solutions</div>' +
+            '</div>' +
+            '<div class="status-pill status-pill--healthy">' + iconCheck + ' Healthy</div>' +
+          '</a>' +
+
+          '<div class="storage-bar-wrap">' +
+            '<div class="storage-bar-text"><span>Local Storage</span><span>' + lsUsed + ' MB / ' + lsTotal + ' MB</span></div>' +
+            '<div class="storage-bar"><div class="storage-bar__fill ' + (lsPercent > 80 ? 'storage-bar__fill--red' : lsPercent > 50 ? 'storage-bar__fill--gold' : 'storage-bar__fill--green') + '" style="width: ' + lsPercent + '%;"></div></div>' +
+          '</div>' +
+
+          '<div class="action-row">' +
+            '<button class="btn-action" id="exportBtn">' + iconDownload + ' Export Backup</button>' +
+            '<button class="btn-action btn-action--red" id="restoreBtn">' + iconUpload + ' Restore Backup</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="settings-section">' +
+          '<div class="settings-section-header">' +
+            '<div class="settings-section-title">' + iconSliders + ' Preferences</div>' +
+          '</div>' +
+
+          '<div class="settings-item">' +
+            '<div class="settings-item__icon icon-pref">' + iconGrid + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Compact Results</div>' +
+              '<div class="settings-item__desc">Show more results in less space</div>' +
+            '</div>' +
+            '<label class="toggle-switch">' +
+              '<input type="checkbox" id="compactToggle" ' + (settings.compactResults ? 'checked' : '') + '>' +
+              '<span class="toggle-slider"></span>' +
+            '</label>' +
+          '</div>' +
+
+          '<div class="settings-item">' +
+            '<div class="settings-item__icon icon-pref-search">' + iconSearch + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Search Suggestions</div>' +
+              '<div class="settings-item__desc">Get suggestions while typing</div>' +
+            '</div>' +
+            '<label class="toggle-switch">' +
+              '<input type="checkbox" id="suggestToggle" ' + (settings.searchSuggestions ? 'checked' : '') + '>' +
+              '<span class="toggle-slider"></span>' +
+            '</label>' +
+          '</div>' +
+
+          '<div class="settings-item" style="border-bottom:none;">' +
+            '<div class="settings-item__icon icon-pref">' + iconRefresh + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Interface Animations</div>' +
+              '<div class="settings-item__desc">Enable smooth transitions</div>' +
+            '</div>' +
+            '<label class="toggle-switch">' +
+              '<input type="checkbox" id="animToggle" ' + (!settings.reduceAnimations ? 'checked' : '') + '>' +
+              '<span class="toggle-slider"></span>' +
+            '</label>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="settings-section">' +
+          '<div class="settings-section-header">' +
+            '<div class="settings-section-title">' + iconInfo + ' App</div>' +
+          '</div>' +
+
+          '<a href="update.html" class="settings-item">' +
+            '<div class="settings-item__icon icon-update">' + iconRefresh + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Check for Updates</div>' +
+              '<div class="settings-item__desc">Get the latest version</div>' +
+            '</div>' +
+            '<div class="settings-item__arrow">' + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>' + '</div>' +
+          '</a>' +
+
+          '<a href="about.html" class="settings-item">' +
+            '<div class="settings-item__icon icon-star">' + iconStar + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">About Machine Search</div>' +
+              '<div class="settings-item__desc">App information and credits</div>' +
+            '</div>' +
+            '<div class="settings-item__arrow">' + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>' + '</div>' +
+          '</a>' +
+
+          '<div class="version-row">' +
+            '<div style="display:flex; align-items:center; gap:12px;">' +
+              '<div class="settings-item__icon icon-android" style="background:transparent;">' + iconAndroid + '</div>' +
+              '<div class="version-row__label">Version</div>' +
+            '</div>' +
+            '<div class="version-row__value">v1.0.0</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="settings-section">' +
+          '<div class="settings-section-header">' +
+            '<div class="settings-section-title">' + iconTrash + ' Privacy</div>' +
+          '</div>' +
+
+          '<div class="settings-item">' +
+            '<div class="settings-item__icon icon-privacy">' + iconTrash + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Clear Search History</div>' +
+              '<div class="settings-item__desc">Remove all search records (' + historyCount + ')</div>' +
+            '</div>' +
+            '<button class="btn-action btn-action--red" id="clearHistoryBtn" style="width:auto; padding:0 12px; height:32px;">Clear</button>' +
+          '</div>' +
+
+          '<div class="settings-item" style="border-bottom:none;">' +
+            '<div class="settings-item__icon icon-privacy">' + iconStar + '</div>' +
+            '<div class="settings-item__content">' +
+              '<div class="settings-item__title">Clear Favorites</div>' +
+              '<div class="settings-item__desc">Remove all saved favorites (' + favsCount + ')</div>' +
+            '</div>' +
+            '<button class="btn-action btn-action--red" id="clearFavsBtn" style="width:auto; padding:0 12px; height:32px;">Clear</button>' +
+          '</div>' +
+        '</div>' +
+
+      '</main>' +
+      MS.bottomNav('settings');
+
+    // --- Handlers ---
+    document.getElementById('compactToggle').addEventListener('change', (e) => {
+      settings.compactResults = e.target.checked;
+      saveSettings(settings);
+      MS.toast('Setting saved', 'ok');
+    });
+    document.getElementById('suggestToggle').addEventListener('change', (e) => {
+      settings.searchSuggestions = e.target.checked;
+      saveSettings(settings);
+      MS.toast('Setting saved', 'ok');
+    });
+    document.getElementById('animToggle').addEventListener('change', (e) => {
+      settings.reduceAnimations = !e.target.checked;
+      saveSettings(settings);
+      MS.toast('Setting saved', 'ok');
+    });
+
+    document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+      if (historyCount === 0) return showAlert('Empty', 'No search history to clear.');
+      showAlert('Clear History', 'Are you sure you want to remove all search history?', true, () => {
+        MS.clearHistory();
+        MS.toast('Search history cleared', 'ok');
+        renderUI();
+      });
+    });
+
+    document.getElementById('clearFavsBtn').addEventListener('click', () => {
+      if (favsCount === 0) return showAlert('Empty', 'No favorites to clear.');
+      showAlert('Clear Favorites', 'Are you sure you want to remove all favorites?', true, () => {
+        localStorage.removeItem('ms_favorites_v2');
+        MS.toast('Favorites cleared', 'ok');
+        renderUI();
+      });
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', async () => {
       try {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onsuccess = (e) => {
-          const d = e.target.result;
-          if (!d.objectStoreNames.contains(STORE_NAME)) return resolve([]);
-          const tx = d.transaction(STORE_NAME, 'readonly');
-          const r = tx.objectStore(STORE_NAME).getAll();
-          r.onsuccess = () => resolve(r.result || []);
-          r.onerror = () => resolve([]);
+        const db = await MS.loadData();
+        const backup = {
+          app: 'MACHINE SEARCH',
+          version: '1.0.0',
+          schema: 1,
+          exportedAt: new Date().toISOString(),
+          data: {
+            database: db,
+            solutions: getSolutions(),
+            favorites: MS.getFavorites(),
+            history: MS.getHistory(),
+            settings: getSettings()
+          }
         };
-        req.onerror = () => resolve([]);
-      } catch (_) { resolve([]); }
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'machine-search-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        MS.toast('Backup exported', 'ok');
+      } catch (e) { 
+        showAlert('Export Failed', 'Could not generate backup file.'); 
+      }
+    });
+
+    document.getElementById('restoreBtn').addEventListener('click', () => backupInput.click());
+
+    backupInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          
+          if (!parsed || parsed.app !== 'MACHINE SEARCH' || !parsed.data) {
+            throw new Error('Invalid Backup File');
+          }
+
+          const d = parsed.data;
+          const msg = 'Found backup from ' + new Date(parsed.exportedAt).toLocaleDateString() + '.\n\n' +
+                      'Includes:\n' +
+                      '- ' + (d.database?.machines?.length || 0) + ' Machines\n' +
+                      '- ' + (d.solutions?.length || 0) + ' Solutions\n' +
+                      '- ' + (d.favorites?.length || 0) + ' Favorites\n\n' +
+                      'WARNING: This will REPLACE your current data. Continue?';
+
+          showAlert('Restore Backup', msg, true, () => {
+            if (d.database) MS.saveData(d.database);
+            if (d.solutions) localStorage.setItem(SOL_KEY, JSON.stringify(d.solutions));
+            if (d.favorites) localStorage.setItem('ms_favorites_v2', JSON.stringify(d.favorites));
+            if (d.history) localStorage.setItem('ms_history_v2', JSON.stringify(d.history));
+            if (d.settings) localStorage.setItem(SETTINGS_KEY, JSON.stringify(d.settings));
+            
+            MS.toast('Backup restored', 'ok');
+            renderUI();
+          });
+          
+        } catch (err) {
+          showAlert('Restore Failed', 'The selected file is not a valid MACHINE SEARCH backup.');
+        }
+        backupInput.value = '';
+      };
+      reader.readAsText(file);
     });
   }
 
-  async function loadDbSummary() {
-    const recs = await getRecords();
-    const machines = new Set(recs.map(x => (x.machine || '').trim().toUpperCase()).filter(Boolean));
-    document.getElementById('dbSummaryText').textContent =
-      `${machines.size} machines · ${recs.length} solutions`;
-  }
-
-  window.exportBackup = async function() {
-    const recs = await getRecords();
-    const blob = new Blob([JSON.stringify({
-      app: 'MACHINE SEARCH',
-      developer: 'Super ko Tint',
-      exportedAt: new Date().toISOString(),
-      troubleshootRecords: recs
-    }, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `machine-search-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    showToast('Backup exported');
-  };
-
-  window.importBackup = async function(ev) {
-    const file = ev.target.files && ev.target.files[0];
-    ev.target.value = '';
-    if (!file) return;
-    try {
-      const data = JSON.parse(await file.text());
-      const recs = Array.isArray(data.troubleshootRecords) ? data.troubleshootRecords : [];
-      if (!recs.length) return showToast('No records in file');
-      await new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onsuccess = (e) => {
-          const tx = e.target.result.transaction(STORE_NAME, 'readwrite');
-          const st = tx.objectStore(STORE_NAME);
-          recs.forEach(r => { if (r && r.machine && r.error && r.steps) st.put(r); });
-          tx.oncomplete = resolve;
-          tx.onerror = reject;
-        };
-        req.onerror = reject;
-      });
-      await loadDbSummary();
-      showToast('Backup restored');
-    } catch (_) {
-      showToast('Invalid JSON file');
-    }
-  };
-
-  window.clearHist = function() {
-    if (confirm('Clear all search history?')) {
-      if (typeof MS.clearHistory === 'function') MS.clearHistory();
-      showToast('Search history cleared');
-    }
-  };
-
-  loadDbSummary();
+  renderUI();
 })();
 </script>
 </body>

@@ -1,4 +1,11 @@
+/* ==========================================
+   MACHINE SEARCH — Background
+   ========================================== */
+
 body {
-  background: linear-gradient(160deg, #0A0F1D 0%, #151C2C 100%);
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, rgba(220,38,38,0.06) 0%, transparent 60%);
+  background-repeat: no-repeat;
   color: var(--text-primary);
+  min-height: 100vh;
 }

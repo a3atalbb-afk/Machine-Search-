@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Settings — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  :root {
+    --ms-red: #E11D3E;
+    --ms-red-dark: #990B24;
+    --ms-red-bright: #FF2A4B;
+    --ms-bg: #141821;
+    --ms-bg-deep: #0D1017;
+    --ms-surface: #1C2230;
+    --ms-surface-elevated: #232B3D;
+    --ms-surface-soft: #171C28;
+    --ms-border: #2E374B;
+    --ms-border-strong: #3F4B66;
+    --ms-text: #F1F5F9;
+    --ms-text-secondary: #CBD5E1;
+    --ms-muted: #94A3B8;
+    --ms-ok: #22C55E;
+    --ms-3d-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
+    --ms-3d-red: 0 6px 14px rgba(225, 29, 62, 0.32), 0 2px 0 #690517;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body.ms-settings-body {
+    background: radial-gradient(circle at top right, #1D2434 0%, var(--ms-bg) 52%, var(--ms-bg-deep) 100%) !important;
+    color: var(--ms-text) !important;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  
+
+  .ms-shell {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 12px 12px 96px;
+  }
+
+  .ms-3d-title {
+    color: #FF4D6A;
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.14),
+      0 2px 0 #6B0517,
+      0 5px 14px rgba(225, 29, 62, 0.35);
+  }
+
+  .ms-hero {
+    border-radius: 14px;
+    background: linear-gradient(115deg, var(--ms-surface-elevated) 0%, #241B29 55%, #7A0B20 85%, #3B0410 100%);
+    border: 1px solid var(--ms-border-strong);
+    padding: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: var(--ms-3d-shadow);
+  }
+
+  .ms-hero-title {
+    margin: 0;
+    font-size: clamp(20px, 4.8vw, 26px);
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.1;
+    color: #FFFFFF;
+    text-shadow: 0 2px 0 #0A0D14, 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .ms-hero-sub {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--ms-text-secondary);
+  }
+
+  .ms-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 800;
+    background: rgba(13, 16, 23, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--ms-ok);
+  }
+
+  .ms-sec-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(90deg, var(--ms-red-bright), var(--ms-red-dark));
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 900;
+    font-style: italic;
+    padding: 5px 14px 5px 11px;
+    border-radius: 6px 16px 6px 6px;
+    margin: 12px 0 8px;
+    box-shadow: var(--ms-3d-red);
+  }
+
+  .ms-card {
+    background: linear-gradient(180deg, var(--ms-surface-elevated) 0%, var(--ms-surface) 100%);
+    border: 1px solid var(--ms-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: var(--ms-3d-shadow);
+  }
+
+  .ms-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    text-decoration: none;
+    color: var(--ms-text);
+    border-bottom: 1px solid var(--ms-border);
+    min-height: 48px;
+  }
+
+  .ms-item:last-child {
+    border-bottom: none;
+  }
+
+  .ms-item-title {
+    font-size: 13.5px;
+    font-weight: 800;
+  }
+
+  .ms-item-sub {
+    font-size: 11.5px;
+    color: var(--ms-muted);
+    margin-top: 2px;
+  }
+
+  .ms-item-val {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #FF5874;
+    white-space: nowrap;
+  }
+
+  .ms-item--danger {
+    color: #FF6B84;
+    cursor: pointer;
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .ms-btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    background: var(--ms-surface-soft);
+    border-top: 1px solid var(--ms-border);
+  }
+
+  .ms-btn {
+    min-height: 38px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    border: 1px solid var(--ms-border-strong);
+    background: linear-gradient(180deg, #2C354A 0%, #1F2636 100%);
+    color: var(--ms-text);
+  }
+
+  .ms-btn-red {
+    background: linear-gradient(180deg, var(--ms-red-bright) 0%, var(--ms-red) 55%, var(--ms-red-dark) 100%);
+    color: #FFFFFF;
+    border: none;
+    box-shadow: var(--ms-3d-red);
+  }
+
+  .ms-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 78px;
+    transform: translateX(-50%);
+    background: var(--ms-surface-elevated);
+    color: var(--ms-text);
+    border: 1px solid var(--ms-red-bright);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+  }
+
+  .ms-toast.is-open {
+    display: block;
+  }
+
+  @media (max-width: 600px) {
+    .ms-shell { padding: 10px 10px 92px; }
+    .ms-btn-row { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+</head>
+<body class="ms-settings-body">
+<div id="app"></div>
+<div class="ms-toast" id="toast"></div>
+<input type="file" id="backupInput" accept=".json,application/json" style="display:none;" onchange="importBackup(event)">
+
+<script src="app.js?v=1016"></script>
+<script>
+(function() {
+  const DB_NAME = 'MS_TroubleshootDB';
+  const STORE_NAME = 'records';
+  const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--ms-muted);"><path d="M9 18l6-6-6-6"/></svg>`;
+
+  const app = document.getElementById('app');
+  app.innerHTML =
+    MS.backHeader('Settings') +
+    `<main class="ms-shell">
+      <section class="ms-hero">
+        <div>
+          <h1 class="ms-hero-title"><span class="ms-3d-title">SETTINGS</span></h1>
+          <div class="ms-hero-sub">Developer: <strong>Super ko Tint</strong></div>
+        </div>
+        <div class="ms-pill">✓ 100% Offline</div>
+      </section>
+
+      <div class="ms-sec-pill">Database</div>
+      <div class="ms-card">
+        <a href="import.html" class="ms-item">
+          <div>
+            <div class="ms-item-title">Import Excel</div>
+            <div class="ms-item-sub">Import machine database spreadsheet</div>
+          </div>
+          <span>${arrow}</span>
+        </a>
+        <a href="info.html" class="ms-item">
+          <div>
+            <div class="ms-item-title">Database Info</div>
+            <div class="ms-item-sub" id="dbSummaryText">Checking records...</div>
+          </div>
+          <span>${arrow}</span>
+        </a>
+        <div class="ms-btn-row">
+          <button type="button" class="ms-btn ms-btn-red" onclick="exportBackup()">Export Backup</button>
+          <button type="button" class="ms-btn" onclick="document.getElementById('backupInput').click()">Restore Backup</button>
+        </div>
+      </div>
+
+      <div class="ms-sec-pill">Data</div>
+      <div class="ms-card">
+        <button type="button" class="ms-item ms-item--danger" onclick="clearHist()">
+          <div>
+            <div class="ms-item-title">Clear Search History</div>
+            <div class="ms-item-sub">Remove saved search queries only</div>
+          </div>
+          <span>${arrow}</span>
+        </button>
+      </div>
+
+      <div class="ms-sec-pill">Application</div>
+      <div class="ms-card">
+        <a href="update.html" class="ms-item">
+          <div class="ms-item-title">App Updates</div>
+          <span>${arrow}</span>
+        </a>
+        <a href="about.html" class="ms-item">
+          <div class="ms-item-title">About MACHINE SEARCH</div>
+          <span>${arrow}</span>
+        </a>
+        <div class="ms-item">
+          <span class="ms-item-title" style="color:var(--ms-muted);">Version</span>
+          <span class="ms-item-val">1.0.0 (Offline)</span>
+        </div>
+      </div>
+    </main>` +
+    MS.bottomNav('settings');
+
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('is-open');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => el.classList.remove('is-open'), 2000);
+  }
+
+  function getRecords() {
+    return new Promise((resolve) => {
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onsuccess = (e) => {
+          const d = e.target.result;
+          if (!d.objectStoreNames.contains(STORE_NAME)) return resolve([]);
+          const tx = d.transaction(STORE_NAME, 'readonly');
+          const r = tx.objectStore(STORE_NAME).getAll();
+          r.onsuccess = () => resolve(r.result || []);
+          r.onerror = () => resolve([]);
+        };
+        req.onerror = () => resolve([]);
+      } catch (_) { resolve([]); }
+    });
+  }
+
+  async function loadDbSummary() {
+    const recs = await getRecords();
+    const machines = new Set(recs.map(x => (x.machine || '').trim().toUpperCase()).filter(Boolean));
+    document.getElementById('dbSummaryText').textContent =
+      `${machines.size} machines · ${recs.length} solutions`;
+  }
+
+  window.exportBackup = async function() {
+    const recs = await getRecords();
+    const blob = new Blob([JSON.stringify({
+      app: 'MACHINE SEARCH',
+      developer: 'Super ko Tint',
+      exportedAt: new Date().toISOString(),
+      troubleshootRecords: recs
+    }, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `machine-search-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('Backup exported');
+  };
+
+  window.importBackup = async function(ev) {
+    const file = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      const recs = Array.isArray(data.troubleshootRecords) ? data.troubleshootRecords : [];
+      if (!recs.length) return showToast('No records in file');
+      await new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onsuccess = (e) => {
+          const tx = e.target.result.transaction(STORE_NAME, 'readwrite');
+          const st = tx.objectStore(STORE_NAME);
+          recs.forEach(r => { if (r && r.machine && r.error && r.steps) st.put(r); });
+          tx.oncomplete = resolve;
+          tx.onerror = reject;
+        };
+        req.onerror = reject;
+      });
+      await loadDbSummary();
+      showToast('Backup restored');
+    } catch (_) {
+      showToast('Invalid JSON file');
+    }
+  };
+
+  window.clearHist = function() {
+    if (confirm('Clear all search history?')) {
+      if (typeof MS.clearHistory === 'function') MS.clearHistory();
+      showToast('Search history cleared');
+    }
+  };
+
+  loadDbSummary();
+})();
+</script>
+</body>
+</html>

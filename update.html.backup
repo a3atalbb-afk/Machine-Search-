@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Updates — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(function() {
+  const app = document.getElementById('app');
+  app.innerHTML = MS.backHeader('App Updates') + `
+    <main class="container" style="padding-top: var(--sp-4)">
+      <div class="card--stats" style="padding: 24px; text-align: center;">
+        <div style="font-size: 14px; color: #B8C4D9; margin-bottom: 4px;">Current Version</div>
+        <div style="font-size: 32px; font-weight: 900; color: #fff;">v1.0.0</div>
+        <div style="font-size: 12px; color: var(--brand-success); font-weight: bold; margin-top: 8px;">✓ Up to date</div>
+      </div>
+
+      <div class="section-title" style="margin-top: var(--sp-5)">
+        <span class="section-title__text">Release Notes</span>
+      </div>
+      <div class="card card--pad">
+        <div style="font-weight: bold; margin-bottom: 8px;">Version 1.0.0</div>
+        <ul style="font-size: 14px; color: var(--text-secondary); padding-left: 16px; line-height: 1.6;">
+          <li>Initial release of MACHINE SEARCH</li>
+          <li>Excel workbook import & auto sheet detection</li>
+          <li>Live search with token matching</li>
+          <li>Offline database & instant copy</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: var(--sp-5)">
+        <button class="btn btn--ghost btn--block" onclick="checkUpdate()">
+          CHECK FOR UPDATES
+        </button>
+      </div>
+    </main>
+  ` + MS.bottomNav('settings');
+
+  window.checkUpdate = () => {
+    const btn = event.target;
+    btn.textContent = 'Checking...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'CHECK FOR UPDATES';
+      btn.disabled = false;
+      MS.toast('You are on the latest version', 'ok');
+    }, 1200);
+  };
+})();
+</script>
+</body>
+</html>

@@ -3,75 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B0E14">
+<meta name="theme-color" content="#0A0E14">
 <title>Search — MACHINE SEARCH</title>
 <link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== SEARCH PAGE SPECIFIC ===== */
+  .search-header-area {
+    padding: 16px;
+    background: #0A0E14;
+    border-bottom: 1px solid rgba(220,38,38,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #141A24;
+    border: 2px solid #DC2626;
+    border-radius: 30px;
+    padding: 0 16px;
+    height: 56px;
+    box-shadow: 0 0 15px rgba(220,38,38,0.2);
+  }
+  .search-box__icon { color: #fff; display: flex; margin-right: 12px; }
+  .search-box__icon svg { width: 22px !important; height: 22px !important; }
+  .search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    font-family: inherit;
+  }
+  .search-box input::placeholder { color: #64748B; }
+  .search-box__clear {
+    color: #fff;
+    display: none;
+    padding: 4px;
+    background: #2A3441;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .search-box__clear svg { width: 16px !important; height: 16px !important; }
+  .search-box.has-value .search-box__clear { display: flex; }
 
-
+  .search-results-area {
+    padding: 16px;
+    padding-bottom: 96px;
+  }
+</style>
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1007"></script>
 <script>
 (async function () {
   const app = document.getElementById('app');
-  const data = await MS.loadData();
+
+  let data;
+  try {
+    data = await MS.loadData();
+  } catch (e) {
+    app.innerHTML = MS.header() +
+      '<main class="container">' +
+        '<div class="state" style="padding-top:40px;">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('database');
+    return;
+  }
+
   const machines = data.machines || [];
-  
-  app.innerHTML = MS.backHeader('Live Search') + `
-    <main class="container" style="padding-top: 16px;">
-      <div class="input-wrap" id="sw">
-        <span class="input-wrap__icon">${MS.ICON.search}</span>
-        <input type="text" id="q" placeholder="Type machine name..." autocomplete="off" autofocus>
-        <button class="input-wrap__clear" id="clearBtn">${MS.ICON.close}</button>
-      </div>
-      <div id="results" style="margin-top: 16px;"></div>
-    </main>
-  ` + MS.bottomNav('search');
+  const params = new URLSearchParams(location.search);
+  const initialQuery = params.get('q') || '';
+
+  app.innerHTML = 
+    // Custom Header with Back Button and Title
+    '<header class="back-header" style="border-bottom:none;">' +
+      '<a href="index.html" class="back-header__back" aria-label="Back">' + MS.ICON.back + '</a>' +
+      '<div class="back-header__title">Search</div>' +
+    '</header>' +
+    '<main>' +
+      '<div class="search-header-area">' +
+        '<div class="search-box" id="searchBox">' +
+          '<span class="search-box__icon">' + MS.ICON.search + '</span>' +
+          '<input type="text" id="q" placeholder="Search machine or code..." autocomplete="off" value="' + MS.escapeHtml(initialQuery) + '">' +
+          '<button class="search-box__clear" id="clearBtn" aria-label="Clear">' + MS.ICON.close + '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="search-results-area">' +
+        '<div id="results"></div>' +
+      '</div>' +
+    '</main>' +
+    MS.bottomNav('search');
 
   const input = document.getElementById('q');
-  const wrap = document.getElementById('sw');
+  const searchBox = document.getElementById('searchBox');
   const resultsEl = document.getElementById('results');
 
   function renderCard(m, query) {
     const fav = MS.isFavorite(m.code);
-    return `<div class="result-card">
-      <div class="result-card__head">
-        <a href="details.html?code=${encodeURIComponent(m.code)}" class="icon-box icon-box--gold">${MS.ICON.machine}</a>
-        <div class="flex-1">
-          <div class="result-card__name">${MS.highlight(m.name, query)}</div>
-          <div class="result-card__meta">
-            <span class="pill">📍 ${m.location}</span>
-            <span class="pill">#${m.number ?? '—'}</span>
-          </div>
-        </div>
-        <button class="fav-btn ${fav ? 'is-active' : ''}" data-fav="${MS.escapeHtml(m.code)}">
-          ${fav ? MS.ICON.starFilled : MS.ICON.star}
-        </button>
-      </div>
-      <div class="result-card__code">
-        <div class="result-card__code-value">${MS.highlight(m.code, query)}</div>
-        <button class="btn--copy" style="color:#fff;" data-copy="${MS.escapeHtml(m.code)}">COPY</button>
-      </div>
-    </div>`;
+    const loc = m.location || '—';
+    const num = (m.number != null) ? m.number : '—';
+
+    return '<div class="result-card">' +
+      '<div class="result-card__head">' +
+        '<a href="details.html?code=' + encodeURIComponent(m.code) + '" class="icon-box icon-box--gold" style="text-decoration:none;">' + MS.ICON.machine + '</a>' +
+        '<div class="flex-1">' +
+          '<div class="result-card__name">' + MS.highlight(m.name, query) + '</div>' +
+          '<div class="result-card__meta">' +
+            '<span class="pill">📍 ' + MS.escapeHtml(loc) + '</span>' +
+            '<span class="pill">#' + MS.escapeHtml(String(num)) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<button class="fav-btn ' + (fav ? 'is-active' : '') + '" data-fav="' + MS.escapeHtml(m.code) + '" aria-label="Favorite">' +
+          (fav ? MS.ICON.starFilled : MS.ICON.star) +
+        '</button>' +
+      '</div>' +
+      '<div class="result-card__code">' +
+        '<div class="result-card__code-value">' + MS.highlight(m.code, query) + '</div>' +
+        '<button class="btn--copy" data-copy="' + MS.escapeHtml(m.code) + '">COPY</button>' +
+      '</div>' +
+    '</div>';
   }
 
   function render(query) {
     const q = (query || '').trim();
-    wrap.classList.toggle('has-value', q.length > 0);
+    searchBox.classList.toggle('has-value', q.length > 0);
 
     if (!q) {
-      resultsEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.search}</div><div class="state__title">Start typing to search</div></div>`;
+      resultsEl.innerHTML = '<div class="state">' +
+        '<div class="state__icon">' + MS.ICON.search + '</div>' +
+        '<div class="state__title">Start typing to search</div>' +
+        '<div class="state__subtitle">Try "prize rush", "dance", or "gold fish"</div>' +
+      '</div>';
       return;
     }
 
-    let matches = MS.search(machines, q);
+    const matches = MS.search(machines, q);
+
+    if (q.length >= 2) MS.pushHistory(q);
 
     if (matches.length === 0) {
-      resultsEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.search}</div><div class="state__title">No results found</div></div>`;
+      resultsEl.innerHTML = '<div class="state">' +
+        '<div class="state__icon">' + MS.ICON.search + '</div>' +
+        '<div class="state__title">No results found</div>' +
+        '<div class="state__subtitle">Try a different keyword</div>' +
+      '</div>';
       return;
     }
 
@@ -79,24 +164,43 @@
 
     resultsEl.querySelectorAll('[data-copy]').forEach(btn => {
       btn.addEventListener('click', async () => {
-        await MS.copy(btn.dataset.copy);
-        btn.textContent = '✓ COPIED'; btn.classList.add('is-copied');
-        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('is-copied'); }, 1400);
+        const ok = await MS.copy(btn.dataset.copy);
+        if (ok) {
+          btn.textContent = '✓';
+          btn.classList.add('is-copied');
+          setTimeout(() => {
+            btn.textContent = 'COPY';
+            btn.classList.remove('is-copied');
+          }, 1400);
+        } else {
+          MS.toast('Copy failed', 'err');
+        }
       });
     });
+
     resultsEl.querySelectorAll('[data-fav]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const m = matches.find(x => x.code === btn.dataset.fav);
+        const code = btn.dataset.fav;
+        const m = matches.find(x => x.code === code);
+        if (!m) return;
         const added = MS.toggleFavorite(m);
         btn.classList.toggle('is-active', added);
         btn.innerHTML = added ? MS.ICON.starFilled : MS.ICON.star;
+        MS.toast(added ? 'Added to favorites' : 'Removed', added ? 'ok' : '');
       });
     });
   }
 
-  input.addEventListener('input', MS.debounce(e => render(e.target.value), 130));
-  document.getElementById('clearBtn').addEventListener('click', () => { input.value = ''; render(''); });
-  render('');
+  const debouncedRender = MS.debounce(e => render(e.target.value), 150);
+  input.addEventListener('input', debouncedRender);
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    input.value = '';
+    render('');
+    input.focus();
+  });
+
+  render(initialQuery);
 })();
 </script>
 </body>

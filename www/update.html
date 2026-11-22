@@ -9,54 +9,113 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
+<style>
+  .update-hero {
+    background: linear-gradient(135deg, var(--surface, #151C2C), var(--card, #151C2C));
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .update-hero__label {
+    font-size: 13px;
+    color: var(--text-secondary, #A0ABC0);
+    margin-bottom: 4px;
+  }
+  .update-hero__version {
+    font-size: 32px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .update-hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(32,166,106,0.15);
+    color: #22C55E;
+    border: 1px solid rgba(32,166,106,0.3);
+  }
 
+  .release-card {
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .release-card h4 {
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 12px;
+  }
+  .release-card ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 14px;
+    color: var(--text-secondary, #A0ABC0);
+    line-height: 1.7;
+  }
+  .release-card ul li {
+    margin-bottom: 4px;
+  }
+  .release-card ul li:last-child {
+    margin-bottom: 0;
+  }
 
+  .update-note {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(255,152,0,0.08);
+    border-left: 4px solid #FF9800;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-secondary, #A0ABC0);
+    line-height: 1.6;
+  }
+  .update-note b {
+    color: #FF9800;
+  }
+</style>
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1006"></script>
 <script>
-(function() {
+(function () {
   const app = document.getElementById('app');
-  app.innerHTML = MS.backHeader('App Updates') + `
-    <main class="container" style="padding-top: var(--sp-4)">
-      <div class="card--stats" style="padding: 24px; text-align: center;">
-        <div style="font-size: 14px; color: #B8C4D9; margin-bottom: 4px;">Current Version</div>
-        <div style="font-size: 32px; font-weight: 900; color: #fff;">v1.0.0</div>
-        <div style="font-size: 12px; color: var(--brand-success); font-weight: bold; margin-top: 8px;">✓ Up to date</div>
-      </div>
+  app.innerHTML = MS.backHeader('App Updates') +
+    '<main class="container" style="padding-top: 16px; padding-bottom: 32px;">' +
+      '<div class="update-hero">' +
+        '<div class="update-hero__label">Current Version</div>' +
+        '<div class="update-hero__version">v1.0.0</div>' +
+        '<div class="update-hero__status">✓ Up to date</div>' +
+      '</div>' +
 
-      <div class="section-title" style="margin-top: var(--sp-5)">
-        <span class="section-title__text">Release Notes</span>
-      </div>
-      <div class="card card--pad">
-        <div style="font-weight: bold; margin-bottom: 8px;">Version 1.0.0</div>
-        <ul style="font-size: 14px; color: var(--text-secondary); padding-left: 16px; line-height: 1.6;">
-          <li>Initial release of MACHINE SEARCH</li>
-          <li>Excel workbook import & auto sheet detection</li>
-          <li>Live search with token matching</li>
-          <li>Offline database & instant copy</li>
-        </ul>
-      </div>
+      '<div class="section-title">Release Notes</div>' +
+      '<div class="release-card">' +
+        '<h4>Version 1.0.0</h4>' +
+        '<ul>' +
+          '<li>Initial release of MACHINE SEARCH</li>' +
+          '<li>Excel workbook import & auto sheet detection</li>' +
+          '<li>Live search with token matching</li>' +
+          '<li>Offline database & instant copy</li>' +
+          '<li>Favorites and search history</li>' +
+          '<li>Backup and restore support</li>' +
+        '</ul>' +
+      '</div>' +
 
-      <div style="margin-top: var(--sp-5)">
-        <button class="btn btn--ghost btn--block" onclick="checkUpdate()">
-          CHECK FOR UPDATES
-        </button>
-      </div>
-    </main>
-  ` + MS.bottomNav('settings');
-
-  window.checkUpdate = () => {
-    const btn = event.target;
-    btn.textContent = 'Checking...';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = 'CHECK FOR UPDATES';
-      btn.disabled = false;
-      MS.toast('You are on the latest version', 'ok');
-    }, 1200);
-  };
+      '<div class="update-note">' +
+        '<b>Note:</b> This is a 100% offline application. Updates are delivered by manually installing a new APK. No internet connection is required to use the app.' +
+      '</div>' +
+    '</main>' +
+    MS.bottomNav('settings');
 })();
 </script>
 </body>

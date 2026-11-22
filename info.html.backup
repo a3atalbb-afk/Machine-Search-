@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Database Info — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(async function() {
+  const app = document.getElementById('app');
+  const data = await MS.loadData();
+  
+  app.innerHTML = MS.backHeader('Database Information') + `
+    <main class="container" style="padding-top: var(--sp-4)">
+      <div class="card card--pad">
+        <div class="info-list">
+          <div class="info-row"><span class="info-row__key">Active File</span><span class="info-row__value">${data.meta.filename || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Sheet Name</span><span class="info-row__value">${data.meta.sheet || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Total Records</span><span class="info-row__value">${data.machines.length}</span></div>
+          <div class="info-row"><span class="info-row__key">Location</span><span class="info-row__value">${data.meta.location || '—'}</span></div>
+          <div class="info-row"><span class="info-row__key">Last Import</span><span class="info-row__value">${data.meta.importedAt !== '—' ? new Date(data.meta.importedAt).toLocaleString() : '—'}</span></div>
+        </div>
+      </div>
+      
+      <button class="btn btn--danger btn--block" style="margin-top:24px" onclick="clearDb()">
+        CLEAR DATABASE
+      </button>
+    </main>
+  ` + MS.bottomNav('settings');
+
+  window.clearDb = function() {
+    if(confirm('Delete all imported data? This cannot be undone.')) {
+      MS.clearData();
+      MS.toast('Database cleared', 'ok');
+      setTimeout(()=>location.reload(), 800);
+    }
+  };
+})();
+</script>
+</body>
+</html>

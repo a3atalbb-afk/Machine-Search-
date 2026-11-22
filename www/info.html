@@ -9,42 +9,93 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
-
-
+<style>
+  .btn--danger {
+    background: var(--color-primary, #D32F2F);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    height: 48px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .btn--danger:hover {
+    opacity: 0.9;
+  }
+  .btn--danger:active {
+    transform: scale(0.98);
+  }
+  .btn--block {
+    display: block;
+    width: 100%;
+  }
+</style>
 </head>
 <body>
 <div id="app"></div>
-<script src="app.js?v=1005"></script>
+<script src="app.js?v=1006"></script>
 <script>
-(async function() {
+(async function () {
   const app = document.getElementById('app');
-  const data = await MS.loadData();
-  
-  app.innerHTML = MS.backHeader('Database Information') + `
-    <main class="container" style="padding-top: var(--sp-4)">
-      <div class="card card--pad">
-        <div class="info-list">
-          <div class="info-row"><span class="info-row__key">Active File</span><span class="info-row__value">${data.meta.filename || '—'}</span></div>
-          <div class="info-row"><span class="info-row__key">Sheet Name</span><span class="info-row__value">${data.meta.sheet || '—'}</span></div>
-          <div class="info-row"><span class="info-row__key">Total Records</span><span class="info-row__value">${data.machines.length}</span></div>
-          <div class="info-row"><span class="info-row__key">Location</span><span class="info-row__value">${data.meta.location || '—'}</span></div>
-          <div class="info-row"><span class="info-row__key">Last Import</span><span class="info-row__value">${data.meta.importedAt !== '—' ? new Date(data.meta.importedAt).toLocaleString() : '—'}</span></div>
-        </div>
-      </div>
-      
-      <button class="btn btn--danger btn--block" style="margin-top:24px" onclick="clearDb()">
-        CLEAR DATABASE
-      </button>
-    </main>
-  ` + MS.bottomNav('settings');
 
-  window.clearDb = function() {
-    if(confirm('Delete all imported data? This cannot be undone.')) {
-      MS.clearData();
-      MS.toast('Database cleared', 'ok');
-      setTimeout(()=>location.reload(), 800);
-    }
-  };
+  let data;
+  try {
+    data = await MS.loadData();
+  } catch (e) {
+    app.innerHTML = MS.backHeader('Database Information') +
+      '<main class="container" style="padding-top: 16px;">' +
+        '<div class="state">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('settings');
+    return;
+  }
+
+  const machines = data.machines || [];
+  const meta = data.meta || {};
+  const filename = meta.filename || '—';
+  const sheet = meta.sheet || '—';
+  const location = meta.location || '—';
+  const importedAt = (meta.importedAt && meta.importedAt !== '—')
+    ? new Date(meta.importedAt).toLocaleString()
+    : '—';
+
+  app.innerHTML = MS.backHeader('Database Information') +
+    '<main class="container" style="padding-top: 16px;">' +
+      '<div class="card card--pad">' +
+        '<div class="info-list">' +
+          '<div class="info-row"><span class="info-row__key">Active File</span><span class="info-row__value">' + MS.escapeHtml(filename) + '</span></div>' +
+          '<div class="info-row"><span class="info-row__key">Sheet Name</span><span class="info-row__value">' + MS.escapeHtml(sheet) + '</span></div>' +
+          '<div class="info-row"><span class="info-row__key">Total Records</span><span class="info-row__value">' + machines.length + '</span></div>' +
+          '<div class="info-row"><span class="info-row__key">Location</span><span class="info-row__value">' + MS.escapeHtml(location) + '</span></div>' +
+          '<div class="info-row"><span class="info-row__key">Last Import</span><span class="info-row__value">' + MS.escapeHtml(importedAt) + '</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<button class="btn--danger btn--block" style="margin-top:24px" id="clearDbBtn">' +
+        'CLEAR DATABASE' +
+      '</button>' +
+    '</main>' +
+    MS.bottomNav('settings');
+
+  document.getElementById('clearDbBtn').addEventListener('click', () => {
+    if (!confirm('Delete all imported data? A backup will be created first.')) return;
+
+    // Backup before clearing
+    try {
+      const current = localStorage.getItem('ms_data_v2');
+      if (current) {
+        localStorage.setItem('ms_data_v2_backup_' + Date.now(), current);
+      }
+    } catch (e) { console.warn('backup failed', e); }
+
+    MS.clearData();
+    MS.toast('Database cleared (backup saved)', 'ok');
+    setTimeout(() => location.reload(), 800);
+  });
 })();
 </script>
 </body>

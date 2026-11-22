@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .home-welcome {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-top: 24px;
+  }
+  .home-welcome h2 {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .home-welcome h2 .accent {
+    color: var(--color-primary, #D32F2F);
+  }
+  .home-welcome p {
+    color: var(--text-secondary, #A0ABC0);
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .home-search-link {
+    display: block;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+
+  .home-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .home-stat {
+    flex: 1;
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary, #D32F2F);
+  }
+  .home-stat__value {
+    font-size: 24px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .home-stat__label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-muted, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  .home-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .home-quick {
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.15s;
+  }
+  .home-quick:active {
+    transform: scale(0.96);
+  }
+  .home-quick__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--surface, #151C2C);
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+  .home-quick__icon svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  .home-quick__icon--red {
+    background: var(--color-primary, #D32F2F);
+  }
+  .home-quick__title {
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .home-info-card {
+    background: var(--card, #151C2C);
+    border: 1px solid var(--border, #2A364F);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .home-info-card h3 {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border, #2A364F);
+    padding-bottom: 12px;
+    margin: 0 0 16px;
+  }
+  .home-info-card h3 svg {
+    color: var(--color-primary, #D32F2F);
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .home-info-text {
+    font-size: 14px;
+    color: var(--text-secondary, #A0ABC0);
+    line-height: 1.6;
+  }
+  .home-info-text b { color: #fff; }
+
+  .home-faq-item {
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border, #2A364F);
+    padding-bottom: 12px;
+  }
+  .home-faq-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .home-faq-q {
+    font-weight: 800;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .home-faq-a {
+    color: var(--text-secondary, #A0ABC0);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .home-footer {
+    text-align: center;
+    color: var(--text-muted, #64748B);
+    font-size: 12px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1006"></script>
+<script>
+(async function () {
+  const app = document.getElementById('app');
+
+  let data;
+  try {
+    data = await MS.loadData();
+  } catch (e) {
+    app.innerHTML = MS.header() +
+      '<main class="container">' +
+        '<div class="state" style="padding-top:32px;">' +
+          '<div class="state__icon">' + MS.ICON.warning + '</div>' +
+          '<div class="state__title">Database load failed</div>' +
+          '<div class="state__subtitle">Try refreshing the page</div>' +
+        '</div>' +
+      '</main>' +
+      MS.bottomNav('home');
+    return;
+  }
+
+  const machines = data.machines || [];
+  const has = data.meta && data.meta.filename !== '—';
+  const loc = has ? data.meta.location : '—';
+  const iconInfo = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+
+  app.innerHTML = MS.header() +
+    '<main class="container">' +
+      '<div class="home-welcome">' +
+        '<h2>FIND YOUR <span class="accent">MACHINE</span></h2>' +
+        '<p>Search arcade machines and discover their original codes instantly.</p>' +
+      '</div>' +
+
+      '<a href="search.html" class="home-search-link">' +
+        '<div class="input-wrap">' +
+          '<span class="input-wrap__icon">' + MS.ICON.search + '</span>' +
+          '<input type="text" placeholder="Search machines..." readonly style="cursor:pointer; font-weight:600;">' +
+        '</div>' +
+      '</a>' +
+
+      '<div class="home-stats">' +
+        '<div class="home-stat">' +
+          '<div class="home-stat__value">' + (has ? machines.length : '0') + '</div>' +
+          '<div class="home-stat__label">Total Machines</div>' +
+        '</div>' +
+        '<div class="home-stat">' +
+          '<div class="home-stat__value">' + MS.escapeHtml(loc) + '</div>' +
+          '<div class="home-stat__label">Location</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="section-title">Quick Access</div>' +
+      '<div class="home-quick-grid">' +
+        '<a href="database.html" class="home-quick">' +
+          '<div class="home-quick__icon">' + MS.ICON.database + '</div>' +
+          '<div class="home-quick__title">Database</div>' +
+        '</a>' +
+        '<a href="favorites.html" class="home-quick">' +
+          '<div class="home-quick__icon">' + MS.ICON.star + '</div>' +
+          '<div class="home-quick__title">Favorites</div>' +
+        '</a>' +
+        '<a href="history.html" class="home-quick">' +
+          '<div class="home-quick__icon">' + MS.ICON.clock + '</div>' +
+          '<div class="home-quick__title">History</div>' +
+        '</a>' +
+        '<a href="import.html" class="home-quick">' +
+          '<div class="home-quick__icon home-quick__icon--red">' + MS.ICON.upload + '</div>' +
+          '<div class="home-quick__title">Import Excel</div>' +
+        '</a>' +
+      '</div>' +
+
+      '<div class="section-title">အကြောင်းအရာ & အသုံးပြုနည်း</div>' +
+
+      '<div class="home-info-card">' +
+        '<h3>' + iconInfo + ' MACHINE SEARCH ဆိုတာဘာလဲ？</h3>' +
+        '<div class="home-info-text">' +
+          'ဤ App သည် Arcade Game စက်များ၏ <b>မူရင်း Machine Code</b> များကို လျင်မြန်စွာ ရှာဖွေနိုင်ရန် ဖန်တီးထားသော Offline Application ဖြစ်ပါသည်။ အင်တာနက်မလိုအပ်ဘဲ မိမိတို့၏ Excel ဖိုင်များကို အသုံးပြု၍ ရှာဖွေနိုင်ပါသည်။' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="home-info-card" style="margin-bottom: 32px;">' +
+        '<h3>' + iconInfo + ' မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ (FAQ)</h3>' +
+        '<div class="home-faq-item">' +
+          '<div class="home-faq-q">Excel ဖိုင်ကို ဘယ်လို ရှာရမလဲ？</div>' +
+          '<div class="home-faq-a">သင့်ဖုန်းရဲ့ Files app ထဲမှာ Excel ဖိုင်ကို ရှာပြီး Import လုပ်ပါ။</div>' +
+        '</div>' +
+        '<div class="home-faq-item">' +
+          '<div class="home-faq-q">အင်တာနက် မရှိရင် သုံးလို့ရလား？</div>' +
+          '<div class="home-faq-a">ရပါတယ်။ ဒီ App က လုံးဝ Offline အလုပ်လုပ်အောင် ဖန်တီးထားတာပါ။</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="home-footer">' +
+        'MACHINE SEARCH v1.0.0<br>' +
+        '100% Offline Application' +
+      '</div>' +
+    '</main>' +
+    MS.bottomNav('home');
+})();
+</script>
+</body>
+</html>

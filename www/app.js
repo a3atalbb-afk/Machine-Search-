@@ -1,9 +1,8 @@
 /* ============================================================
-   MACHINE SEARCH — Shared App Logic (Final Version)
+   MACHINE SEARCH — Shared App Logic (Final v2)
    ============================================================ */
 
 const MS = (() => {
-
   let _toastTimer;
   function toast(msg, type = '') {
     let el = document.getElementById('ms-toast');
@@ -26,8 +25,13 @@ const MS = (() => {
         return true;
       }
       const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
       return true;
     } catch (e) { return false; }
   }
@@ -86,49 +90,108 @@ const MS = (() => {
 
   function parseMachineCode(code) {
     if (!code) return '';
-    return String(code).trim().replace(/^[A-Za-z]_/, '').replace(/_\d+$/, '').replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+    return String(code).trim()
+      .replace(/^[A-Za-z]_/, '')
+      .replace(/_\d+$/, '')
+      .replace(/_/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
+  // ---------- STORAGE (unified + migration) ----------
   const STORAGE_KEY = 'ms_data_v2';
+  const LEGACY_KEY = 'ms_data_v1';
+
+  function migrateLegacy() {
+    try {
+      const legacy = localStorage.getItem(LEGACY_KEY);
+      if (!legacy) return;
+      const current = localStorage.getItem(STORAGE_KEY);
+      if (!current) {
+        localStorage.setItem(STORAGE_KEY, legacy);
+      }
+      localStorage.removeItem(LEGACY_KEY);
+    } catch (e) { console.warn('migration failed', e); }
+  }
+
   async function loadData() {
+    migrateLegacy();
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) { try { return JSON.parse(saved); } catch (e) {} }
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { console.warn('parse failed', e); }
+    }
     try {
       const res = await fetch('data/machines.json');
-      if (res.ok) { const data = await res.json(); saveData(data); return data; }
-    } catch (e) {}
-    return { meta: { filename: '—', sheet: '—', location: '—', importedAt: '—', totalRecords: 0 }, machines: [] };
+      if (res.ok) {
+        const data = await res.json();
+        saveData(data);
+        return data;
+      }
+    } catch (e) { console.warn('fetch failed', e); }
+    return {
+      meta: { filename: '—', sheet: '—', location: '—', importedAt: '—', totalRecords: 0 },
+      machines: []
+    };
   }
-  function saveData(data) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); return true; } catch (e) { return false; } }
+
+  function saveData(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return true;
+    } catch (e) { console.error('save failed', e); return false; }
+  }
+
   function clearData() { localStorage.removeItem(STORAGE_KEY); }
 
+  // ---------- HISTORY ----------
   const HISTORY_KEY = 'ms_history_v2';
-  function getHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch { return []; } }
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch { return []; }
+  }
   function pushHistory(query) {
     if (!query || !query.trim()) return;
-    let hist = getHistory().filter(h => h !== query.trim());
-    hist.unshift(query.trim());
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(hist.slice(0, 50)));
+    const q = query.trim();
+    let hist = getHistory().filter(h => h !== q);
+    hist.unshift(q);
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(hist.slice(0, 50))); } catch (e) {}
   }
   function clearHistory() { localStorage.removeItem(HISTORY_KEY); }
-  function removeHistory(q) { localStorage.setItem(HISTORY_KEY, JSON.stringify(getHistory().filter(h => h !== q))); }
+  function removeHistory(q) {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(getHistory().filter(h => h !== q))); } catch (e) {}
+  }
 
+  // ---------- FAVORITES ----------
   const FAV_KEY = 'ms_favorites_v2';
-  function getFavorites() { try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch { return []; } }
+  function getFavorites() {
+    try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+    catch { return []; }
+  }
   function isFavorite(code) { return getFavorites().some(f => f.code === code); }
   function toggleFavorite(machine) {
     let favs = getFavorites();
     if (favs.some(f => f.code === machine.code)) {
-      localStorage.setItem(FAV_KEY, JSON.stringify(favs.filter(f => f.code !== machine.code)));
+      try { localStorage.setItem(FAV_KEY, JSON.stringify(favs.filter(f => f.code !== machine.code))); } catch (e) {}
       return false;
     }
-    favs.unshift({ code: machine.code, name: machine.name, location: machine.location, number: machine.number, savedAt: Date.now() });
-    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    favs.unshift({
+      code: machine.code,
+      name: machine.name,
+      location: machine.location,
+      number: machine.number,
+      savedAt: Date.now()
+    });
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (e) {}
     return true;
   }
-  function removeFavorite(code) { localStorage.setItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.code !== code))); }
+  function removeFavorite(code) {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.code !== code))); } catch (e) {}
+  }
 
-  function debounce(fn, ms) { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }; }
+  function debounce(fn, ms) {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
 
   const ICON = {
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
@@ -146,46 +209,47 @@ const MS = (() => {
     machine: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="14" height="18" rx="2"/><rect x="5" y="6" width="10" height="6" rx="1" fill="#14213D"/><circle cx="6.5" cy="17" r="1" fill="#14213D"/><circle cx="10" cy="17" r="1" fill="#14213D"/><circle cx="13.5" cy="17" r="1" fill="#14213D"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
     warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L1 21h22L12 2z"/><path d="M12 9v5M12 18h.01"/></svg>',
-    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>', refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+    refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>',
     tool: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>'
   };
 
   function header() {
-    return `<header class="app-header">
-      <a href="index.html" class="app-header__logo" aria-label="Home">
-        <img src="assets/logo-nav.svg" alt="" width="40" height="40">
-      </a>
-      <div class="app-header__title">
-        <div class="app-header__name">MACHINE SEARCH</div>
-        <div class="app-header__tagline">FIND MACHINES. GET CODES.</div>
-      </div>
-    </header>`;
+    return '<header class="app-header">' +
+      '<a href="index.html" class="app-header__logo" aria-label="Home">' +
+        '<img src="assets/logo-nav.svg" alt="" width="40" height="40">' +
+      '</a>' +
+      '<div class="app-header__title">' +
+        '<div class="app-header__name">MACHINE SEARCH</div>' +
+        '<div class="app-header__tagline">FIND MACHINES. GET CODES.</div>' +
+      '</div>' +
+    '</header>';
   }
 
   function backHeader(title, backHref = 'index.html') {
-    return `<header class="back-header">
-      <a href="${backHref}" class="back-header__back" aria-label="Back">${ICON.back}</a>
-      <div class="back-header__title">${escapeHtml(title)}</div>
-    </header>`;
+    return '<header class="back-header">' +
+      '<a href="' + backHref + '" class="back-header__back" aria-label="Back">' + ICON.back + '</a>' +
+      '<div class="back-header__title">' + escapeHtml(title) + '</div>' +
+    '</header>';
   }
 
-  // 🔥 ၅ ခုတိတိ ဖြစ်အောင် သေချာရေးထားပါတယ် 🔥
+  // 🔥 Menu ၅ ခု — Home / Solution / Database / Favorites / Settings 🔥
   function bottomNav(active) {
     const items = [
-      { href: 'index.html',         icon: ICON.home,     label: 'Home',      key: 'home' },
-      { href: 'troubleshoot.html',  icon: ICON.tool,     label: 'Solutions', key: 'troubleshoot' },
-      { href: 'database.html',      icon: ICON.database, label: 'Database',  key: 'database' },
-      { href: 'favorites.html',     icon: ICON.star,     label: 'Favorites', key: 'favorites' },
-      { href: 'settings.html',      icon: ICON.settings, label: 'Settings',  key: 'settings' }
+      { href: 'index.html',        icon: ICON.home,     label: 'Home',      key: 'home' },
+      { href: 'troubleshoot.html', icon: ICON.tool,     label: 'Solution',  key: 'troubleshoot' },
+      { href: 'database.html',     icon: ICON.database, label: 'Database',  key: 'database' },
+      { href: 'favorites.html',    icon: ICON.star,     label: 'Favorites', key: 'favorites' },
+      { href: 'settings.html',     icon: ICON.settings, label: 'Settings',  key: 'settings' }
     ];
-    return `<nav class="bottom-nav">
-      ${items.map(i => `
-        <a href="${i.href}" class="bottom-nav__item ${i.key === active ? 'is-active' : ''}">
-          ${i.icon}
-          <span>${i.label}</span>
-        </a>
-      `).join('')}
-    </nav>`;
+    return '<nav class="bottom-nav">' +
+      items.map(i =>
+        '<a href="' + i.href + '" class="bottom-nav__item ' + (i.key === active ? 'is-active' : '') + '">' +
+          i.icon +
+          '<span>' + i.label + '</span>' +
+        '</a>'
+      ).join('') +
+    '</nav>';
   }
 
   const FILTERS = ['All', 'Prize', 'Dance', 'Gold Fish', 'Future Field', 'Other'];
@@ -197,54 +261,34 @@ const MS = (() => {
 
   return {
     toast, copy, normalize, tokenize, search, highlight, escapeHtml, parseMachineCode,
-    loadData, saveData, clearData, getHistory, pushHistory, clearHistory, removeHistory,
+    loadData, saveData, clearData,
+    getHistory, pushHistory, clearHistory, removeHistory,
     getFavorites, isFavorite, toggleFavorite, removeFavorite,
     debounce, ICON, header, backHeader, bottomNav, FILTERS, matchFilter
   };
 })();
 
-// Android Back Button Fix
+// ---------- Android Back Button Fix ----------
 document.addEventListener('DOMContentLoaded', () => {
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
     const { App } = window.Capacitor.Plugins;
+    let lastBackTime = 0;
     App.addListener('backButton', ({ canGoBack }) => {
       if (window.history.length > 1) {
         window.history.back();
       } else {
-        // ပထမဆုံး Page ရောက်နေရင် ထွက်မသွားဘဲ အောက်က Toast လေးပဲပြမယ်
-        const toast = document.createElement('div');
-        toast.innerText = 'Press back again to exit';
-        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#D32F2F;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;z-index:9999;';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
+        const now = Date.now();
+        if (now - lastBackTime < 2000) {
+          if (App.exitApp) App.exitApp();
+        } else {
+          lastBackTime = now;
+          const t = document.createElement('div');
+          t.innerText = 'Press back again to exit';
+          t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#D32F2F;color:#fff;padding:8px 16px;border-radius:8px;font-size:14px;z-index:9999;';
+          document.body.appendChild(t);
+          setTimeout(() => t.remove(), 2000);
+        }
       }
     });
   }
-});
-
-// Search Box ရဲ့ ညာဘက်မှာ How To Use ခလုတ် ထည့်ဖို့ Script
-document.addEventListener('DOMContentLoaded', () => {
-  setInterval(() => {
-    // Search Box ကို ရှာမယ်
-    const searchBox = document.querySelector('.arc-search-box');
-    if (searchBox && !document.getElementById('my-help-btn')) {
-      
-      // ခလုတ်အသစ် ဖန်တီးမယ်
-      const btn = document.createElement('button');
-      btn.id = 'my-help-btn';
-      btn.innerHTML = `❓ How To Use`;
-      btn.style.cssText = 'background: rgba(225, 29, 62, 0.1); color: #E11D3E; border: 1px solid #E11D3E; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 8px; white-space: nowrap;';
-      
-      // ခလုတ်နှိပ်ရင် Popup ပွင့်အောင်
-      btn.onclick = () => {
-        let modal = document.getElementById('helpModal');
-        if(modal) modal.style.display = 'flex';
-      };
-
-      // Search Box ရဲ့ ဘေးမှာ ထည့်မယ်
-      searchBox.parentNode.style.display = 'flex';
-      searchBox.parentNode.style.alignItems = 'center';
-      searchBox.parentNode.appendChild(btn);
-    }
-  }, 1000); // စက္ကန့်တိုင်း စစ်ပါမယ် (JavaScript က ကုဒ်တွေ ပြန်မဖျက်နိုင်အောင်)
 });

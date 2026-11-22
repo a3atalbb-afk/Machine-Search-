@@ -1,28 +1,28 @@
 /* ==========================================
    MACHINE SEARCH — Browser Excel Parser
-   Mirrors the Kotlin SheetDetector + MachineCodeParser
    Uses SheetJS (window.XLSX) to read .xlsx/.xls
    ========================================== */
 
 const ExcelParser = (() => {
 
-  // ---------- MachineCodeParser (mirror) ----------
+  // ---------- MachineCodeParser ----------
   function parseMachineCode(code) {
     if (!code) return '';
     let s = String(code).trim();
-    s = s.replace(/^[A-Za-z]_/, '');        // strip "R_", "A_", ...
-    s = s.replace(/_\d+$/, '');              // strip trailing "_002"
-    s = s.replace(/_/g, ' ');                // underscores → spaces
-    s = s.replace(/\s+/g, ' ').trim();       // collapse whitespace
+    s = s.replace(/^[A-Za-z]_/, '');       // strip "R_", "A_", ...
+    s = s.replace(/_\d+$/, '');             // strip trailing "_002"
+    s = s.replace(/_/g, ' ');               // underscores → spaces
+    s = s.replace(/\s+/g, ' ').trim();      // collapse whitespace
     return s;
   }
 
+  // Preserve original location — only trim whitespace
   function normalizeLocation(loc) {
     if (!loc) return '';
-    return String(loc).replace(/[\s\-]/g, '').toUpperCase();
+    return String(loc).trim();
   }
 
-  // ---------- SheetDetector (mirror) ----------
+  // ---------- SheetDetector ----------
   const TECH_SPEC = ['voltage','power','weight','specification','serial','warranty','supplier','cost','price'];
 
   function normalizeHeader(s) {
@@ -69,7 +69,13 @@ const ExcelParser = (() => {
       if (!found) continue;
       const score = scoreSheet(sheetName, found.headers);
       if (score > 0) {
-        candidates.push({ name: sheetName, rows, headerRow: found.rowIndex, headers: found.headers, score });
+        candidates.push({
+          name: sheetName,
+          rows,
+          headerRow: found.rowIndex,
+          headers: found.headers,
+          score
+        });
       }
     }
     if (candidates.length === 0) return null;
@@ -78,35 +84,51 @@ const ExcelParser = (() => {
   }
 
   // ---------- Main ----------
-  async function parseFile(file) {
+  async function parseFile(file, onProgress) {
     if (!window.XLSX) {
       throw new Error('SheetJS not loaded. Check lib/xlsx.full.min.js');
     }
 
+    if (onProgress) onProgress(10, 'Reading file...');
     const buf = await file.arrayBuffer();
     const workbook = window.XLSX.read(buf, { type: 'array' });
+
     if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
       throw new Error('Workbook has no worksheets');
     }
 
+    if (onProgress) onProgress(40, 'Detecting machine sheet...');
     const chosen = detectMachineSheet(workbook);
     if (!chosen) {
       throw new Error('No worksheet with a valid "Machine Code" column found');
     }
+
+    if (onProgress) onProgress(70, 'Parsing rows from "' + chosen.name + '"...');
 
     const norm = chosen.headers.map(normalizeHeader);
     const codeIdx = norm.indexOf('machine code');
     const noIdx   = norm.indexOf('no');
     const arrIdx  = norm.indexOf('arrival date');
     const locIdx  = norm.indexOf('location');
+    const nameIdx = norm.indexOf('name');
 
     const machines = [];
     const locations = {};
+    const seenCodes = new Set();
+    let duplicates = 0;
+    let invalid = 0;
 
     for (let r = chosen.headerRow + 1; r < chosen.rows.length; r++) {
       const row = chosen.rows[r] || [];
       const code = String(row[codeIdx] ?? '').trim();
       if (!code) continue;
+
+      // Skip duplicates
+      if (seenCodes.has(code)) {
+        duplicates++;
+        continue;
+      }
+      seenCodes.add(code);
 
       const locRaw = locIdx >= 0 ? String(row[locIdx] ?? '').trim() : '';
       const loc = normalizeLocation(locRaw);
@@ -126,22 +148,24 @@ const ExcelParser = (() => {
 
       machines.push({
         no: num ?? machines.length + 1,
-        code,
+        code: code,
         name: parseMachineCode(code),
         location: loc || '—',
         number: num,
-        arrival
+        arrival: arrival
       });
 
       if (loc) locations[loc] = (locations[loc] || 0) + 1;
     }
 
     if (machines.length === 0) {
-      throw new Error(`Sheet "${chosen.name}" has no machine records`);
+      throw new Error('Sheet "' + chosen.name + '" has no machine records');
     }
 
     const commonLoc = Object.entries(locations)
       .sort((a, b) => b[1] - a[1] || a[0].length - b[0].length)[0]?.[0] || '—';
+
+    if (onProgress) onProgress(100, 'Done');
 
     return {
       meta: {
@@ -151,9 +175,19 @@ const ExcelParser = (() => {
         importedAt: new Date().toISOString().slice(0, 19),
         totalRecords: machines.length
       },
-      machines
+      machines,
+      stats: {
+        total: machines.length,
+        duplicates,
+        invalid
+      }
     };
   }
 
-  return { parseFile, parseMachineCode, normalizeLocation };
+  return {
+    parseFile,
+    parseMachineCode,
+    normalizeLocation,
+    detectMachineSheet
+  };
 })();

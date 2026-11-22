@@ -1,59 +1,120 @@
+/* ==========================================
+   MACHINE SEARCH — Design Tokens
+   ========================================== */
+
 :root {
-  --bg: #0A0F1D !important;
-  --surface: #151C2C !important;
-  --card: #151C2C !important;
-  --nav-bg: #0A0F1D !important;
-  --navy: #0A0F1D !important;
-  --navy-light: #1E293B !important;
-  --text-primary: #F4F5F7 !important;
-  --text-secondary: #A0ABC0 !important;
-  --text-muted: #64748B !important;
-  --border: #2A364F !important;
-  --gold: #F4A623 !important;
-  --gold-dark: #D98E1A !important;
-  --success: #20A66A !important;
-  --color-primary: #D32F2F !important;
-  --font-sans: system-ui, -apple-system, sans-serif;
+  /* ===== Backgrounds ===== */
+  --bg: #0A0E14;
+  --surface: #141A24;
+  --surface-2: #1C2330;
+  --card: #141A24;
+  --card-2: #1C2330;
+
+  /* ===== Borders ===== */
+  --border: #2A3441;
+  --border-strong: #3A4654;
+
+  /* ===== Text ===== */
+  --text-primary: #F1F5F9;
+  --text: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  /* ===== Accent — Red ===== */
+  --color-primary: #DC2626;
+  --color-primary-dark: #B91C1C;
+  --color-primary-light: #EF4444;
+
+  /* ===== Accent — Gold ===== */
+  --gold: #F59E0B;
+  --gold-dark: #D97706;
+  --color-gold: #F59E0B;
+
+  /* ===== Status ===== */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+
+  /* ===== Legacy aliases (for backward compat) ===== */
+  --navy: #0A0E14;
+  --navy-light: #1C2330;
+  --nav-bg: #0A0E14;
+  --nav-active: #DC2626;
+  --nav-inactive: #64748B;
+
+  /* ===== Fonts ===== */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SF Mono", "Consolas", "Roboto Mono", monospace;
+
+  /* ===== Spacing ===== */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* ===== Radius ===== */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+
+  /* ===== Shadow ===== */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
 }
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
 
 body {
-  font-family: var(--font-sans); 
-  background: var(--bg) !important; 
-  color: var(--text-primary) !important;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-button { cursor: pointer; background: none; border: none; }
-.section-title::before { content: ''; width: 4px; height: 14px; background: var(--color-primary); border-radius: 2px; }
-h1, h2, h3, h4, h5, h6 { color: var(--text-primary) !important; }
+h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
+
 p, span, div, strong, b { color: inherit; }
-.text-secondary { color: var(--text-secondary) !important; }
 
-/* Database Page Specific Fix */
-.db-list-item, .db-list-item * {
-  color: #F4F5F7 !important;
-}
-.db-list-item h3, .db-list-item .title {
-  color: #FFFFFF !important;
-}
-
-/* Database List Items Fix */
-.db-list-item, .db-list-item *, .db-list-item h3, .db-list-item .title, .db-list-item .subtitle {
-  color: #F4F5F7 !important;
-}
-
-/* Link တွေရဲ့ အောက်မျဉ်းနဲ့ အပြာရောင်တွေ ဖျောက်ဖို့ */
 a, a:link, a:visited, a:hover, a:active {
-  text-decoration: none !important;
-  color: inherit !important;
-}
-.db-list-item {
-  text-decoration: none !important;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Details Page Fix */
-#app, #app *, .info-row, .info-row span, .info-row div, .code-val, .detail-val {
-  color: #FFFFFF !important;
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: inherit;
 }
-.text-muted, .info-label {
-  color: #A0ABC0 !important;
+
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin: 24px 0 12px;
+  padding-left: 2px;
+}
+.section-title::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: var(--color-primary);
+  border-radius: 2px;
 }

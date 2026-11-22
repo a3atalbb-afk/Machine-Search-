@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E14">
+<title>Database — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1005"></script>
+<script>
+(async function () {
+  const app = document.getElementById('app');
+  const data = await MS.loadData();
+  const machines = data.machines || [];
+  const hasDb = data.meta && data.meta.filename !== '—';
+
+  app.innerHTML = MS.backHeader('Database') + `
+    <main class="container" style="padding-top: 16px;">
+      <div class="card card--pad" style="margin-bottom: 16px;">
+        <div class="row" style="justify-content: space-between;">
+          <div>
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Active Database</div>
+            <div style="font-weight: 800; font-size: 16px; margin-top: 2px; color: #FFFFFF;">${hasDb ? MS.escapeHtml(data.meta.filename) : 'Empty'}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">${machines.length} records</div>
+          </div>
+          <a href="import.html" class="btn btn--primary" style="height: 36px; text-decoration: none; font-size: 12px;">REPLACE</a>
+        </div>
+      </div>
+      <div id="list"></div>
+    </main>
+  ` + MS.bottomNav('database');
+
+  const listEl = document.getElementById('list');
+  
+  if(machines.length === 0) {
+    listEl.innerHTML = `<div class="state"><div class="state__icon">${MS.ICON.database}</div><div class="state__title">No database loaded</div></div>`;
+    return;
+  }
+
+  listEl.innerHTML = machines.map(m => `
+    <a class="db-list-item" href="details.html?code=${encodeURIComponent(m.code)}">
+      <div class="icon-box">${MS.ICON.machine}</div>
+      <div class="flex-1">
+        <div class="db-list-item__name">${MS.escapeHtml(m.name)}</div>
+        <div class="db-list-item__code">${MS.escapeHtml(m.code)}</div>
+      </div>
+    </a>
+  `).join('');
+})();
+</script>
+</body>
+</html>
