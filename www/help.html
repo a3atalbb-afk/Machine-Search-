@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0E14">
+<title>Help — MACHINE SEARCH</title>
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="bg.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .help-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .help-section h3 {
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .help-section h3 .num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .help-section p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .help-section p:last-child { margin-bottom: 0; }
+  .help-section p b { color: #fff; }
+  .help-section ul {
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .help-section ul li { margin-bottom: 4px; }
+  .help-section ul li b { color: #fff; }
+
+  .help-tip {
+    background: rgba(245,158,11,0.08);
+    border-left: 4px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+  .help-tip b { color: var(--gold); }
+
+  .help-faq-q {
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .help-faq-a {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .help-faq-a:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js?v=1006"></script>
+<script>
+(function () {
+  const app = document.getElementById('app');
+  app.innerHTML = MS.backHeader('အသုံးပြုနည်း လမ်းညွှန်') +
+    '<main class="container" style="padding-top:16px;">' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၁</span>Excel ဖိုင် Import လုပ်ခြင်း</h3>' +
+        '<p>သင့်ရဲ့ Machine အချက်အလက်တွေ ပါတဲ့ <b>Excel ဖိုင် (.xlsx သို့မဟုတ် .xls)</b> ကို Import လုပ်နိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li>ဖုန်းရဲ့ <b>Files</b> သို့မဟုတ် <b>Downloads</b> ထဲက ဖိုင်ကို ရွေးပါ</li>' +
+          '<li>App က အလိုအလျောက် <b>Machine Code</b> column ကို ရှာပါမယ်</li>' +
+          '<li>Preview ပြပြီး အတည်ပြုရင် <b>Import</b> ကို နှိပ်ပါ</li>' +
+          '<li>Data အဟောင်းတွေ <b>Backup</b> ယူပြီးမှ အစားထိုးပါမယ်</li>' +
+        '</ul>' +
+        '<div class="help-tip"><b>သတိပြုရန်:</b> Excel ဖိုင်မှာ <b>Machine Code</b> ဆိုတဲ့ column ရှိရပါမယ်။ မရှိရင် Import မလုပ်နိုင်ပါဘူး။</div>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၂</span>Machine ရှာဖွေခြင်း</h3>' +
+        '<p><b>Search</b> box မှာ Machine အမည် သို့မဟုတ် Code ရိုက်ပြီး ရှာနိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li><b>အမည်ဖြင့်</b> — "prize rush" ရိုက်ပါ</li>' +
+          '<li><b>Code ဖြင့်</b> — "R_PRIZE" ရိုက်ပါ</li>' +
+          '<li><b>Partial</b> — "prize" ရိုက်ရင် prize ပါတဲ့ အားလုံး ပြပါမယ်</li>' +
+          '<li><b>Multiple words</b> — "dance rush" ရိုက်ရင် နှစ်ခုလုံး ပါတဲ့ ရလဒ် ပြပါမယ်</li>' +
+        '</ul>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၃</span>Favorites သိမ်းခြင်း</h3>' +
+        '<p>အသုံးများတဲ့ Machine တွေကို <b>Favorites</b> ထဲ သိမ်းထားနိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li>Search result မှာ <b>Star (★)</b> ကို နှိပ်ပါ</li>' +
+          '<li>သိမ်းထားတာတွေကို <b>Favorites</b> page မှာ ကြည့်နိုင်ပါတယ်</li>' +
+          '<li>Star ကို ထပ်နှိပ်ရင် ဖျက်သွားပါမယ်</li>' +
+        '</ul>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၄</span>Machine Code ကူးယူခြင်း</h3>' +
+        '<p>Machine Code ကို <b>COPY</b> button နှိပ်ပြီး ကူးယူနိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li>Search result မှာ <b>COPY</b> ကို နှိပ်ပါ</li>' +
+          '<li>Details page မှာ <b>COPY CODE</b> ကို နှိပ်ပါ</li>' +
+          '<li>Code ကို clipboard ထဲ ရောက်သွားပါမယ်</li>' +
+          '<li>တခြား app တွေမှာ paste လုပ်နိုင်ပါတယ်</li>' +
+        '</ul>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၅</span>Search History</h3>' +
+        '<p>သင်ရှာခဲ့တဲ့ မှတ်တမ်းတွေကို <b>History</b> page မှာ ကြည့်နိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li>နောက်ဆုံး search ၅၀ အထိ သိမ်းထားပါတယ်</li>' +
+          '<li>Search တစ်ခုကို နှိပ်ရင် ပြန်ရှာပေးပါမယ်</li>' +
+          '<li><b>Clear All</b> နှိပ်ရင် အားလုံး ဖျက်နိုင်ပါတယ်</li>' +
+        '</ul>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">၆</span>Backup နှင့် Restore</h3>' +
+        '<p><b>Settings</b> မှာ Data ကို Backup/Restore လုပ်နိုင်ပါတယ်။</p>' +
+        '<ul>' +
+          '<li><b>Export Backup</b> — Database, Favorites, History အားလုံးကို JSON ဖိုင်အဖြစ် သိမ်းပါ</li>' +
+          '<li><b>Restore Backup</b> — သိမ်းထားတဲ့ JSON ဖိုင်ကို ပြန်ထည့်ပါ</li>' +
+        '</ul>' +
+        '<div class="help-tip"><b>အကြံပြု:</b> Data အရေးကြီးရင် <b>Export Backup</b> ကို ပုံမှန် လုပ်ပါ။</div>' +
+      '</div>' +
+
+      '<div class="help-section">' +
+        '<h3><span class="num">?</span>မကြာခဏ မေးလေ့ရှိတဲ့ မေးခွန်းများ</h3>' +
+        '<div class="help-faq-q">အင်တာနက် မရှိရင် သုံးလို့ရလား?</div>' +
+        '<div class="help-faq-a">ရပါတယ်။ ဒီ App က လုံးဝ Offline အလုပ်လုပ်ပါတယ်။ အင်တာနက် မလိုပါဘူး။</div>' +
+        '<div class="help-faq-q">Excel ဖိုင် ဘယ်လို ရှာရမလဲ?</div>' +
+        '<div class="help-faq-a">ဖုန်းရဲ့ Files app ထဲမှာ .xlsx ဖိုင်ကို ရှာပြီး Import လုပ်ပါ။</div>' +
+        '<div class="help-faq-q">Data တွေ ပျောက်သွားရင် ဘယ်လိုလုပ်ရမလဲ?</div>' +
+        '<div class="help-faq-a">Settings &gt; Restore Backup မှာ သိမ်းထားတဲ့ JSON ဖိုင်ကို ပြန်ထည့်ပါ။ Backup မရှိရင် Excel ဖိုင်ကို ပြန် Import လုပ်ပါ။</div>' +
+        '<div class="help-faq-q">Location က မှားနေတယ်</div>' +
+        '<div class="help-faq-a">Location က Excel ဖိုင်ထဲက အတိုင်း ပြပါတယ်။ မှားနေရင် Excel ဖိုင်ကို ပြင်ပြီး ပြန် Import လုပ်ပါ။</div>' +
+      '</div>' +
+
+      '<div style="text-align:center;color:var(--text-muted);font-size:11px;margin:24px 0;">' +
+        'MACHINE SEARCH v1.0.0' +
+      '</div>' +
+
+    '</main>' +
+    MS.bottomNav('settings');
+})();
+</script>
+</body>
+</html>

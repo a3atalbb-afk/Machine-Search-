@@ -10,39 +10,103 @@
 <link rel="stylesheet" href="bg.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  /* ===== HOME SPECIFIC (Mobile Fixed) ===== */
   html, body {
     height: 100%;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Header (Static, No sticky) */
   .custom-header {
-    position: relative; /* Sticky မဟုတ်တော့ဘူး */
+    position: relative;
     z-index: 10;
   }
 
-  .home-hero {
-    padding: 24px 16px 16px;
-    text-align: center;
+  /* ===== 3D Cover Photo Slideshow (Full Image) ===== */
+  .home-cover-wrap {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: #141A24;
+    overflow: hidden;
+    border-bottom: 1px solid #2A3441;
+    box-shadow: inset 0 -20px 30px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .home-hero h2 {
-    font-size: 32px;
+  
+  /* နောက်ခံ မှုန်ဝါးပုံ (Blurred Background) */
+  .home-cover-bg {
+    position: absolute;
+    inset: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(15px) brightness(0.4);
+    z-index: 0;
+    transition: opacity 1.5s ease-in-out;
+    opacity: 0;
+  }
+  .home-cover-bg.active { opacity: 1; }
+
+  /* အဓိက ပုံ (Contain ဖြစ်လို့ အကုန်မြင်ရမယ်) */
+  .home-cover-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* ဒီနေရာမှာ ပြောင်းထားတယ် */
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 1s ease-in-out, transform 6s ease-out;
+    z-index: 1;
+    padding: 10px; /* အနားသတ်လေး ချန်ထားမယ် */
+  }
+  .home-cover-img.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .home-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(10,14,20,0.1) 0%, rgba(10,14,20,0.8) 70%, rgba(10,14,20,1) 100%);
+    z-index: 2;
+  }
+  .home-cover-content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+  }
+  .home-cover-content h2 {
+    font-size: 34px;
     font-weight: 900;
     line-height: 1.1;
     color: #fff;
     margin: 0 0 8px;
-    letter-spacing: -0.5px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 20px rgba(220,38,38,0.3);
   }
-  .home-hero h2 .accent { color: #EF4444; }
-  .home-hero p { color: #94A3B8; font-size: 14px; margin: 0; }
+  .home-cover-content h2 .accent { color: #EF4444; }
+  .home-cover-content p {
+    color: #E2E8F0;
+    font-size: 14px;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+  }
 
   .home-search-wrap {
-    padding: 0 16px 20px;
+    padding: 16px;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: -32px;
+    position: relative;
+    z-index: 5;
   }
   .home-search-box {
     flex: 1;
@@ -52,12 +116,14 @@
     border: 2px solid #DC2626;
     border-radius: 30px;
     padding: 0 16px;
-    height: 52px;
-    box-shadow: 0 0 15px rgba(220,38,38,0.15);
+    height: 56px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px rgba(220,38,38,0.3), inset 0 2px 5px rgba(255,255,255,0.05);
     text-decoration: none;
+    transition: transform 0.2s;
   }
+  .home-search-box:active { transform: scale(0.98); }
   .home-search-box__icon { color: #fff; display: flex; margin-right: 12px; }
-  .home-search-box__icon svg { width: 20px !important; height: 20px !important; }
+  .home-search-box__icon svg { width: 22px !important; height: 22px !important; }
   .home-search-box__input {
     flex: 1;
     background: transparent;
@@ -82,13 +148,14 @@
     padding: 0 16px 24px;
   }
   .home-stat-card {
-    background: #141A24;
+    background: linear-gradient(145deg, #1C2330, #141A24);
     border: 1px solid #2A3441;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 16px;
     display: flex;
     align-items: center;
     gap: 12px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
   }
   .home-stat-card--red { border-color: rgba(220,38,38,0.4); }
   .home-stat-card--gold { border-color: rgba(245,158,11,0.4); }
@@ -106,7 +173,7 @@
     letter-spacing: 0.5px;
     margin-bottom: 2px;
   }
-  .home-stat-card__value { font-size: 20px; font-weight: 900; color: #fff; line-height: 1; }
+  .home-stat-card__value { font-size: 20px; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
   .home-stat-card__value--gold { color: #F59E0B; font-size: 14px; margin-top: 2px; }
 
   .section-header-row {
@@ -123,6 +190,7 @@
     font-size: 18px;
     font-weight: 800;
     color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
   .section-header-row .title::before {
     content: '';
@@ -130,6 +198,7 @@
     height: 18px;
     background: #DC2626;
     border-radius: 2px;
+    box-shadow: 0 0 10px rgba(220,38,38,0.5);
   }
   .section-header-row .arrow { color: #64748B; }
   .section-header-row .arrow svg { width: 20px !important; height: 20px !important; }
@@ -141,26 +210,27 @@
     padding: 0 16px 24px;
   }
   .home-quick-card {
-    background: #141A24;
+    background: linear-gradient(145deg, #1C2330, #141A24);
     border: 1px solid #2A3441;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 16px;
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
     color: #fff;
-    transition: background 0.2s;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
+    transition: transform 0.2s, background 0.2s;
   }
-  .home-quick-card:hover { background: #1C2330; }
+  .home-quick-card:active { transform: scale(0.96); }
   .home-quick-card--red-border {
     border-color: rgba(220,38,38,0.5);
-    background: rgba(220,38,38,0.05);
+    background: linear-gradient(145deg, rgba(220,38,38,0.1), #141A24);
   }
   .home-quick-card__icon { width: 24px; height: 24px; display: grid; place-items: center; flex-shrink: 0; }
   .home-quick-card__icon svg { width: 24px !important; height: 24px !important; }
   .home-quick-card__icon--grey { color: #CBD5E1; }
-  .home-quick-card__icon--red { color: #EF4444; }
+  .home-quick-card__icon--red { color: #EF4444; filter: drop-shadow(0 0 5px rgba(220,38,38,0.5)); }
   .home-quick-card__divider { width: 1px; height: 24px; background: rgba(255,255,255,0.1); }
   .home-quick-card__title { flex: 1; font-size: 15px; font-weight: 700; }
   .home-quick-card__arrow { color: #64748B; display: flex; }
@@ -168,10 +238,11 @@
 
   .home-how {
     margin: 0 16px 24px;
-    background: #141A24;
+    background: linear-gradient(145deg, #1C2330, #141A24);
     border: 1px solid #2A3441;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 16px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
   }
   .home-how__header {
     display: flex;
@@ -225,7 +296,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #DC2626;
+    background: linear-gradient(135deg, #EF4444, #990B24);
     color: #fff;
     display: grid;
     place-items: center;
@@ -233,7 +304,7 @@
     font-weight: 900;
     margin-bottom: 12px;
     border: 4px solid #141A24;
-    box-shadow: 0 0 0 1px #2A3441;
+    box-shadow: 0 0 0 1px #2A3441, 0 5px 10px rgba(220,38,38,0.4);
   }
   .home-how__text {
     font-size: 12px;
@@ -269,9 +340,30 @@
   const machines = data.machines || [];
   const has = data.meta && data.meta.filename !== '—';
   const count = machines.length;
+  const covers = JSON.parse(localStorage.getItem('ms_covers_v1') || '[]');
+
+  // Build Cover Slideshow HTML
+  let slideshowHtml = '';
+  if (covers.length > 0) {
+    slideshowHtml = '<div class="home-cover-wrap" id="coverWrap">' +
+      covers.map((c, i) => `
+        <div class="home-cover-bg ${i === 0 ? 'active' : ''}" style="background-image: url('${c}')"></div>
+        <img src="${c}" class="home-cover-img ${i === 0 ? 'active' : ''}">
+      `).join('') +
+      '<div class="home-cover-overlay"></div>' +
+      '<div class="home-cover-content">' +
+        '<h2>Find your <span class="accent">machine.</span></h2>' +
+        '<p>Search names, codes & locations.</p>' +
+      '</div>' +
+    '</div>';
+  } else {
+    slideshowHtml = '<div class="home-hero" style="padding:32px 16px 16px; text-align:center;">' +
+      '<h2 style="font-size:32px; font-weight:900; color:#fff; margin:0 0 8px;">Find your <span style="color:#EF4444;">machine.</span></h2>' +
+      '<p style="color:#94A3B8; font-size:14px; margin:0;">Search names, codes & locations.</p>' +
+    '</div>';
+  }
 
   app.innerHTML = 
-    // Custom Header (With settings icon)
     '<header class="back-header" style="border-bottom:none; justify-content:space-between; padding-right:16px;">' +
       '<div style="display:flex; align-items:center; gap:12px;">' +
         '<div class="custom-header__brand">' +
@@ -287,11 +379,7 @@
 
     '<main style="padding-bottom: 80px;">' +
       
-      // Hero Text
-      '<div class="home-hero">' +
-        '<h2>Find your <span class="accent">machine.</span></h2>' +
-        '<p>Search names, codes & locations.</p>' +
-      '</div>' +
+      slideshowHtml +
 
       // Search Box
       '<div class="home-search-wrap">' +
@@ -388,6 +476,24 @@
 
     '</main>' +
     MS.bottomNav('home');
+
+  // ===== Slideshow Logic =====
+  if (covers.length > 1) {
+    let currentIndex = 0;
+    const imgs = document.querySelectorAll('.home-cover-img');
+    const bgs = document.querySelectorAll('.home-cover-bg');
+    
+    setInterval(() => {
+      imgs[currentIndex].classList.remove('active');
+      bgs[currentIndex].classList.remove('active');
+      
+      currentIndex = (currentIndex + 1) % covers.length;
+      
+      imgs[currentIndex].classList.add('active');
+      bgs[currentIndex].classList.add('active');
+    }, 5000); // 5 စက္ကန့်တစ်ခါ ပြောင်းမယ်
+  }
+
 })();
 </script>
 </body>

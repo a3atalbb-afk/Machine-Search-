@@ -1,0 +1,227 @@
+/* =========================================
+   MACHINE SEARCH
+   PREMIUM 3D COVER SLIDESHOW
+   DARK INDUSTRIAL DESIGN
+========================================= */
+
+.home-cover-wrap {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    perspective: 1200px;
+    background: #090d14;
+    isolation: isolate;
+    border-radius: 0;
+}
+
+/* Background Glow */
+.home-cover-wrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(220, 38, 38, 0.16),
+            transparent 65%
+        );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 3D Stage */
+.home-cover-stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+/* Images */
+.home-cover-img {
+    position: absolute;
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 14px;
+    opacity: 0;
+    transform: translateZ(-250px) scale(0.65);
+    transition:
+        transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity 800ms ease,
+        filter 800ms ease;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    filter: brightness(0.35);
+    pointer-events: none;
+}
+
+/* Center Active Photo */
+.home-cover-img.active {
+    opacity: 1;
+    transform: translateZ(0) scale(1);
+    filter: brightness(1);
+    z-index: 5;
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(220, 38, 38, 0.10);
+}
+
+/* Left Photo */
+.home-cover-img.prev {
+    opacity: 0.4;
+    transform:
+        translate3d(-42%, 0, -130px)
+        rotateY(35deg)
+        scale(0.78);
+    filter: brightness(0.4);
+    z-index: 2;
+}
+
+/* Right Photo */
+.home-cover-img.next {
+    opacity: 0.4;
+    transform:
+        translate3d(42%, 0, -130px)
+        rotateY(-35deg)
+        scale(0.78);
+    filter: brightness(0.4);
+    z-index: 2;
+}
+
+/* Hidden Photos */
+.home-cover-img.hidden-3d {
+    opacity: 0;
+    transform: translateZ(-300px) scale(0.5);
+    filter: brightness(0.2);
+    z-index: 0;
+}
+
+/* Cinematic Overlay */
+.home-cover-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        rgba(9, 13, 20, 0.02) 0%,
+        rgba(9, 13, 20, 0.08) 45%,
+        rgba(9, 13, 20, 0.75) 100%
+    );
+}
+
+/* Hero Text */
+.home-cover-content {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+    padding: 16px 16px 24px;
+    pointer-events: none;
+}
+
+.home-cover-content h2 {
+    font-size: 27px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #ffffff;
+    margin: 0 0 6px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.9);
+}
+
+.home-cover-content h2 .accent {
+    color: #ef4444;
+}
+
+.home-cover-content p {
+    font-size: 12px;
+    color: #cbd5e1;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+/* Slide Indicators */
+.home-cover-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.home-cover-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.35);
+    transition: all 300ms ease;
+}
+
+.home-cover-dot.active {
+    width: 18px;
+    background: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Empty State */
+.home-hero {
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(220, 38, 38, 0.16),
+            transparent 65%
+        ),
+        linear-gradient(135deg, #1c2330, #090d14);
+}
+
+/* Mobile Optimization */
+@media (max-width: 360px) {
+    .home-cover-wrap {
+        height: 225px;
+    }
+
+    .home-cover-img {
+        width: 88%;
+        height: 82%;
+    }
+
+    .home-cover-img.prev {
+        transform:
+            translate3d(-32%, 0, -120px)
+            rotateY(28deg)
+            scale(0.75);
+    }
+
+    .home-cover-img.next {
+        transform:
+            translate3d(32%, 0, -120px)
+            rotateY(-28deg)
+            scale(0.75);
+    }
+
+    .home-cover-content h2 {
+        font-size: 23px;
+    }
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .home-cover-img,
+    .home-cover-dot {
+        transition: none !important;
+    }
+}

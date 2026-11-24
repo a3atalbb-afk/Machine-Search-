@@ -45,7 +45,6 @@
   }
   .settings-item__icon svg { width: 20px !important; height: 20px !important; }
   
-  /* Custom Colors for Icons */
   .icon-excel { background: rgba(34,197,94,0.15); color: #22C55E; }
   .icon-db { background: rgba(59,130,246,0.15); color: #3B82F6; }
   .icon-pref { background: rgba(220,38,38,0.15); color: #EF4444; }
@@ -98,6 +97,25 @@
   .version-row__label { font-size: 14px; font-weight: 700; color: #CBD5E1; }
   .version-row__value { font-size: 12px; font-weight: 800; color: #64748B; background: #1C2330; padding: 4px 8px; border-radius: 6px; }
 
+  /* Cover Photos Upload - No Limit */
+  .cover-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; }
+  .cover-item {
+    aspect-ratio: 16/9; border-radius: 8px; background: #1C2330; border: 1px dashed #2A3441;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative;
+    /* 3D Design အတွက် */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+  .cover-item:hover { transform: translateY(-2px); border-color: #DC2626; }
+  .cover-item img { width: 100%; height: 100%; object-fit: cover; }
+  .cover-item svg { width: 20px !important; height: 20px !important; color: #64748B; }
+  .cover-item-remove {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+    background: #EF4444; color: #fff; border-radius: 50%; border: none; font-size: 10px;
+    display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+
   .ms-alert-modal {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85);
     z-index: 10000; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);
@@ -125,15 +143,18 @@
 <body>
 <div id="app"></div>
 <input type="file" id="backupInput" accept=".json" style="display: none;">
+<input type="file" id="coverInput" accept="image/*" multiple style="display: none;">
 
-<script src="app.js?v=1007"></script>
+<script src="app.js?v=1008"></script>
 <script>
 (function () {
   const app = document.getElementById('app');
   const backupInput = document.getElementById('backupInput');
+  const coverInput = document.getElementById('coverInput');
 
   const SETTINGS_KEY = 'ms_settings_v1';
   const SOL_KEY = 'ms_solutions_v1';
+  const COVERS_KEY = 'ms_covers_v1';
 
   // ===== Custom Alert =====
   function showAlert(title, text, isConfirm = false, onConfirm) {
@@ -185,6 +206,8 @@
   }
   function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
   function getSolutions() { try { return JSON.parse(localStorage.getItem(SOL_KEY) || '[]'); } catch { return []; } }
+  function getCovers() { try { return JSON.parse(localStorage.getItem(COVERS_KEY) || '[]'); } catch { return []; } }
+  function saveCovers(covers) { localStorage.setItem(COVERS_KEY, JSON.stringify(covers)); }
 
   // ===== Icons =====
   const iconExcel = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>';
@@ -200,6 +223,7 @@
   const iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
   const iconAndroid = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 16V9a7 7 0 0 1 14 0v7"/><line x1="5" y1="16" x2="19" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="15" y1="16" x2="15" y2="21"/></svg>';
   const iconCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+  const iconImage = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
 
   async function renderUI() {
     let data = { machines: [] };
@@ -210,6 +234,7 @@
     const historyCount = MS.getHistory().length;
     const favsCount = MS.getFavorites().length;
     const settings = getSettings();
+    const covers = getCovers();
 
     let lsSize = 0;
     for (let key in localStorage) {
@@ -224,8 +249,7 @@
     app.innerHTML = 
       '<header class="back-header" style="border-bottom:none; justify-content:space-between; padding-right:16px;">' +
         '<div style="display:flex; align-items:center; gap:12px;">' +
-          // Back Button (Fixed: using history.back)
-          '<a href="#" class="back-header__back" aria-label="Back" onclick="event.preventDefault(); history.back();">' + MS.ICON.back + '</a>' +
+          '<a href="index.html" class="back-header__back" aria-label="Back">' + MS.ICON.back + '</a>' +
           '<div class="custom-header__brand">' +
             '<svg class="custom-header__logo" style="width:32px;height:32px;" viewBox="0 0 100 100" fill="none"><path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#DC2626" stroke-width="6" fill="none"/><circle cx="50" cy="50" r="15" stroke="#DC2626" stroke-width="6" fill="none"/><path d="M65 65 L80 80" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/></svg>' +
             '<div class="custom-header__text">' +
@@ -234,8 +258,7 @@
             '</div>' +
           '</div>' +
         '</div>' +
-        // Settings Icon (Current Page, so no action needed, or just a visual indicator)
-        '<div class="custom-header__settings" style="width:36px;height:36px; color:#DC2626;">' + MS.ICON.settings + '</div>' +
+        '<a href="settings.html" class="custom-header__settings" style="width:36px;height:36px;">' + MS.ICON.settings + '</a>' +
       '</header>' +
 
       '<div class="settings-hero">' +
@@ -250,6 +273,25 @@
 
       '<main style="padding-bottom: 100px;">' +
 
+        // ===== COVER PHOTOS (No Limit) =====
+        '<div class="settings-section">' +
+          '<div class="settings-section-header">' +
+            '<div class="settings-section-title">' + iconImage + ' Home Cover Photos (No Limit)</div>' +
+          '</div>' +
+          '<div class="cover-grid" id="coverGrid">' +
+            covers.map((c, i) => `
+              <div class="cover-item" style="border:none;">
+                <img src="${c}">
+                <button class="cover-item-remove" onclick="removeCover(${i})">✕</button>
+              </div>
+            `).join('') +
+            `<div class="cover-item" onclick="document.getElementById('coverInput').click()">
+              ${iconImage}
+            </div>` +
+          '</div>' +
+        '</div>' +
+
+        // ===== DATA & BACKUP =====
         '<div class="settings-section">' +
           '<div class="settings-section-header">' +
             '<div class="settings-section-title">' + iconDb + ' Data & Backup</div>' +
@@ -284,6 +326,7 @@
           '</div>' +
         '</div>' +
 
+        // ===== PREFERENCES =====
         '<div class="settings-section">' +
           '<div class="settings-section-header">' +
             '<div class="settings-section-title">' + iconSliders + ' Preferences</div>' +
@@ -326,6 +369,7 @@
           '</div>' +
         '</div>' +
 
+        // ===== APP =====
         '<div class="settings-section">' +
           '<div class="settings-section-header">' +
             '<div class="settings-section-title">' + iconInfo + ' App</div>' +
@@ -358,6 +402,7 @@
           '</div>' +
         '</div>' +
 
+        // ===== PRIVACY =====
         '<div class="settings-section">' +
           '<div class="settings-section-header">' +
             '<div class="settings-section-title">' + iconTrash + ' Privacy</div>' +
@@ -386,6 +431,35 @@
       MS.bottomNav('settings');
 
     // --- Handlers ---
+    // Cover Upload (Multiple Selection)
+    coverInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+      
+      let currentCovers = getCovers();
+      
+      for (const file of files) {
+        try {
+          // အရမ်းကြီးတဲ့ ပုံတွေကို ချုံ့ပြီး သိမ်းမယ် (800px, 70% quality)
+          const base64 = await compressImage(file, 800, 0.7);
+          currentCovers.push(base64);
+        } catch (err) {
+          console.error("Image compression failed", err);
+        }
+      }
+      
+      saveCovers(currentCovers);
+      renderUI();
+      coverInput.value = ''; // reset
+    });
+
+    window.removeCover = function(index) {
+      let currentCovers = getCovers();
+      currentCovers.splice(index, 1);
+      saveCovers(currentCovers);
+      renderUI();
+    };
+
     document.getElementById('compactToggle').addEventListener('change', (e) => {
       settings.compactResults = e.target.checked;
       saveSettings(settings);
@@ -433,7 +507,8 @@
             solutions: getSolutions(),
             favorites: MS.getFavorites(),
             history: MS.getHistory(),
-            settings: getSettings()
+            settings: getSettings(),
+            covers: getCovers()
           }
         };
         const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -480,6 +555,7 @@
             if (d.favorites) localStorage.setItem('ms_favorites_v2', JSON.stringify(d.favorites));
             if (d.history) localStorage.setItem('ms_history_v2', JSON.stringify(d.history));
             if (d.settings) localStorage.setItem(SETTINGS_KEY, JSON.stringify(d.settings));
+            if (d.covers) localStorage.setItem(COVERS_KEY, JSON.stringify(d.covers));
             
             MS.toast('Backup restored', 'ok');
             renderUI();
@@ -491,6 +567,33 @@
         backupInput.value = '';
       };
       reader.readAsText(file);
+    });
+  }
+
+  function compressImage(file, maxWidth, quality) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = (error) => reject(error);
+      };
+      reader.onerror = (error) => reject(error);
     });
   }
 
